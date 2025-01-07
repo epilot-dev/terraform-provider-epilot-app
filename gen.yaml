@@ -1,0 +1,47 @@
+configVersion: 2.0.0
+generation:
+  sdkClassName: SDK
+  usageSnippets:
+    optionalPropertyRendering: withExample
+  fixes:
+    nameResolutionDec2023: false
+    parameterOrderingFeb2024: false
+    requestResponseComponentNamesFeb2024: false
+  auth:
+    oAuth2ClientCredentialsEnabled: false
+  telemetryEnabled: false
+go:
+  version: 0.0.1
+  clientServerStatusCodesAsErrors: true
+  flattenGlobalSecurity: true
+  imports:
+    option: openapi
+    paths:
+      apps: models/apps
+      callbacks: models/callbacks
+      errors: models/sdkerrors
+      operations: models/operations
+      shared: models/components
+  inputModelSuffix: input
+  maxMethodParams: 4
+  outputModelSuffix: output
+  packageName: openapi
+terraform:
+  version: 0.6.3
+  additionalDataSources: []
+  additionalDependencies: {}
+  additionalResources: []
+  allowUnknownFieldsInWeakUnions: false
+  author: epilot-dev
+  environmentVariables: []
+  imports:
+    option: openapi
+    paths:
+      apps: apps
+      callbacks: callbacks
+      errors: sdkerrors
+      operations: operations
+      shared: shared
+  inputModelSuffix: input
+  outputModelSuffix: output
+  packageName: epilot-app

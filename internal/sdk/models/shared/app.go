@@ -3,46 +3,101 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
 )
 
-// ConfigOptions - Metadata for the app components
-type ConfigOptions struct {
-	// Type of app component
-	ComponentType *ComponentType           `json:"component_type,omitempty"`
-	Configuration []ComponentConfiguration `json:"configuration,omitempty"`
+// AccessLevel - Access level of the app.
+type AccessLevel string
+
+const (
+	AccessLevelPublic  AccessLevel = "public"
+	AccessLevelPrivate AccessLevel = "private"
+)
+
+func (e AccessLevel) ToPointer() *AccessLevel {
+	return &e
+}
+func (e *AccessLevel) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "public":
+		fallthrough
+	case "private":
+		*e = AccessLevel(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for AccessLevel: %v", v)
+	}
 }
 
-func (o *ConfigOptions) GetComponentType() *ComponentType {
-	if o == nil {
-		return nil
-	}
-	return o.ComponentType
-}
+type Status string
 
-func (o *ConfigOptions) GetConfiguration() []ComponentConfiguration {
-	if o == nil {
-		return nil
+const (
+	StatusPublished Status = "published"
+	StatusPending   Status = "pending"
+)
+
+func (e Status) ToPointer() *Status {
+	return &e
+}
+func (e *Status) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
 	}
-	return o.Configuration
+	switch v {
+	case "published":
+		fallthrough
+	case "pending":
+		*e = Status(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for Status: %v", v)
+	}
 }
 
 // App - Information about the installed app
 type App struct {
-	// Unique identifier for the app configuration
-	AppID *string `json:"app_id,omitempty"`
-	// Metadata for the app components
-	ConfigOptions *ConfigOptions `json:"config_options,omitempty"`
+	// Access level of the app.
+	AccessLevel *AccessLevel      `default:"public" json:"access_level"`
+	AppID       *string           `json:"app_id,omitempty"`
+	Author      *Author           `json:"author,omitempty"`
+	Components  []BaseComponent   `json:"components,omitempty"`
+	CreatedAt   *string           `json:"created_at,omitempty"`
+	CreatedBy   *string           `json:"created_by,omitempty"`
+	Description *TranslatedString `json:"description,omitempty"`
+	// URL of the app documentation.
+	DocumentationURL *string `json:"documentation_url,omitempty"`
 	// Flag to indicate if the app is enabled.
 	Enabled *bool `default:"true" json:"enabled"`
+	// URL of the app icon.
+	IconURL *string `json:"icon_url,omitempty"`
 	// Unique identifier for the app installation
 	InstallationID *string `json:"installation_id,omitempty"`
 	// Timestamp of app creation
 	InstalledAt *string `json:"installed_at,omitempty"`
 	// User ID of the user who installed the app
 	InstalledBy *string `json:"installed_by,omitempty"`
+	// Flag to indicate if the app is built by epilot.
+	Internal *bool             `default:"false" json:"internal"`
+	Name     *TranslatedString `json:"name,omitempty"`
+	// Configuration values for the app components options
+	OptionValues []OptionsRef `json:"option_values,omitempty"`
 	// Unique identifier for the organization the app is installed in
 	OrganizationID *string `json:"organization_id,omitempty"`
+	// Organization ID of the app owner, required for private apps
+	OwnerOrgID *string `json:"owner_org_id,omitempty"`
+	Status     *Status `json:"status,omitempty"`
+	// Timestamp of the last update
+	UpdatedAt *string `json:"updated_at,omitempty"`
+	// User ID of the user who last updated the app
+	UpdatedBy *string `json:"updated_by,omitempty"`
+	Version   *string `json:"version,omitempty"`
 }
 
 func (a App) MarshalJSON() ([]byte, error) {
@@ -56,6 +111,13 @@ func (a *App) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (o *App) GetAccessLevel() *AccessLevel {
+	if o == nil {
+		return nil
+	}
+	return o.AccessLevel
+}
+
 func (o *App) GetAppID() *string {
 	if o == nil {
 		return nil
@@ -63,11 +125,46 @@ func (o *App) GetAppID() *string {
 	return o.AppID
 }
 
-func (o *App) GetConfigOptions() *ConfigOptions {
+func (o *App) GetAuthor() *Author {
 	if o == nil {
 		return nil
 	}
-	return o.ConfigOptions
+	return o.Author
+}
+
+func (o *App) GetComponents() []BaseComponent {
+	if o == nil {
+		return nil
+	}
+	return o.Components
+}
+
+func (o *App) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *App) GetCreatedBy() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedBy
+}
+
+func (o *App) GetDescription() *TranslatedString {
+	if o == nil {
+		return nil
+	}
+	return o.Description
+}
+
+func (o *App) GetDocumentationURL() *string {
+	if o == nil {
+		return nil
+	}
+	return o.DocumentationURL
 }
 
 func (o *App) GetEnabled() *bool {
@@ -75,6 +172,13 @@ func (o *App) GetEnabled() *bool {
 		return nil
 	}
 	return o.Enabled
+}
+
+func (o *App) GetIconURL() *string {
+	if o == nil {
+		return nil
+	}
+	return o.IconURL
 }
 
 func (o *App) GetInstallationID() *string {
@@ -98,6 +202,27 @@ func (o *App) GetInstalledBy() *string {
 	return o.InstalledBy
 }
 
+func (o *App) GetInternal() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Internal
+}
+
+func (o *App) GetName() *TranslatedString {
+	if o == nil {
+		return nil
+	}
+	return o.Name
+}
+
+func (o *App) GetOptionValues() []OptionsRef {
+	if o == nil {
+		return nil
+	}
+	return o.OptionValues
+}
+
 func (o *App) GetOrganizationID() *string {
 	if o == nil {
 		return nil
@@ -105,35 +230,37 @@ func (o *App) GetOrganizationID() *string {
 	return o.OrganizationID
 }
 
-// AppInput - Information about the installed app
-type AppInput struct {
-	// Metadata for the app components
-	ConfigOptions *ConfigOptions `json:"config_options,omitempty"`
-	// Flag to indicate if the app is enabled.
-	Enabled *bool `default:"true" json:"enabled"`
-}
-
-func (a AppInput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AppInput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, false); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *AppInput) GetConfigOptions() *ConfigOptions {
+func (o *App) GetOwnerOrgID() *string {
 	if o == nil {
 		return nil
 	}
-	return o.ConfigOptions
+	return o.OwnerOrgID
 }
 
-func (o *AppInput) GetEnabled() *bool {
+func (o *App) GetStatus() *Status {
 	if o == nil {
 		return nil
 	}
-	return o.Enabled
+	return o.Status
+}
+
+func (o *App) GetUpdatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.UpdatedAt
+}
+
+func (o *App) GetUpdatedBy() *string {
+	if o == nil {
+		return nil
+	}
+	return o.UpdatedBy
+}
+
+func (o *App) GetVersion() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Version
 }

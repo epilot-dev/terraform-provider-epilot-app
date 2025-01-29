@@ -10,7 +10,9 @@ import (
 
 type ListInstalledAppsRequest struct {
 	// Filter apps by specific component type
-	ComponentType *shared.ComponentType `queryParam:"style=form,explode=true,name=componentType"`
+	ComponentType *shared.ComponentType `queryParam:"style=form,explode=true,name=component_type"`
+	// Filter apps by enabled status
+	Enabled *bool `queryParam:"style=form,explode=true,name=enabled"`
 	// Page number for pagination
 	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// Number of items per page
@@ -33,6 +35,13 @@ func (o *ListInstalledAppsRequest) GetComponentType() *shared.ComponentType {
 		return nil
 	}
 	return o.ComponentType
+}
+
+func (o *ListInstalledAppsRequest) GetEnabled() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Enabled
 }
 
 func (o *ListInstalledAppsRequest) GetPage() *int64 {

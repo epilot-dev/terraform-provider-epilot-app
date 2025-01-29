@@ -27,26 +27,260 @@ data "epilot-app_app" "my_app" {
 
 ### Read-Only
 
-- `config_options` (Attributes) Metadata for the app components (see [below for nested schema](#nestedatt--config_options))
+- `access_level` (String) Access level of the app.
+- `author` (Attributes) (see [below for nested schema](#nestedatt--author))
+- `components` (Attributes List) (see [below for nested schema](#nestedatt--components))
+- `created_at` (String)
+- `created_by` (String)
+- `description` (Attributes) (see [below for nested schema](#nestedatt--description))
+- `documentation_url` (String) URL of the app documentation.
 - `enabled` (Boolean) Flag to indicate if the app is enabled.
+- `icon_url` (String) URL of the app icon.
 - `installation_id` (String) Unique identifier for the app installation
 - `installed_at` (String) Timestamp of app creation
 - `installed_by` (String) User ID of the user who installed the app
+- `internal` (Boolean) Flag to indicate if the app is built by epilot.
+- `name` (Attributes) (see [below for nested schema](#nestedatt--name))
+- `option_values` (Attributes List) Configuration values for the app components options (see [below for nested schema](#nestedatt--option_values))
 - `organization_id` (String) Unique identifier for the organization the app is installed in
+- `owner_org_id` (String) Organization ID of the app owner, required for private apps
+- `status` (String)
+- `updated_at` (String) Timestamp of the last update
+- `updated_by` (String) User ID of the user who last updated the app
+- `version` (String)
 
-<a id="nestedatt--config_options"></a>
-### Nested Schema for `config_options`
-
-Read-Only:
-
-- `component_type` (String) Type of app component
-- `configuration` (Attributes List) (see [below for nested schema](#nestedatt--config_options--configuration))
-
-<a id="nestedatt--config_options--configuration"></a>
-### Nested Schema for `config_options.configuration`
+<a id="nestedatt--author"></a>
+### Nested Schema for `author`
 
 Read-Only:
 
-- `key` (String)
+- `company` (String) Company of the author
+- `email` (String) Email of the author
+- `name` (String) Name of the author
+
+
+<a id="nestedatt--components"></a>
+### Nested Schema for `components`
+
+Read-Only:
+
+- `custom_journey_block` (Attributes) (see [below for nested schema](#nestedatt--components--custom_journey_block))
+- `portal_extension` (Attributes) (see [below for nested schema](#nestedatt--components--portal_extension))
+
+<a id="nestedatt--components--custom_journey_block"></a>
+### Nested Schema for `components.custom_journey_block`
+
+Read-Only:
+
+- `component_type` (String)
+- `configuration` (Attributes) (see [below for nested schema](#nestedatt--components--custom_journey_block--configuration))
+- `id` (String) Unique identifier for the component
+- `name` (Attributes) (see [below for nested schema](#nestedatt--components--custom_journey_block--name))
+- `options` (Attributes List) List of options for the app component (see [below for nested schema](#nestedatt--components--custom_journey_block--options))
+
+<a id="nestedatt--components--custom_journey_block--configuration"></a>
+### Nested Schema for `components.custom_journey_block.configuration`
+
+Read-Only:
+
+- `component_tag` (String) Custom element tag for the component
+- `component_url` (String) URL of the web component object
+
+
+<a id="nestedatt--components--custom_journey_block--name"></a>
+### Nested Schema for `components.custom_journey_block.name`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
+
+
+<a id="nestedatt--components--custom_journey_block--options"></a>
+### Nested Schema for `components.custom_journey_block.options`
+
+Read-Only:
+
+- `description` (String) Detailed description of what this configuration option does
+- `key` (String) Unique identifier for this configuration option
+- `label` (String) Human-readable label for the configuration option
+- `required` (Boolean) Flag to indicate if this option is required
 - `type` (String)
-- `value` (String)
+- `value` (String) The configured value for this option. Is only present when the component is installed.
+
+
+
+<a id="nestedatt--components--portal_extension"></a>
+### Nested Schema for `components.portal_extension`
+
+Read-Only:
+
+- `component_type` (String)
+- `configuration` (Attributes) (see [below for nested schema](#nestedatt--components--portal_extension--configuration))
+- `id` (String) Unique identifier for the component
+- `name` (Attributes) (see [below for nested schema](#nestedatt--components--portal_extension--name))
+- `options` (Attributes List) List of options for the app component (see [below for nested schema](#nestedatt--components--portal_extension--options))
+- `origin` (String)
+
+<a id="nestedatt--components--portal_extension--configuration"></a>
+### Nested Schema for `components.portal_extension.configuration`
+
+Read-Only:
+
+- `hooks` (Attributes List) (see [below for nested schema](#nestedatt--components--portal_extension--configuration--hooks))
+- `id` (String)
+- `links` (Attributes List) (see [below for nested schema](#nestedatt--components--portal_extension--configuration--links))
+
+<a id="nestedatt--components--portal_extension--configuration--hooks"></a>
+### Nested Schema for `components.portal_extension.configuration.hooks`
+
+Read-Only:
+
+- `auth` (Attributes) (see [below for nested schema](#nestedatt--components--portal_extension--configuration--hooks--auth))
+- `call` (Attributes) (see [below for nested schema](#nestedatt--components--portal_extension--configuration--hooks--call))
+- `id` (String)
+- `interval` (List of String)
+- `name` (Attributes) (see [below for nested schema](#nestedatt--components--portal_extension--configuration--hooks--name))
+- `type` (String)
+
+<a id="nestedatt--components--portal_extension--configuration--hooks--auth"></a>
+### Nested Schema for `components.portal_extension.configuration.hooks.auth`
+
+Read-Only:
+
+- `headers` (Map of String)
+- `method` (String)
+- `type` (String)
+- `url` (String)
+
+
+<a id="nestedatt--components--portal_extension--configuration--hooks--call"></a>
+### Nested Schema for `components.portal_extension.configuration.hooks.call`
+
+Read-Only:
+
+- `headers` (Map of String)
+- `params` (Map of String)
+- `url` (String)
+
+
+<a id="nestedatt--components--portal_extension--configuration--hooks--name"></a>
+### Nested Schema for `components.portal_extension.configuration.hooks.name`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
+
+
+
+<a id="nestedatt--components--portal_extension--configuration--links"></a>
+### Nested Schema for `components.portal_extension.configuration.links`
+
+Read-Only:
+
+- `auth` (Attributes) (see [below for nested schema](#nestedatt--components--portal_extension--configuration--links--auth))
+- `condition` (String)
+- `description` (Attributes) (see [below for nested schema](#nestedatt--components--portal_extension--configuration--links--description))
+- `id` (String)
+- `name` (Attributes) (see [below for nested schema](#nestedatt--components--portal_extension--configuration--links--name))
+- `redirect` (Attributes) (see [below for nested schema](#nestedatt--components--portal_extension--configuration--links--redirect))
+- `type` (String)
+
+<a id="nestedatt--components--portal_extension--configuration--links--auth"></a>
+### Nested Schema for `components.portal_extension.configuration.links.auth`
+
+Read-Only:
+
+- `headers` (Map of String)
+- `method` (String)
+- `type` (String)
+- `url` (String)
+
+
+<a id="nestedatt--components--portal_extension--configuration--links--description"></a>
+### Nested Schema for `components.portal_extension.configuration.links.description`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
+
+
+<a id="nestedatt--components--portal_extension--configuration--links--name"></a>
+### Nested Schema for `components.portal_extension.configuration.links.name`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
+
+
+<a id="nestedatt--components--portal_extension--configuration--links--redirect"></a>
+### Nested Schema for `components.portal_extension.configuration.links.redirect`
+
+Read-Only:
+
+- `params` (Map of String)
+- `url` (String)
+
+
+
+
+<a id="nestedatt--components--portal_extension--name"></a>
+### Nested Schema for `components.portal_extension.name`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
+
+
+<a id="nestedatt--components--portal_extension--options"></a>
+### Nested Schema for `components.portal_extension.options`
+
+Read-Only:
+
+- `description` (String) Detailed description of what this configuration option does
+- `key` (String) Unique identifier for this configuration option
+- `label` (String) Human-readable label for the configuration option
+- `required` (Boolean) Flag to indicate if this option is required
+- `type` (String)
+- `value` (String) The configured value for this option. Is only present when the component is installed.
+
+
+
+
+<a id="nestedatt--description"></a>
+### Nested Schema for `description`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
+
+
+<a id="nestedatt--name"></a>
+### Nested Schema for `name`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
+
+
+<a id="nestedatt--option_values"></a>
+### Nested Schema for `option_values`
+
+Read-Only:
+
+- `component_id` (String) ID of the component these values are for
+- `options` (Attributes List) (see [below for nested schema](#nestedatt--option_values--options))
+
+<a id="nestedatt--option_values--options"></a>
+### Nested Schema for `option_values.options`
+
+Read-Only:
+
+- `key` (String) Key matching a config_option from the component
+- `value` (String) The configured value for this option

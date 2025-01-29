@@ -8,15 +8,15 @@ import (
 )
 
 type InstallAppRequest struct {
-	App   *shared.AppInput `request:"mediaType=application/json"`
-	AppID string           `pathParam:"style=simple,explode=false,name=appId"`
+	InstallAppRequest *shared.InstallAppRequest `request:"mediaType=application/json"`
+	AppID             string                    `pathParam:"style=simple,explode=false,name=appId"`
 }
 
-func (o *InstallAppRequest) GetApp() *shared.AppInput {
+func (o *InstallAppRequest) GetInstallAppRequest() *shared.InstallAppRequest {
 	if o == nil {
 		return nil
 	}
-	return o.App
+	return o.InstallAppRequest
 }
 
 func (o *InstallAppRequest) GetAppID() string {

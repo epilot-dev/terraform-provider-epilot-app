@@ -59,7 +59,7 @@ terraform {
   required_providers {
     epilot-app = {
       source  = "epilot-dev/epilot-app"
-      version = "0.6.3"
+      version = "0.7.0"
     }
   }
 }
@@ -131,10 +131,12 @@ App API: API for managing app publishing and installed app.
 
 <!-- Start Table of Contents [toc] -->
 ## Table of Contents
+<!-- $toc-max-depth=2 -->
+* [epilot-app](#epilot-app)
+  * [Installation](#installation)
+  * [Testing the provider locally](#testing-the-provider-locally)
+  * [Available Resources and Data Sources](#available-resources-and-data-sources)
 
-* [Installation](#installation)
-* [Available Resources and Data Sources](#available-resources-and-data-sources)
-* [Testing the provider locally](#testing-the-provider-locally)
 <!-- End Table of Contents [toc] -->
 
 <!-- Placeholder for Future Speakeasy SDK Sections -->

@@ -6,7 +6,7 @@ actions:
   - target: $
     update:
       servers:
-        - url: https://apps.sls.epilot.io
+        - url: https://app.sls.epilot.io
       x-speakeasy-retries:
         strategy: backoff
         backoff:
@@ -23,9 +23,12 @@ actions:
   - target: $["paths"]["/v1/app/{appId}"]["delete"]
     update:
       x-speakeasy-entity-operation: app#delete
-  - target: $["paths"]["/v1/app/{appId}"]["put"]
+  - target: $["paths"]["/v1/app/{appId}"]["post"]
     update:
-      x-speakeasy-entity-operation: app#create,update
+      x-speakeasy-entity-operation: app#create
+  - target: $["paths"]["/v1/app/{appId}"]["patch"]
+    update:
+      x-speakeasy-entity-operation: app#update
   - target: $["components"]["schemas"]["App"]
     update:
       x-speakeasy-entity: app

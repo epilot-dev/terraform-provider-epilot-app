@@ -3,6 +3,6 @@
 package types
 
 type BaseComponent struct {
-	CustomJourneyBlock *Schemas                         `tfsdk:"custom_journey_block" tfPlanOnly:"true"`
+	CustomJourneyBlock *JourneyBlockComponentSchemas    `tfsdk:"custom_journey_block" tfPlanOnly:"true"`
 	PortalExtension    *PortalExtensionComponentSchemas `tfsdk:"portal_extension" tfPlanOnly:"true"`
 }

@@ -29,28 +29,14 @@ type AppDataSource struct {
 
 // AppDataSourceModel describes the data model.
 type AppDataSourceModel struct {
-	AccessLevel      types.String              `tfsdk:"access_level"`
-	AppID            types.String              `tfsdk:"app_id"`
-	Author           *tfTypes.Author           `tfsdk:"author"`
-	Components       []tfTypes.BaseComponent   `tfsdk:"components"`
-	CreatedAt        types.String              `tfsdk:"created_at"`
-	CreatedBy        types.String              `tfsdk:"created_by"`
-	Description      *tfTypes.TranslatedString `tfsdk:"description"`
-	DocumentationURL types.String              `tfsdk:"documentation_url"`
-	Enabled          types.Bool                `tfsdk:"enabled"`
-	IconURL          types.String              `tfsdk:"icon_url"`
-	InstallationID   types.String              `tfsdk:"installation_id"`
-	InstalledAt      types.String              `tfsdk:"installed_at"`
-	InstalledBy      types.String              `tfsdk:"installed_by"`
-	Internal         types.Bool                `tfsdk:"internal"`
-	Name             *tfTypes.TranslatedString `tfsdk:"name"`
-	OptionValues     []tfTypes.OptionsRef      `tfsdk:"option_values"`
-	OrganizationID   types.String              `tfsdk:"organization_id"`
-	OwnerOrgID       types.String              `tfsdk:"owner_org_id"`
-	Status           types.String              `tfsdk:"status"`
-	UpdatedAt        types.String              `tfsdk:"updated_at"`
-	UpdatedBy        types.String              `tfsdk:"updated_by"`
-	Version          types.String              `tfsdk:"version"`
+	AppID             types.String               `tfsdk:"app_id"`
+	Components        []tfTypes.BaseComponent    `tfsdk:"components"`
+	Enabled           types.Bool                 `tfsdk:"enabled"`
+	InstallationAudit *tfTypes.InstallationAudit `tfsdk:"installation_audit"`
+	InstalledVersion  types.String               `tfsdk:"installed_version"`
+	InstallerOrgID    types.String               `tfsdk:"installer_org_id"`
+	Name              types.String               `tfsdk:"name"`
+	OptionValues      []tfTypes.OptionsRef       `tfsdk:"option_values"`
 }
 
 // Metadata returns the data source type name.
@@ -64,29 +50,8 @@ func (r *AppDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 		MarkdownDescription: "App DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"access_level": schema.StringAttribute{
-				Computed:    true,
-				Description: `Access level of the app.`,
-			},
 			"app_id": schema.StringAttribute{
 				Required: true,
-			},
-			"author": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"company": schema.StringAttribute{
-						Computed:    true,
-						Description: `Company of the author`,
-					},
-					"email": schema.StringAttribute{
-						Computed:    true,
-						Description: `Email of the author`,
-					},
-					"name": schema.StringAttribute{
-						Computed:    true,
-						Description: `Name of the author`,
-					},
-				},
 			},
 			"components": schema.ListNestedAttribute{
 				Computed: true,
@@ -101,6 +66,180 @@ func (r *AppDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 								"configuration": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
+										"component_args": schema.ListNestedAttribute{
+											Computed: true,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"boolean": schema.SingleNestedAttribute{
+														Computed: true,
+														Attributes: map[string]schema.Attribute{
+															"description": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"de": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `German translation`,
+																	},
+																	"en": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `English translation`,
+																	},
+																},
+																Description: `Description of what this component arg does`,
+															},
+															"key": schema.StringAttribute{
+																Computed:    true,
+																Description: `Unique identifier for this component arg`,
+															},
+															"label": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"de": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `German translation`,
+																	},
+																	"en": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `English translation`,
+																	},
+																},
+																Description: `Human-readable label for the component arg`,
+															},
+															"required": schema.BoolAttribute{
+																Computed:    true,
+																Description: `Flag to indicate if this option is required`,
+															},
+															"type": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+													"enum": schema.SingleNestedAttribute{
+														Computed: true,
+														Attributes: map[string]schema.Attribute{
+															"description": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"de": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `German translation`,
+																	},
+																	"en": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `English translation`,
+																	},
+																},
+																Description: `Description of what this component arg does`,
+															},
+															"is_multi": schema.BoolAttribute{
+																Computed:    true,
+																Description: `If true, allows selection of multiple values`,
+															},
+															"key": schema.StringAttribute{
+																Computed:    true,
+																Description: `Unique identifier for this component arg`,
+															},
+															"label": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"de": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `German translation`,
+																	},
+																	"en": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `English translation`,
+																	},
+																},
+																Description: `Human-readable label for the component arg`,
+															},
+															"options": schema.ListNestedAttribute{
+																Computed: true,
+																NestedObject: schema.NestedAttributeObject{
+																	Attributes: map[string]schema.Attribute{
+																		"id": schema.StringAttribute{
+																			Computed:    true,
+																			Description: `Unique identifier for the option`,
+																		},
+																		"label": schema.SingleNestedAttribute{
+																			Computed: true,
+																			Attributes: map[string]schema.Attribute{
+																				"de": schema.StringAttribute{
+																					Computed:    true,
+																					Description: `German translation`,
+																				},
+																				"en": schema.StringAttribute{
+																					Computed:    true,
+																					Description: `English translation`,
+																				},
+																			},
+																			Description: `Display label for the option`,
+																		},
+																	},
+																},
+																Description: `List of options for enum type`,
+															},
+															"required": schema.BoolAttribute{
+																Computed:    true,
+																Description: `Flag to indicate if this option is required`,
+															},
+															"type": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+													"text": schema.SingleNestedAttribute{
+														Computed: true,
+														Attributes: map[string]schema.Attribute{
+															"description": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"de": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `German translation`,
+																	},
+																	"en": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `English translation`,
+																	},
+																},
+																Description: `Description of what this component arg does`,
+															},
+															"key": schema.StringAttribute{
+																Computed:    true,
+																Description: `Unique identifier for this component arg`,
+															},
+															"label": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"de": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `German translation`,
+																	},
+																	"en": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `English translation`,
+																	},
+																},
+																Description: `Human-readable label for the component arg`,
+															},
+															"required": schema.BoolAttribute{
+																Computed:    true,
+																Description: `Flag to indicate if this option is required`,
+															},
+															"type": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+												},
+											},
+											Description: `Arguments to pass to the component`,
+										},
+										"component_size": schema.NumberAttribute{
+											Computed:    true,
+											Description: `Size of the bundle in bytes`,
+										},
 										"component_tag": schema.StringAttribute{
 											Computed:    true,
 											Description: `Custom element tag for the component`,
@@ -110,6 +249,20 @@ func (r *AppDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 											Description: `URL of the web component object`,
 										},
 									},
+								},
+								"description": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"de": schema.StringAttribute{
+											Computed:    true,
+											Description: `German translation`,
+										},
+										"en": schema.StringAttribute{
+											Computed:    true,
+											Description: `English translation`,
+										},
+									},
+									Description: `Description of the component`,
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
@@ -127,6 +280,7 @@ func (r *AppDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 											Description: `English translation`,
 										},
 									},
+									Description: `Name of the component`,
 								},
 								"options": schema.ListNestedAttribute{
 									Computed: true,
@@ -311,6 +465,20 @@ func (r *AppDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										},
 									},
 								},
+								"description": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"de": schema.StringAttribute{
+											Computed:    true,
+											Description: `German translation`,
+										},
+										"en": schema.StringAttribute{
+											Computed:    true,
+											Description: `English translation`,
+										},
+									},
+									Description: `Description of the component`,
+								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the component`,
@@ -327,6 +495,7 @@ func (r *AppDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 											Description: `English translation`,
 										},
 									},
+									Description: `Name of the component`,
 								},
 								"options": schema.ListNestedAttribute{
 									Computed: true,
@@ -366,66 +535,45 @@ func (r *AppDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						},
 					},
 				},
-			},
-			"created_at": schema.StringAttribute{
-				Computed: true,
-			},
-			"created_by": schema.StringAttribute{
-				Computed: true,
-			},
-			"description": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"de": schema.StringAttribute{
-						Computed:    true,
-						Description: `German translation`,
-					},
-					"en": schema.StringAttribute{
-						Computed:    true,
-						Description: `English translation`,
-					},
-				},
-			},
-			"documentation_url": schema.StringAttribute{
-				Computed:    true,
-				Description: `URL of the app documentation.`,
+				Description: `List of component configurations for the installed version`,
 			},
 			"enabled": schema.BoolAttribute{
 				Computed:    true,
-				Description: `Flag to indicate if the app is enabled.`,
+				Description: `Flag to indicate if the app is enabled. Enabled is set to true when required option values are set.`,
 			},
-			"icon_url": schema.StringAttribute{
-				Computed:    true,
-				Description: `URL of the app icon.`,
-			},
-			"installation_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Unique identifier for the app installation`,
-			},
-			"installed_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp of app creation`,
-			},
-			"installed_by": schema.StringAttribute{
-				Computed:    true,
-				Description: `User ID of the user who installed the app`,
-			},
-			"internal": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Flag to indicate if the app is built by epilot.`,
-			},
-			"name": schema.SingleNestedAttribute{
+			"installation_audit": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
-					"de": schema.StringAttribute{
+					"created_at": schema.StringAttribute{
 						Computed:    true,
-						Description: `German translation`,
+						Description: `Timestamp of the creation`,
 					},
-					"en": schema.StringAttribute{
+					"created_by": schema.StringAttribute{
 						Computed:    true,
-						Description: `English translation`,
+						Description: `User ID of the creator`,
+					},
+					"updated_at": schema.StringAttribute{
+						Computed:    true,
+						Description: `Timestamp of the last update`,
+					},
+					"updated_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `User ID of the last updater`,
 					},
 				},
+				Description: `Audit information for the app`,
+			},
+			"installed_version": schema.StringAttribute{
+				Computed:    true,
+				Description: `Version of the app that is installed`,
+			},
+			"installer_org_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the organization the app is installed in`,
+			},
+			"name": schema.StringAttribute{
+				Computed:    true,
+				Description: `Name of the app`,
 			},
 			"option_values": schema.ListNestedAttribute{
 				Computed: true,
@@ -452,29 +600,7 @@ func (r *AppDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						},
 					},
 				},
-				Description: `Configuration values for the app components options`,
-			},
-			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Unique identifier for the organization the app is installed in`,
-			},
-			"owner_org_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Organization ID of the app owner, required for private apps`,
-			},
-			"status": schema.StringAttribute{
-				Computed: true,
-			},
-			"updated_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp of the last update`,
-			},
-			"updated_by": schema.StringAttribute{
-				Computed:    true,
-				Description: `User ID of the user who last updated the app`,
-			},
-			"version": schema.StringAttribute{
-				Computed: true,
+				Description: `Configuration values for the app components`,
 			},
 		},
 	}
@@ -521,10 +647,10 @@ func (r *AppDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 	var appID string
 	appID = data.AppID.ValueString()
 
-	request := operations.GetInstalledAppRequest{
+	request := operations.GetInstallationRequest{
 		AppID: appID,
 	}
-	res, err := r.client.GetInstalledApp(ctx, request)
+	res, err := r.client.AppInstallation.GetInstallation(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -544,11 +670,11 @@ func (r *AppDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.App != nil) {
+	if !(res.Installation != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSharedApp(res.App)
+	data.RefreshFromSharedInstallation(res.Installation)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

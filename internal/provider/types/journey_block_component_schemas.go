@@ -4,12 +4,11 @@ package types
 
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
-type PortalExtensionComponentSchemas struct {
+type JourneyBlockComponentSchemas struct {
 	ComponentType types.String               `tfsdk:"component_type"`
-	Configuration PortalExtensionConfig      `tfsdk:"configuration"`
+	Configuration JourneyBlockConfig         `tfsdk:"configuration"`
 	Description   *SchemasTextArgDescription `tfsdk:"description"`
 	ID            types.String               `tfsdk:"id"`
 	Name          *SchemasTextArgDescription `tfsdk:"name"`
 	Options       []Options                  `tfsdk:"options"`
-	Origin        types.String               `tfsdk:"origin"`
 }

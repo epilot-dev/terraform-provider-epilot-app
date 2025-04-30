@@ -4,14 +4,14 @@ package shared
 
 type TranslatedString struct {
 	// German translation
-	De *string `json:"de,omitempty"`
+	De string `json:"de"`
 	// English translation
 	En *string `json:"en,omitempty"`
 }
 
-func (o *TranslatedString) GetDe() *string {
+func (o *TranslatedString) GetDe() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.De
 }

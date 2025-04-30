@@ -8,50 +8,32 @@ import (
 	"net/http"
 )
 
-type ListInstalledAppsRequest struct {
-	// Filter apps by specific component type
-	ComponentType *shared.ComponentType `queryParam:"style=form,explode=true,name=component_type"`
-	// Filter apps by enabled status
-	Enabled *bool `queryParam:"style=form,explode=true,name=enabled"`
+type ListConfigurationsRequest struct {
 	// Page number for pagination
 	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// Number of items per page
 	PageSize *int64 `default:"20" queryParam:"style=form,explode=true,name=pageSize"`
 }
 
-func (l ListInstalledAppsRequest) MarshalJSON() ([]byte, error) {
+func (l ListConfigurationsRequest) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(l, "", false)
 }
 
-func (l *ListInstalledAppsRequest) UnmarshalJSON(data []byte) error {
+func (l *ListConfigurationsRequest) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &l, "", false, false); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *ListInstalledAppsRequest) GetComponentType() *shared.ComponentType {
-	if o == nil {
-		return nil
-	}
-	return o.ComponentType
-}
-
-func (o *ListInstalledAppsRequest) GetEnabled() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Enabled
-}
-
-func (o *ListInstalledAppsRequest) GetPage() *int64 {
+func (o *ListConfigurationsRequest) GetPage() *int64 {
 	if o == nil {
 		return nil
 	}
 	return o.Page
 }
 
-func (o *ListInstalledAppsRequest) GetPageSize() *int64 {
+func (o *ListConfigurationsRequest) GetPageSize() *int64 {
 	if o == nil {
 		return nil
 	}
@@ -85,59 +67,59 @@ func (o *Pagination) GetTotal() *int64 {
 	return o.Total
 }
 
-// ListInstalledAppsResponseBody - Successful response
-type ListInstalledAppsResponseBody struct {
-	Apps       []shared.App `json:"apps,omitempty"`
-	Pagination *Pagination  `json:"pagination,omitempty"`
+// ListConfigurationsResponseBody - List of app configurations
+type ListConfigurationsResponseBody struct {
+	Configurations []shared.ConfigurationMetadata `json:"configurations,omitempty"`
+	Pagination     *Pagination                    `json:"pagination,omitempty"`
 }
 
-func (o *ListInstalledAppsResponseBody) GetApps() []shared.App {
+func (o *ListConfigurationsResponseBody) GetConfigurations() []shared.ConfigurationMetadata {
 	if o == nil {
 		return nil
 	}
-	return o.Apps
+	return o.Configurations
 }
 
-func (o *ListInstalledAppsResponseBody) GetPagination() *Pagination {
+func (o *ListConfigurationsResponseBody) GetPagination() *Pagination {
 	if o == nil {
 		return nil
 	}
 	return o.Pagination
 }
 
-type ListInstalledAppsResponse struct {
+type ListConfigurationsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Successful response
-	Object *ListInstalledAppsResponseBody
+	// List of app configurations
+	Object *ListConfigurationsResponseBody
 }
 
-func (o *ListInstalledAppsResponse) GetContentType() string {
+func (o *ListConfigurationsResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *ListInstalledAppsResponse) GetStatusCode() int {
+func (o *ListConfigurationsResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *ListInstalledAppsResponse) GetRawResponse() *http.Response {
+func (o *ListConfigurationsResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}
 	return o.RawResponse
 }
 
-func (o *ListInstalledAppsResponse) GetObject() *ListInstalledAppsResponseBody {
+func (o *ListConfigurationsResponse) GetObject() *ListConfigurationsResponseBody {
 	if o == nil {
 		return nil
 	}

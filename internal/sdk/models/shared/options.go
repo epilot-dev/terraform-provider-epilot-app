@@ -7,19 +7,19 @@ import (
 	"fmt"
 )
 
-type Type string
+type OptionsType string
 
 const (
-	TypeText    Type = "text"
-	TypeNumber  Type = "number"
-	TypeBoolean Type = "boolean"
-	TypeSecret  Type = "secret"
+	OptionsTypeText    OptionsType = "text"
+	OptionsTypeNumber  OptionsType = "number"
+	OptionsTypeBoolean OptionsType = "boolean"
+	OptionsTypeSecret  OptionsType = "secret"
 )
 
-func (e Type) ToPointer() *Type {
+func (e OptionsType) ToPointer() *OptionsType {
 	return &e
 }
-func (e *Type) UnmarshalJSON(data []byte) error {
+func (e *OptionsType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -32,10 +32,10 @@ func (e *Type) UnmarshalJSON(data []byte) error {
 	case "boolean":
 		fallthrough
 	case "secret":
-		*e = Type(v)
+		*e = OptionsType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for Type: %v", v)
+		return fmt.Errorf("invalid value for OptionsType: %v", v)
 	}
 }
 
@@ -48,8 +48,8 @@ type Options struct {
 	// Human-readable label for the configuration option
 	Label *string `json:"label,omitempty"`
 	// Flag to indicate if this option is required
-	Required *bool `json:"required,omitempty"`
-	Type     Type  `json:"type"`
+	Required *bool       `json:"required,omitempty"`
+	Type     OptionsType `json:"type"`
 	// The configured value for this option. Is only present when the component is installed.
 	Value *string `json:"value,omitempty"`
 }
@@ -82,9 +82,9 @@ func (o *Options) GetRequired() *bool {
 	return o.Required
 }
 
-func (o *Options) GetType() Type {
+func (o *Options) GetType() OptionsType {
 	if o == nil {
-		return Type("")
+		return OptionsType("")
 	}
 	return o.Type
 }

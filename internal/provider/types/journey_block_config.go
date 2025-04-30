@@ -5,6 +5,8 @@ package types
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
 type JourneyBlockConfig struct {
-	ComponentTag types.String `tfsdk:"component_tag"`
-	ComponentURL types.String `tfsdk:"component_url"`
+	ComponentArgs []JourneyBlockComponentArgs `tfsdk:"component_args"`
+	ComponentSize types.Number                `tfsdk:"component_size"`
+	ComponentTag  types.String                `tfsdk:"component_tag"`
+	ComponentURL  types.String                `tfsdk:"component_url"`
 }

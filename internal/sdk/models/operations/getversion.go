@@ -7,21 +7,30 @@ import (
 	"net/http"
 )
 
-type GetAppConfigurationRequest struct {
+type GetVersionRequest struct {
 	// ID of the app configuration
 	AppID string `pathParam:"style=simple,explode=false,name=appId"`
+	// Version of the app configuration to retrieve
+	Version string `pathParam:"style=simple,explode=false,name=version"`
 }
 
-func (o *GetAppConfigurationRequest) GetAppID() string {
+func (o *GetVersionRequest) GetAppID() string {
 	if o == nil {
 		return ""
 	}
 	return o.AppID
 }
 
-type GetAppConfigurationResponse struct {
-	// Successful response
-	AppConfiguration *shared.AppConfiguration
+func (o *GetVersionRequest) GetVersion() string {
+	if o == nil {
+		return ""
+	}
+	return o.Version
+}
+
+type GetVersionResponse struct {
+	// App configuration for specific version
+	Configuration *shared.Configuration
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -30,28 +39,28 @@ type GetAppConfigurationResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *GetAppConfigurationResponse) GetAppConfiguration() *shared.AppConfiguration {
+func (o *GetVersionResponse) GetConfiguration() *shared.Configuration {
 	if o == nil {
 		return nil
 	}
-	return o.AppConfiguration
+	return o.Configuration
 }
 
-func (o *GetAppConfigurationResponse) GetContentType() string {
+func (o *GetVersionResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *GetAppConfigurationResponse) GetStatusCode() int {
+func (o *GetVersionResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *GetAppConfigurationResponse) GetRawResponse() *http.Response {
+func (o *GetVersionResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}

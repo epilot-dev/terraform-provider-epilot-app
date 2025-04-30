@@ -11,13 +11,13 @@ import (
 	speakeasy_listvalidators "github.com/epilot-dev/terraform-provider-epilot-app/internal/validators/listvalidators"
 	speakeasy_objectvalidators "github.com/epilot-dev/terraform-provider-epilot-app/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/epilot-dev/terraform-provider-epilot-app/internal/validators/stringvalidators"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -38,28 +38,14 @@ type AppResource struct {
 
 // AppResourceModel describes the resource data model.
 type AppResourceModel struct {
-	AccessLevel      types.String              `tfsdk:"access_level"`
-	AppID            types.String              `tfsdk:"app_id"`
-	Author           *tfTypes.Author           `tfsdk:"author"`
-	Components       []tfTypes.BaseComponent   `tfsdk:"components"`
-	CreatedAt        types.String              `tfsdk:"created_at"`
-	CreatedBy        types.String              `tfsdk:"created_by"`
-	Description      *tfTypes.TranslatedString `tfsdk:"description"`
-	DocumentationURL types.String              `tfsdk:"documentation_url"`
-	Enabled          types.Bool                `tfsdk:"enabled"`
-	IconURL          types.String              `tfsdk:"icon_url"`
-	InstallationID   types.String              `tfsdk:"installation_id"`
-	InstalledAt      types.String              `tfsdk:"installed_at"`
-	InstalledBy      types.String              `tfsdk:"installed_by"`
-	Internal         types.Bool                `tfsdk:"internal"`
-	Name             *tfTypes.TranslatedString `tfsdk:"name"`
-	OptionValues     []tfTypes.OptionsRef      `tfsdk:"option_values"`
-	OrganizationID   types.String              `tfsdk:"organization_id"`
-	OwnerOrgID       types.String              `tfsdk:"owner_org_id"`
-	Status           types.String              `tfsdk:"status"`
-	UpdatedAt        types.String              `tfsdk:"updated_at"`
-	UpdatedBy        types.String              `tfsdk:"updated_by"`
-	Version          types.String              `tfsdk:"version"`
+	AppID             types.String               `tfsdk:"app_id"`
+	Components        []tfTypes.BaseComponent    `tfsdk:"components"`
+	Enabled           types.Bool                 `tfsdk:"enabled"`
+	InstallationAudit *tfTypes.InstallationAudit `tfsdk:"installation_audit"`
+	InstalledVersion  types.String               `tfsdk:"installed_version"`
+	InstallerOrgID    types.String               `tfsdk:"installer_org_id"`
+	Name              types.String               `tfsdk:"name"`
+	OptionValues      []tfTypes.OptionsRef       `tfsdk:"option_values"`
 }
 
 func (r *AppResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -70,36 +56,8 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "App Resource",
 		Attributes: map[string]schema.Attribute{
-			"access_level": schema.StringAttribute{
-				Computed:    true,
-				Default:     stringdefault.StaticString("public"),
-				Description: `Access level of the app. Default: "public"; must be one of ["public", "private"]`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"public",
-						"private",
-					),
-				},
-			},
 			"app_id": schema.StringAttribute{
 				Required: true,
-			},
-			"author": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"company": schema.StringAttribute{
-						Computed:    true,
-						Description: `Company of the author`,
-					},
-					"email": schema.StringAttribute{
-						Computed:    true,
-						Description: `Email of the author`,
-					},
-					"name": schema.StringAttribute{
-						Computed:    true,
-						Description: `Name of the author`,
-					},
-				},
 			},
 			"components": schema.ListNestedAttribute{
 				Computed: true,
@@ -120,6 +78,229 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 								"configuration": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
+										"component_args": schema.ListNestedAttribute{
+											Computed: true,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"boolean": schema.SingleNestedAttribute{
+														Computed: true,
+														Attributes: map[string]schema.Attribute{
+															"description": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"de": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `German translation`,
+																	},
+																	"en": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `English translation`,
+																	},
+																},
+																Description: `Description of what this component arg does`,
+															},
+															"key": schema.StringAttribute{
+																Computed:    true,
+																Description: `Unique identifier for this component arg`,
+															},
+															"label": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"de": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `German translation`,
+																	},
+																	"en": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `English translation`,
+																	},
+																},
+																Description: `Human-readable label for the component arg`,
+															},
+															"required": schema.BoolAttribute{
+																Computed:    true,
+																Default:     booldefault.StaticBool(false),
+																Description: `Flag to indicate if this option is required. Default: false`,
+															},
+															"type": schema.StringAttribute{
+																Computed:    true,
+																Description: `must be one of ["text", "boolean", "enum"]`,
+																Validators: []validator.String{
+																	stringvalidator.OneOf(
+																		"text",
+																		"boolean",
+																		"enum",
+																	),
+																},
+															},
+														},
+														Validators: []validator.Object{
+															objectvalidator.ConflictsWith(path.Expressions{
+																path.MatchRelative().AtParent().AtName("text"),
+																path.MatchRelative().AtParent().AtName("enum"),
+															}...),
+														},
+													},
+													"enum": schema.SingleNestedAttribute{
+														Computed: true,
+														Attributes: map[string]schema.Attribute{
+															"description": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"de": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `German translation`,
+																	},
+																	"en": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `English translation`,
+																	},
+																},
+																Description: `Description of what this component arg does`,
+															},
+															"is_multi": schema.BoolAttribute{
+																Computed:    true,
+																Default:     booldefault.StaticBool(false),
+																Description: `If true, allows selection of multiple values. Default: false`,
+															},
+															"key": schema.StringAttribute{
+																Computed:    true,
+																Description: `Unique identifier for this component arg`,
+															},
+															"label": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"de": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `German translation`,
+																	},
+																	"en": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `English translation`,
+																	},
+																},
+																Description: `Human-readable label for the component arg`,
+															},
+															"options": schema.ListNestedAttribute{
+																Computed: true,
+																NestedObject: schema.NestedAttributeObject{
+																	Attributes: map[string]schema.Attribute{
+																		"id": schema.StringAttribute{
+																			Computed:    true,
+																			Description: `Unique identifier for the option`,
+																		},
+																		"label": schema.SingleNestedAttribute{
+																			Computed: true,
+																			Attributes: map[string]schema.Attribute{
+																				"de": schema.StringAttribute{
+																					Computed:    true,
+																					Description: `German translation`,
+																				},
+																				"en": schema.StringAttribute{
+																					Computed:    true,
+																					Description: `English translation`,
+																				},
+																			},
+																			Description: `Display label for the option`,
+																		},
+																	},
+																},
+																Description: `List of options for enum type`,
+																Validators: []validator.List{
+																	listvalidator.SizeAtLeast(1),
+																},
+															},
+															"required": schema.BoolAttribute{
+																Computed:    true,
+																Default:     booldefault.StaticBool(false),
+																Description: `Flag to indicate if this option is required. Default: false`,
+															},
+															"type": schema.StringAttribute{
+																Computed:    true,
+																Description: `must be one of ["text", "boolean", "enum"]`,
+																Validators: []validator.String{
+																	stringvalidator.OneOf(
+																		"text",
+																		"boolean",
+																		"enum",
+																	),
+																},
+															},
+														},
+														Validators: []validator.Object{
+															objectvalidator.ConflictsWith(path.Expressions{
+																path.MatchRelative().AtParent().AtName("text"),
+																path.MatchRelative().AtParent().AtName("boolean"),
+															}...),
+														},
+													},
+													"text": schema.SingleNestedAttribute{
+														Computed: true,
+														Attributes: map[string]schema.Attribute{
+															"description": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"de": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `German translation`,
+																	},
+																	"en": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `English translation`,
+																	},
+																},
+																Description: `Description of what this component arg does`,
+															},
+															"key": schema.StringAttribute{
+																Computed:    true,
+																Description: `Unique identifier for this component arg`,
+															},
+															"label": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"de": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `German translation`,
+																	},
+																	"en": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `English translation`,
+																	},
+																},
+																Description: `Human-readable label for the component arg`,
+															},
+															"required": schema.BoolAttribute{
+																Computed:    true,
+																Default:     booldefault.StaticBool(false),
+																Description: `Flag to indicate if this option is required. Default: false`,
+															},
+															"type": schema.StringAttribute{
+																Computed:    true,
+																Description: `must be one of ["text", "boolean", "enum"]`,
+																Validators: []validator.String{
+																	stringvalidator.OneOf(
+																		"text",
+																		"boolean",
+																		"enum",
+																	),
+																},
+															},
+														},
+														Validators: []validator.Object{
+															objectvalidator.ConflictsWith(path.Expressions{
+																path.MatchRelative().AtParent().AtName("boolean"),
+																path.MatchRelative().AtParent().AtName("enum"),
+															}...),
+														},
+													},
+												},
+											},
+											Description: `Arguments to pass to the component`,
+										},
+										"component_size": schema.NumberAttribute{
+											Computed:    true,
+											Description: `Size of the bundle in bytes`,
+										},
 										"component_tag": schema.StringAttribute{
 											Computed:    true,
 											Description: `Custom element tag for the component`,
@@ -129,6 +310,20 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 											Description: `URL of the web component object`,
 										},
 									},
+								},
+								"description": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"de": schema.StringAttribute{
+											Computed:    true,
+											Description: `German translation`,
+										},
+										"en": schema.StringAttribute{
+											Computed:    true,
+											Description: `English translation`,
+										},
+									},
+									Description: `Description of the component`,
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
@@ -146,6 +341,7 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 											Description: `English translation`,
 										},
 									},
+									Description: `Name of the component`,
 								},
 								"options": schema.ListNestedAttribute{
 									Computed: true,
@@ -350,6 +546,20 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										},
 									},
 								},
+								"description": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"de": schema.StringAttribute{
+											Computed:    true,
+											Description: `German translation`,
+										},
+										"en": schema.StringAttribute{
+											Computed:    true,
+											Description: `English translation`,
+										},
+									},
+									Description: `Description of the component`,
+								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the component`,
@@ -366,6 +576,7 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 											Description: `English translation`,
 										},
 									},
+									Description: `Name of the component`,
 								},
 								"options": schema.ListNestedAttribute{
 									Computed: true,
@@ -426,68 +637,46 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						},
 					},
 				},
-			},
-			"created_at": schema.StringAttribute{
-				Computed: true,
-			},
-			"created_by": schema.StringAttribute{
-				Computed: true,
-			},
-			"description": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"de": schema.StringAttribute{
-						Computed:    true,
-						Description: `German translation`,
-					},
-					"en": schema.StringAttribute{
-						Computed:    true,
-						Description: `English translation`,
-					},
-				},
-			},
-			"documentation_url": schema.StringAttribute{
-				Computed:    true,
-				Description: `URL of the app documentation.`,
+				Description: `List of component configurations for the installed version`,
 			},
 			"enabled": schema.BoolAttribute{
 				Computed:    true,
 				Default:     booldefault.StaticBool(true),
-				Description: `Flag to indicate if the app is enabled. Default: true`,
+				Description: `Flag to indicate if the app is enabled. Enabled is set to true when required option values are set. Default: true`,
 			},
-			"icon_url": schema.StringAttribute{
-				Computed:    true,
-				Description: `URL of the app icon.`,
-			},
-			"installation_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Unique identifier for the app installation`,
-			},
-			"installed_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp of app creation`,
-			},
-			"installed_by": schema.StringAttribute{
-				Computed:    true,
-				Description: `User ID of the user who installed the app`,
-			},
-			"internal": schema.BoolAttribute{
-				Computed:    true,
-				Default:     booldefault.StaticBool(false),
-				Description: `Flag to indicate if the app is built by epilot. Default: false`,
-			},
-			"name": schema.SingleNestedAttribute{
+			"installation_audit": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
-					"de": schema.StringAttribute{
+					"created_at": schema.StringAttribute{
 						Computed:    true,
-						Description: `German translation`,
+						Description: `Timestamp of the creation`,
 					},
-					"en": schema.StringAttribute{
+					"created_by": schema.StringAttribute{
 						Computed:    true,
-						Description: `English translation`,
+						Description: `User ID of the creator`,
+					},
+					"updated_at": schema.StringAttribute{
+						Computed:    true,
+						Description: `Timestamp of the last update`,
+					},
+					"updated_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `User ID of the last updater`,
 					},
 				},
+				Description: `Audit information for the app`,
+			},
+			"installed_version": schema.StringAttribute{
+				Computed:    true,
+				Description: `Version of the app that is installed`,
+			},
+			"installer_org_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the organization the app is installed in`,
+			},
+			"name": schema.StringAttribute{
+				Computed:    true,
+				Description: `Name of the app`,
 			},
 			"option_values": schema.ListNestedAttribute{
 				Computed: true,
@@ -540,35 +729,6 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				},
 				Description: `Configuration values for the app components`,
 			},
-			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Unique identifier for the organization the app is installed in`,
-			},
-			"owner_org_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Organization ID of the app owner, required for private apps`,
-			},
-			"status": schema.StringAttribute{
-				Computed:    true,
-				Description: `must be one of ["published", "pending"]`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"published",
-						"pending",
-					),
-				},
-			},
-			"updated_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp of the last update`,
-			},
-			"updated_by": schema.StringAttribute{
-				Computed:    true,
-				Description: `User ID of the user who last updated the app`,
-			},
-			"version": schema.StringAttribute{
-				Computed: true,
-			},
 		},
 	}
 }
@@ -611,15 +771,15 @@ func (r *AppResource) Create(ctx context.Context, req resource.CreateRequest, re
 		return
 	}
 
-	installAppRequest := data.ToSharedInstallAppRequest()
+	installRequest := data.ToSharedInstallRequest()
 	var appID string
 	appID = data.AppID.ValueString()
 
-	request := operations.InstallAppRequest{
-		InstallAppRequest: installAppRequest,
-		AppID:             appID,
+	request := operations.InstallRequest{
+		InstallRequest: installRequest,
+		AppID:          appID,
 	}
-	res, err := r.client.InstallApp(ctx, request)
+	res, err := r.client.AppInstallation.Install(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -662,10 +822,10 @@ func (r *AppResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	var appID string
 	appID = data.AppID.ValueString()
 
-	request := operations.GetInstalledAppRequest{
+	request := operations.GetInstallationRequest{
 		AppID: appID,
 	}
-	res, err := r.client.GetInstalledApp(ctx, request)
+	res, err := r.client.AppInstallation.GetInstallation(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -685,11 +845,11 @@ func (r *AppResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.App != nil) {
+	if !(res.Installation != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSharedApp(res.App)
+	data.RefreshFromSharedInstallation(res.Installation)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -709,15 +869,15 @@ func (r *AppResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		return
 	}
 
-	installAppRequest := data.ToSharedInstallAppRequest()
+	installRequest := data.ToSharedInstallRequest()
 	var appID string
 	appID = data.AppID.ValueString()
 
-	request := operations.InstallAppRequest{
-		InstallAppRequest: installAppRequest,
-		AppID:             appID,
+	request := operations.PatchInstallationRequest{
+		InstallRequest: installRequest,
+		AppID:          appID,
 	}
-	res, err := r.client.InstallApp(ctx, request)
+	res, err := r.client.AppInstallation.PatchInstallation(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -760,10 +920,10 @@ func (r *AppResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 	var appID string
 	appID = data.AppID.ValueString()
 
-	request := operations.UninstallAppRequest{
+	request := operations.UninstallRequest{
 		AppID: appID,
 	}
-	res, err := r.client.UninstallApp(ctx, request)
+	res, err := r.client.AppInstallation.Uninstall(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

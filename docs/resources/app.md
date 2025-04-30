@@ -42,26 +42,12 @@ resource "epilot-app_app" "my_app" {
 
 ### Read-Only
 
-- `access_level` (String) Access level of the app. Default: "public"; must be one of ["public", "private"]
-- `author` (Attributes) (see [below for nested schema](#nestedatt--author))
-- `components` (Attributes List) (see [below for nested schema](#nestedatt--components))
-- `created_at` (String)
-- `created_by` (String)
-- `description` (Attributes) (see [below for nested schema](#nestedatt--description))
-- `documentation_url` (String) URL of the app documentation.
-- `enabled` (Boolean) Flag to indicate if the app is enabled. Default: true
-- `icon_url` (String) URL of the app icon.
-- `installation_id` (String) Unique identifier for the app installation
-- `installed_at` (String) Timestamp of app creation
-- `installed_by` (String) User ID of the user who installed the app
-- `internal` (Boolean) Flag to indicate if the app is built by epilot. Default: false
-- `name` (Attributes) (see [below for nested schema](#nestedatt--name))
-- `organization_id` (String) Unique identifier for the organization the app is installed in
-- `owner_org_id` (String) Organization ID of the app owner, required for private apps
-- `status` (String) must be one of ["published", "pending"]
-- `updated_at` (String) Timestamp of the last update
-- `updated_by` (String) User ID of the user who last updated the app
-- `version` (String)
+- `components` (Attributes List) List of component configurations for the installed version (see [below for nested schema](#nestedatt--components))
+- `enabled` (Boolean) Flag to indicate if the app is enabled. Enabled is set to true when required option values are set. Default: true
+- `installation_audit` (Attributes) Audit information for the app (see [below for nested schema](#nestedatt--installation_audit))
+- `installed_version` (String) Version of the app that is installed
+- `installer_org_id` (String) Unique identifier for the organization the app is installed in
+- `name` (String) Name of the app
 
 <a id="nestedatt--option_values"></a>
 ### Nested Schema for `option_values`
@@ -81,16 +67,6 @@ Optional:
 
 
 
-<a id="nestedatt--author"></a>
-### Nested Schema for `author`
-
-Read-Only:
-
-- `company` (String) Company of the author
-- `email` (String) Email of the author
-- `name` (String) Name of the author
-
-
 <a id="nestedatt--components"></a>
 ### Nested Schema for `components`
 
@@ -106,8 +82,9 @@ Read-Only:
 
 - `component_type` (String) must be "CUSTOM_JOURNEY_BLOCK"
 - `configuration` (Attributes) (see [below for nested schema](#nestedatt--components--custom_journey_block--configuration))
+- `description` (Attributes) Description of the component (see [below for nested schema](#nestedatt--components--custom_journey_block--description))
 - `id` (String) Unique identifier for the component
-- `name` (Attributes) (see [below for nested schema](#nestedatt--components--custom_journey_block--name))
+- `name` (Attributes) Name of the component (see [below for nested schema](#nestedatt--components--custom_journey_block--name))
 - `options` (Attributes List) List of options for the app component (see [below for nested schema](#nestedatt--components--custom_journey_block--options))
 
 <a id="nestedatt--components--custom_journey_block--configuration"></a>
@@ -115,8 +92,139 @@ Read-Only:
 
 Read-Only:
 
+- `component_args` (Attributes List) Arguments to pass to the component (see [below for nested schema](#nestedatt--components--custom_journey_block--configuration--component_args))
+- `component_size` (Number) Size of the bundle in bytes
 - `component_tag` (String) Custom element tag for the component
 - `component_url` (String) URL of the web component object
+
+<a id="nestedatt--components--custom_journey_block--configuration--component_args"></a>
+### Nested Schema for `components.custom_journey_block.configuration.component_args`
+
+Read-Only:
+
+- `boolean` (Attributes) (see [below for nested schema](#nestedatt--components--custom_journey_block--configuration--component_args--boolean))
+- `enum` (Attributes) (see [below for nested schema](#nestedatt--components--custom_journey_block--configuration--component_args--enum))
+- `text` (Attributes) (see [below for nested schema](#nestedatt--components--custom_journey_block--configuration--component_args--text))
+
+<a id="nestedatt--components--custom_journey_block--configuration--component_args--boolean"></a>
+### Nested Schema for `components.custom_journey_block.configuration.component_args.boolean`
+
+Read-Only:
+
+- `description` (Attributes) Description of what this component arg does (see [below for nested schema](#nestedatt--components--custom_journey_block--configuration--component_args--boolean--description))
+- `key` (String) Unique identifier for this component arg
+- `label` (Attributes) Human-readable label for the component arg (see [below for nested schema](#nestedatt--components--custom_journey_block--configuration--component_args--boolean--label))
+- `required` (Boolean) Flag to indicate if this option is required. Default: false
+- `type` (String) must be one of ["text", "boolean", "enum"]
+
+<a id="nestedatt--components--custom_journey_block--configuration--component_args--boolean--description"></a>
+### Nested Schema for `components.custom_journey_block.configuration.component_args.boolean.description`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
+
+
+<a id="nestedatt--components--custom_journey_block--configuration--component_args--boolean--label"></a>
+### Nested Schema for `components.custom_journey_block.configuration.component_args.boolean.label`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
+
+
+
+<a id="nestedatt--components--custom_journey_block--configuration--component_args--enum"></a>
+### Nested Schema for `components.custom_journey_block.configuration.component_args.enum`
+
+Read-Only:
+
+- `description` (Attributes) Description of what this component arg does (see [below for nested schema](#nestedatt--components--custom_journey_block--configuration--component_args--enum--description))
+- `is_multi` (Boolean) If true, allows selection of multiple values. Default: false
+- `key` (String) Unique identifier for this component arg
+- `label` (Attributes) Human-readable label for the component arg (see [below for nested schema](#nestedatt--components--custom_journey_block--configuration--component_args--enum--label))
+- `options` (Attributes List) List of options for enum type (see [below for nested schema](#nestedatt--components--custom_journey_block--configuration--component_args--enum--options))
+- `required` (Boolean) Flag to indicate if this option is required. Default: false
+- `type` (String) must be one of ["text", "boolean", "enum"]
+
+<a id="nestedatt--components--custom_journey_block--configuration--component_args--enum--description"></a>
+### Nested Schema for `components.custom_journey_block.configuration.component_args.enum.description`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
+
+
+<a id="nestedatt--components--custom_journey_block--configuration--component_args--enum--label"></a>
+### Nested Schema for `components.custom_journey_block.configuration.component_args.enum.label`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
+
+
+<a id="nestedatt--components--custom_journey_block--configuration--component_args--enum--options"></a>
+### Nested Schema for `components.custom_journey_block.configuration.component_args.enum.options`
+
+Read-Only:
+
+- `id` (String) Unique identifier for the option
+- `label` (Attributes) Display label for the option (see [below for nested schema](#nestedatt--components--custom_journey_block--configuration--component_args--enum--options--label))
+
+<a id="nestedatt--components--custom_journey_block--configuration--component_args--enum--options--label"></a>
+### Nested Schema for `components.custom_journey_block.configuration.component_args.enum.options.label`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
+
+
+
+
+<a id="nestedatt--components--custom_journey_block--configuration--component_args--text"></a>
+### Nested Schema for `components.custom_journey_block.configuration.component_args.text`
+
+Read-Only:
+
+- `description` (Attributes) Description of what this component arg does (see [below for nested schema](#nestedatt--components--custom_journey_block--configuration--component_args--text--description))
+- `key` (String) Unique identifier for this component arg
+- `label` (Attributes) Human-readable label for the component arg (see [below for nested schema](#nestedatt--components--custom_journey_block--configuration--component_args--text--label))
+- `required` (Boolean) Flag to indicate if this option is required. Default: false
+- `type` (String) must be one of ["text", "boolean", "enum"]
+
+<a id="nestedatt--components--custom_journey_block--configuration--component_args--text--description"></a>
+### Nested Schema for `components.custom_journey_block.configuration.component_args.text.description`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
+
+
+<a id="nestedatt--components--custom_journey_block--configuration--component_args--text--label"></a>
+### Nested Schema for `components.custom_journey_block.configuration.component_args.text.label`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
+
+
+
+
+
+<a id="nestedatt--components--custom_journey_block--description"></a>
+### Nested Schema for `components.custom_journey_block.description`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
 
 
 <a id="nestedatt--components--custom_journey_block--name"></a>
@@ -149,8 +257,9 @@ Read-Only:
 
 - `component_type` (String) must be "PORTAL_EXTENSION"
 - `configuration` (Attributes) (see [below for nested schema](#nestedatt--components--portal_extension--configuration))
+- `description` (Attributes) Description of the component (see [below for nested schema](#nestedatt--components--portal_extension--description))
 - `id` (String) Unique identifier for the component
-- `name` (Attributes) (see [below for nested schema](#nestedatt--components--portal_extension--name))
+- `name` (Attributes) Name of the component (see [below for nested schema](#nestedatt--components--portal_extension--name))
 - `options` (Attributes List) List of options for the app component (see [below for nested schema](#nestedatt--components--portal_extension--options))
 - `origin` (String) must be one of ["END_CUSTOMER_PORTAL", "INSTALLER_PORTAL"]
 
@@ -259,6 +368,15 @@ Read-Only:
 
 
 
+<a id="nestedatt--components--portal_extension--description"></a>
+### Nested Schema for `components.portal_extension.description`
+
+Read-Only:
+
+- `de` (String) German translation
+- `en` (String) English translation
+
+
 <a id="nestedatt--components--portal_extension--name"></a>
 ### Nested Schema for `components.portal_extension.name`
 
@@ -283,22 +401,15 @@ Read-Only:
 
 
 
-<a id="nestedatt--description"></a>
-### Nested Schema for `description`
+<a id="nestedatt--installation_audit"></a>
+### Nested Schema for `installation_audit`
 
 Read-Only:
 
-- `de` (String) German translation
-- `en` (String) English translation
-
-
-<a id="nestedatt--name"></a>
-### Nested Schema for `name`
-
-Read-Only:
-
-- `de` (String) German translation
-- `en` (String) English translation
+- `created_at` (String) Timestamp of the creation
+- `created_by` (String) User ID of the creator
+- `updated_at` (String) Timestamp of the last update
+- `updated_by` (String) User ID of the last updater
 
 ## Import
 

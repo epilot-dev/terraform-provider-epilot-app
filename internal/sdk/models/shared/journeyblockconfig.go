@@ -2,11 +2,78 @@
 
 package shared
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type ComponentMapping string
+
+const (
+	ComponentMappingString   ComponentMapping = "string"
+	ComponentMappingBoolean  ComponentMapping = "boolean"
+	ComponentMappingDate     ComponentMapping = "date"
+	ComponentMappingDatetime ComponentMapping = "datetime"
+	ComponentMappingLink     ComponentMapping = "link"
+)
+
+func (e ComponentMapping) ToPointer() *ComponentMapping {
+	return &e
+}
+func (e *ComponentMapping) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "string":
+		fallthrough
+	case "boolean":
+		fallthrough
+	case "date":
+		fallthrough
+	case "datetime":
+		fallthrough
+	case "link":
+		*e = ComponentMapping(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ComponentMapping: %v", v)
+	}
+}
+
 type JourneyBlockConfig struct {
+	// Arguments to pass to the component
+	ComponentArgs []JourneyBlockComponentArgs `json:"component_args,omitempty"`
+	// Define data which is mapped to entity mapping ui blocks
+	ComponentMapping map[string]ComponentMapping `json:"component_mapping,omitempty"`
+	// Size of the bundle in bytes
+	ComponentSize *float64 `json:"component_size,omitempty"`
 	// Custom element tag for the component
 	ComponentTag string `json:"component_tag"`
 	// URL of the web component object
 	ComponentURL string `json:"component_url"`
+}
+
+func (o *JourneyBlockConfig) GetComponentArgs() []JourneyBlockComponentArgs {
+	if o == nil {
+		return nil
+	}
+	return o.ComponentArgs
+}
+
+func (o *JourneyBlockConfig) GetComponentMapping() map[string]ComponentMapping {
+	if o == nil {
+		return nil
+	}
+	return o.ComponentMapping
+}
+
+func (o *JourneyBlockConfig) GetComponentSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.ComponentSize
 }
 
 func (o *JourneyBlockConfig) GetComponentTag() string {
@@ -21,4 +88,34 @@ func (o *JourneyBlockConfig) GetComponentURL() string {
 		return ""
 	}
 	return o.ComponentURL
+}
+
+type JourneyBlockConfigInput struct {
+	// Arguments to pass to the component
+	ComponentArgs []JourneyBlockComponentArgs `json:"component_args,omitempty"`
+	// Define data which is mapped to entity mapping ui blocks
+	ComponentMapping map[string]ComponentMapping `json:"component_mapping,omitempty"`
+	// Custom element tag for the component
+	ComponentTag string `json:"component_tag"`
+}
+
+func (o *JourneyBlockConfigInput) GetComponentArgs() []JourneyBlockComponentArgs {
+	if o == nil {
+		return nil
+	}
+	return o.ComponentArgs
+}
+
+func (o *JourneyBlockConfigInput) GetComponentMapping() map[string]ComponentMapping {
+	if o == nil {
+		return nil
+	}
+	return o.ComponentMapping
+}
+
+func (o *JourneyBlockConfigInput) GetComponentTag() string {
+	if o == nil {
+		return ""
+	}
+	return o.ComponentTag
 }

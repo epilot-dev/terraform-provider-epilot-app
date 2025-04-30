@@ -5,10 +5,10 @@ package types
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
 type Hooks struct {
-	Auth     *PortalAuth       `tfsdk:"auth"`
-	Call     *Call             `tfsdk:"call"`
-	ID       types.String      `tfsdk:"id"`
-	Interval []types.String    `tfsdk:"interval"`
-	Name     *TranslatedString `tfsdk:"name"`
-	Type     types.String      `tfsdk:"type"`
+	Auth     *PortalAuth                `tfsdk:"auth"`
+	Call     *Call                      `tfsdk:"call"`
+	ID       types.String               `tfsdk:"id"`
+	Interval []types.String             `tfsdk:"interval"`
+	Name     *SchemasTextArgDescription `tfsdk:"name"`
+	Type     types.String               `tfsdk:"type"`
 }

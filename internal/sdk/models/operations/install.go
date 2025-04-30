@@ -7,26 +7,26 @@ import (
 	"net/http"
 )
 
-type InstallAppRequest struct {
-	InstallAppRequest *shared.InstallAppRequest `request:"mediaType=application/json"`
-	AppID             string                    `pathParam:"style=simple,explode=false,name=appId"`
+type InstallRequest struct {
+	InstallRequest *shared.InstallRequest `request:"mediaType=application/json"`
+	AppID          string                 `pathParam:"style=simple,explode=false,name=appId"`
 }
 
-func (o *InstallAppRequest) GetInstallAppRequest() *shared.InstallAppRequest {
+func (o *InstallRequest) GetInstallRequest() *shared.InstallRequest {
 	if o == nil {
 		return nil
 	}
-	return o.InstallAppRequest
+	return o.InstallRequest
 }
 
-func (o *InstallAppRequest) GetAppID() string {
+func (o *InstallRequest) GetAppID() string {
 	if o == nil {
 		return ""
 	}
 	return o.AppID
 }
 
-type InstallAppResponse struct {
+type InstallResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -35,21 +35,21 @@ type InstallAppResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *InstallAppResponse) GetContentType() string {
+func (o *InstallResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *InstallAppResponse) GetStatusCode() int {
+func (o *InstallResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *InstallAppResponse) GetRawResponse() *http.Response {
+func (o *InstallResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}

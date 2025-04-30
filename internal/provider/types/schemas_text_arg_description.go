@@ -4,7 +4,7 @@ package types
 
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
-type TranslatedString struct {
+type SchemasTextArgDescription struct {
 	De types.String `tfsdk:"de"`
 	En types.String `tfsdk:"en"`
 }

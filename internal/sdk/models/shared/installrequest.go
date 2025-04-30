@@ -2,12 +2,12 @@
 
 package shared
 
-type InstallAppRequest struct {
+type InstallRequest struct {
 	// Configuration values for the app components
 	OptionValues []OptionsRef `json:"option_values,omitempty"`
 }
 
-func (o *InstallAppRequest) GetOptionValues() []OptionsRef {
+func (o *InstallRequest) GetOptionValues() []OptionsRef {
 	if o == nil {
 		return nil
 	}

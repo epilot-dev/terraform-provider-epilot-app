@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 11c8545a-deb6-44f9-ba56-e71722af6a51
 management:
-  docChecksum: bb4e86af098b1023a97baf71727fb78c
+  docChecksum: e681ab7ca77ef90baad81b7def57b0e1
   docVersion: 1.0.0
   speakeasyVersion: 1.477.0
   generationVersion: 2.497.0
-  releaseVersion: 0.7.0
-  configChecksum: 71b535cca5bfaa6282dac94cbd50b56d
+  releaseVersion: 0.8.0
+  configChecksum: 38897df10b7ddc607b13c17fb6243860
   repoURL: https://github.com/epilot-dev/terraform-provider-epilot-app.git
   repoSubDirectory: .
   published: true
@@ -18,6 +18,8 @@ features:
     envVarSecurityUsage: 0.1.0
     globalSecurity: 2.81.9
     globalServerURLs: 2.82.1
+    inputOutputModels: 2.83.0
+    nullables: 0.0.0
     retries: 2.81.2
     unions: 2.81.17
 generatedFiles:
@@ -59,10 +61,13 @@ generatedFiles:
   - internal/provider/reflect/primitive.go
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
-  - internal/provider/types/author.go
   - internal/provider/types/base_component.go
   - internal/provider/types/call.go
+  - internal/provider/types/enum_arg_schemas.go
   - internal/provider/types/hooks.go
+  - internal/provider/types/installation_audit.go
+  - internal/provider/types/journey_block_component_args.go
+  - internal/provider/types/journey_block_component_schemas.go
   - internal/provider/types/journey_block_config.go
   - internal/provider/types/links.go
   - internal/provider/types/option.go
@@ -72,10 +77,13 @@ generatedFiles:
   - internal/provider/types/portal_extension_component_schemas.go
   - internal/provider/types/portal_extension_config.go
   - internal/provider/types/redirect.go
-  - internal/provider/types/schemas.go
-  - internal/provider/types/translated_string.go
+  - internal/provider/types/schemas_options.go
+  - internal/provider/types/schemas_text_arg_description.go
+  - internal/provider/types/text_arg_schemas.go
   - internal/provider/utils.go
   - internal/sdk/.gitattributes
+  - internal/sdk/appconfiguration.go
+  - internal/sdk/appinstallation.go
   - internal/sdk/internal/hooks/hooks.go
   - internal/sdk/internal/utils/contenttype.go
   - internal/sdk/internal/utils/env.go
@@ -89,31 +97,55 @@ generatedFiles:
   - internal/sdk/internal/utils/security.go
   - internal/sdk/internal/utils/utils.go
   - internal/sdk/models/errors/sdkerror.go
-  - internal/sdk/models/operations/getappconfiguration.go
-  - internal/sdk/models/operations/getinstalledapp.go
-  - internal/sdk/models/operations/getuploadurl.go
-  - internal/sdk/models/operations/installapp.go
-  - internal/sdk/models/operations/listinstalledapps.go
+  - internal/sdk/models/operations/cloneversion.go
+  - internal/sdk/models/operations/createbundleuploadurl.go
+  - internal/sdk/models/operations/createcomponent.go
+  - internal/sdk/models/operations/createconfiguration.go
+  - internal/sdk/models/operations/createlogouploadurl.go
+  - internal/sdk/models/operations/deletecomponent.go
+  - internal/sdk/models/operations/deletelogo.go
+  - internal/sdk/models/operations/deleteversion.go
+  - internal/sdk/models/operations/getconfiguration.go
+  - internal/sdk/models/operations/getinstallation.go
+  - internal/sdk/models/operations/getpublicconfiguration.go
+  - internal/sdk/models/operations/getversion.go
+  - internal/sdk/models/operations/install.go
+  - internal/sdk/models/operations/listconfigurations.go
+  - internal/sdk/models/operations/listinstallations.go
+  - internal/sdk/models/operations/listversions.go
   - internal/sdk/models/operations/options.go
-  - internal/sdk/models/operations/publishapp.go
-  - internal/sdk/models/operations/uninstallapp.go
-  - internal/sdk/models/shared/app.go
-  - internal/sdk/models/shared/appconfiguration.go
+  - internal/sdk/models/operations/patchcomponent.go
+  - internal/sdk/models/operations/patchinstallation.go
+  - internal/sdk/models/operations/patchmetadata.go
+  - internal/sdk/models/operations/promoteversion.go
+  - internal/sdk/models/operations/uninstall.go
   - internal/sdk/models/shared/author.go
   - internal/sdk/models/shared/basecomponent.go
+  - internal/sdk/models/shared/billingfrequency.go
   - internal/sdk/models/shared/componenttype.go
-  - internal/sdk/models/shared/installapprequest.go
+  - internal/sdk/models/shared/configuration.go
+  - internal/sdk/models/shared/configurationmetadata.go
+  - internal/sdk/models/shared/configurationversion.go
+  - internal/sdk/models/shared/createbundlepresignedrequest.go
+  - internal/sdk/models/shared/createconfigrequest.go
+  - internal/sdk/models/shared/createlogopresignedrequest.go
+  - internal/sdk/models/shared/installation.go
+  - internal/sdk/models/shared/installrequest.go
+  - internal/sdk/models/shared/journeyblockcomponentargs.go
   - internal/sdk/models/shared/journeyblockconfig.go
+  - internal/sdk/models/shared/notificationconfig.go
+  - internal/sdk/models/shared/notificationevent.go
   - internal/sdk/models/shared/option.go
   - internal/sdk/models/shared/options.go
   - internal/sdk/models/shared/optionsref.go
+  - internal/sdk/models/shared/patchconfigmetadatarequest.go
   - internal/sdk/models/shared/portalauth.go
   - internal/sdk/models/shared/portalextensionconfig.go
-  - internal/sdk/models/shared/publishapprequest.go
+  - internal/sdk/models/shared/pricing.go
+  - internal/sdk/models/shared/publicconfiguration.go
   - internal/sdk/models/shared/s3reference.go
   - internal/sdk/models/shared/security.go
   - internal/sdk/models/shared/translatedstring.go
-  - internal/sdk/models/shared/uploadfilepayload.go
   - internal/sdk/retry/config.go
   - internal/sdk/sdk.go
   - internal/sdk/types/bigint.go
@@ -188,5 +220,173 @@ examples:
       parameters:
         path:
           appId: "<id>"
+  getInstallation:
+    speakeasy-default-get-installation:
+      parameters:
+        path:
+          appId: "<id>"
+      responses:
+        "200":
+          application/json: {"app_id": "<id>", "components": [], "enabled": true, "installed_version": "<value>", "installer_org_id": "<id>", "name": "<value>"}
+  install:
+    speakeasy-default-install:
+      parameters:
+        path:
+          appId: "<id>"
+  listInstallations:
+    "":
+      parameters:
+        query:
+          componentType: "CUSTOM_JOURNEY_BLOCK"
+          page: 1
+          pageSize: 20
+      responses:
+        "200":
+          application/json: {"apps": [{"app_id": "<id>", "components": [{"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}, {"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}, {"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}], "enabled": true, "installed_version": "<value>", "installer_org_id": "<id>", "name": "<value>"}]}
+  patchInstallation:
+    speakeasy-default-patch-installation:
+      parameters:
+        path:
+          appId: "<id>"
+  promoteVersion:
+    speakeasy-default-promote-version:
+      parameters:
+        path:
+          appId: "<id>"
+          version: "<value>"
+      responses:
+        "200":
+          application/json: {"app_id": "<id>", "components": [], "enabled": true, "installed_version": "<value>", "installer_org_id": "<id>", "name": "<value>"}
+  uninstall:
+    speakeasy-default-uninstall:
+      parameters:
+        path:
+          appId: "<id>"
+  cloneVersion:
+    speakeasy-default-clone-version:
+      parameters:
+        path:
+          appId: "<id>"
+          sourceVersion: "<value>"
+          targetVersion: "<value>"
+      responses:
+        "201":
+          application/json: {}
+  createBundleUploadUrl:
+    speakeasy-default-create-bundle-upload-url:
+      parameters:
+        path:
+          appId: "<id>"
+      requestBody:
+        application/json: {"version": "<value>"}
+      responses:
+        "200":
+          application/json: {"s3ref": {"bucket": "my-bucket", "key": "manifest.json"}, "upload_url": "https://pure-wear.biz"}
+  createComponent:
+    speakeasy-default-create-component:
+      parameters:
+        path:
+          appId: "<id>"
+          version: "<value>"
+      requestBody:
+        application/json: {"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}
+  createConfiguration:
+    speakeasy-default-create-configuration:
+      requestBody:
+        application/json: {"description": {"de": "<value>"}, "name": "<value>"}
+      responses:
+        "201":
+          application/json: {"app_id": "<id>"}
+  createLogoUploadUrl:
+    speakeasy-default-create-logo-upload-url:
+      parameters:
+        path:
+          appId: "<id>"
+      requestBody:
+        application/json: {"filename": "company-logo.png", "mime_type": "image/png"}
+      responses:
+        "200":
+          application/json: {"s3ref": {"bucket": "my-bucket", "key": "manifest.json"}, "upload_url": "https://lumbering-e-mail.com"}
+  deleteComponent:
+    speakeasy-default-delete-component:
+      parameters:
+        path:
+          appId: "<id>"
+          version: "<value>"
+          componentId: "<id>"
+  deleteLogo:
+    speakeasy-default-delete-logo:
+      parameters:
+        path:
+          appId: "<id>"
+  deleteVersion:
+    speakeasy-default-delete-version:
+      parameters:
+        path:
+          appId: "<id>"
+          version: "<value>"
+  getConfiguration:
+    speakeasy-default-get-configuration:
+      parameters:
+        path:
+          appId: "<id>"
+        query: {}
+      responses:
+        "200":
+          application/json: {"app_id": "<id>", "components": [], "description": {"de": "<value>"}, "internal": false, "latest_version": "<value>", "name": "<value>", "notifications": {"email": "developer@example.com"}, "owner_org_id": "<id>", "pending": false, "public": true, "version": "<value>", "version_audit": {}, "versions": ["<value>", "<value>"]}
+  getPublicConfiguration:
+    speakeasy-default-get-public-configuration:
+      parameters:
+        path:
+          appId: "<id>"
+        query: {}
+      responses:
+        "200":
+          application/json: {"app_id": "<id>", "components": [{"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}, {"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>", "component_url": "https://cdn.apps.com/123/v1.0.0/bundle.js"}, "id": "<id>"}], "name": "<value>", "owner_org_id": "<id>", "version": "<value>"}
+  getVersion:
+    speakeasy-default-get-version:
+      parameters:
+        path:
+          appId: "<id>"
+          version: "<value>"
+      responses:
+        "200":
+          application/json: {"app_id": "<id>", "components": [{"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}], "description": {"de": "<value>"}, "internal": false, "latest_version": "<value>", "name": "<value>", "notifications": {"email": "developer@example.com"}, "owner_org_id": "<id>", "pending": false, "public": true, "version": "<value>", "version_audit": {}, "versions": []}
+  listConfigurations:
+    speakeasy-default-list-configurations:
+      parameters:
+        query:
+          page: 1
+          pageSize: 20
+      responses:
+        "200":
+          application/json: {"configurations": [{"app_id": "<id>", "description": {"de": "<value>"}, "internal": false, "latest_version": "<value>", "name": "<value>", "notifications": {"email": "developer@example.com"}, "owner_org_id": "<id>", "versions": ["<value>"]}, {"app_id": "<id>", "description": {"de": "<value>"}, "internal": false, "latest_version": "<value>", "name": "<value>", "notifications": {"email": "developer@example.com"}, "owner_org_id": "<id>", "versions": ["<value>"]}]}
+  listVersions:
+    speakeasy-default-list-versions:
+      parameters:
+        path:
+          appId: "<id>"
+        query:
+          page: 1
+          pageSize: 20
+      responses:
+        "200":
+          application/json: {"versions": [{"app_id": "<id>", "components": [{"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>", "component_url": "https://cdn.apps.com/123/v1.0.0/bundle.js"}, "id": "<id>"}], "owner_org_id": "<id>", "pending": false, "public": true, "version": "<value>", "version_audit": {}}]}
+  patchComponent:
+    speakeasy-default-patch-component:
+      parameters:
+        path:
+          appId: "<id>"
+          version: "<value>"
+          componentId: "<id>"
+      requestBody:
+        application/json: {"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>"}, "id": "<id>"}
+  patchMetadata:
+    speakeasy-default-patch-metadata:
+      parameters:
+        path:
+          appId: "<id>"
+      requestBody:
+        application/json: {"notifications": {"email": "developer@example.com"}}
 examplesVersion: 1.0.0
 generatedTests: {}

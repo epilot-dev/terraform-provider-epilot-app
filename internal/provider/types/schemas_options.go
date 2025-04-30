@@ -4,8 +4,7 @@ package types
 
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
-type Author struct {
-	Company types.String `tfsdk:"company"`
-	Email   types.String `tfsdk:"email"`
-	Name    types.String `tfsdk:"name"`
+type SchemasOptions struct {
+	ID    types.String              `tfsdk:"id"`
+	Label SchemasTextArgDescription `tfsdk:"label"`
 }

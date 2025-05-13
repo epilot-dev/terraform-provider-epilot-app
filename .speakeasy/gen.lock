@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 11c8545a-deb6-44f9-ba56-e71722af6a51
 management:
-  docChecksum: e681ab7ca77ef90baad81b7def57b0e1
+  docChecksum: 1dde0c9d7d78632c9715408c9a62f8a7
   docVersion: 1.0.0
   speakeasyVersion: 1.477.0
   generationVersion: 2.497.0
-  releaseVersion: 0.8.0
-  configChecksum: 38897df10b7ddc607b13c17fb6243860
+  releaseVersion: 0.8.2
+  configChecksum: d12e5c328dd04901e16679766f119f18
   repoURL: https://github.com/epilot-dev/terraform-provider-epilot-app.git
   repoSubDirectory: .
   published: true
@@ -233,6 +233,9 @@ examples:
       parameters:
         path:
           appId: "<id>"
+      responses:
+        "204":
+          application/json: {"app_id": "<id>", "components": [{"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>", "component_url": "https://cdn.apps.com/123/v1.0.0/bundle.js"}, "id": "<id>"}], "enabled": true, "installed_version": "<value>", "installer_org_id": "<id>", "name": "<value>"}
   listInstallations:
     "":
       parameters:

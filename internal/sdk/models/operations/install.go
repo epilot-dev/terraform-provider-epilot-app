@@ -29,6 +29,8 @@ func (o *InstallRequest) GetAppID() string {
 type InstallResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
+	// App successfully installed.
+	Installation *shared.Installation
 	// HTTP response status code for this operation
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
@@ -40,6 +42,13 @@ func (o *InstallResponse) GetContentType() string {
 		return ""
 	}
 	return o.ContentType
+}
+
+func (o *InstallResponse) GetInstallation() *shared.Installation {
+	if o == nil {
+		return nil
+	}
+	return o.Installation
 }
 
 func (o *InstallResponse) GetStatusCode() int {

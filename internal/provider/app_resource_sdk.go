@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"encoding/json"
 	tfTypes "github.com/epilot-dev/terraform-provider-epilot-app/internal/provider/types"
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -10,33 +11,17 @@ import (
 )
 
 func (r *AppResourceModel) ToSharedInstallRequest() *shared.InstallRequest {
-	var optionValues []shared.OptionsRef = []shared.OptionsRef{}
-	for _, optionValuesItem := range r.OptionValues {
-		var componentID string
-		componentID = optionValuesItem.ComponentID.ValueString()
-
-		var optionsVar []shared.Option = []shared.Option{}
-		for _, optionsItem := range optionValuesItem.Options {
-			var key string
-			key = optionsItem.Key.ValueString()
-
-			var value string
-			value = optionsItem.Value.ValueString()
-
-			optionsVar = append(optionsVar, shared.Option{
-				Key:   key,
-				Value: value,
-			})
-		}
-		optionValues = append(optionValues, shared.OptionsRef{
-			ComponentID: componentID,
-			Options:     optionsVar,
-		})
-	}
-	out := shared.InstallRequest{
-		OptionValues: optionValues,
-	}
+	out := shared.InstallRequest{}
 	return &out
+}
+
+func (r *AppResourceModel) RefreshFromInterface(resp interface{}) {
+	if resp == nil {
+		r.Data = types.StringNull()
+	} else {
+		dataResult, _ := json.Marshal(resp)
+		r.Data = types.StringValue(string(dataResult))
+	}
 }
 
 func (r *AppResourceModel) RefreshFromSharedInstallation(resp *shared.Installation) {

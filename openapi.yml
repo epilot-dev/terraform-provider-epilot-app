@@ -585,6 +585,10 @@ paths:
       responses:
         "204":
           description: App successfully installed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/requestBodies/InstallRequest"          
         "404":
           description: App not found.
     patch:

@@ -26,15 +26,27 @@ func (o *InstallRequest) GetAppID() string {
 	return o.AppID
 }
 
+// InstallResponseBody - App successfully installed.
+type InstallResponseBody struct {
+	OptionValues []shared.OptionsRef `json:"option_values,omitempty"`
+}
+
+func (o *InstallResponseBody) GetOptionValues() []shared.OptionsRef {
+	if o == nil {
+		return nil
+	}
+	return o.OptionValues
+}
+
 type InstallResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
-	// App successfully installed.
-	InstallRequest any
 	// HTTP response status code for this operation
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
+	// App successfully installed.
+	Object *InstallResponseBody
 }
 
 func (o *InstallResponse) GetContentType() string {
@@ -42,13 +54,6 @@ func (o *InstallResponse) GetContentType() string {
 		return ""
 	}
 	return o.ContentType
-}
-
-func (o *InstallResponse) GetInstallRequest() any {
-	if o == nil {
-		return nil
-	}
-	return o.InstallRequest
 }
 
 func (o *InstallResponse) GetStatusCode() int {
@@ -63,4 +68,11 @@ func (o *InstallResponse) GetRawResponse() *http.Response {
 		return nil
 	}
 	return o.RawResponse
+}
+
+func (o *InstallResponse) GetObject() *InstallResponseBody {
+	if o == nil {
+		return nil
+	}
+	return o.Object
 }

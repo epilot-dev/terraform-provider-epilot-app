@@ -43,7 +43,6 @@ resource "epilot-app_app" "my_app" {
 ### Read-Only
 
 - `components` (Attributes List) List of component configurations for the installed version (see [below for nested schema](#nestedatt--components))
-- `data` (String) Parsed as JSON.
 - `enabled` (Boolean) Flag to indicate if the app is enabled. Enabled is set to true when required option values are set. Default: true
 - `installation_audit` (Attributes) Audit information for the app (see [below for nested schema](#nestedatt--installation_audit))
 - `installed_version` (String) Version of the app that is installed

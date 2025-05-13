@@ -3,24 +3,71 @@
 package provider
 
 import (
-	"encoding/json"
 	tfTypes "github.com/epilot-dev/terraform-provider-epilot-app/internal/provider/types"
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/models/operations"
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"math/big"
 )
 
 func (r *AppResourceModel) ToSharedInstallRequest() *shared.InstallRequest {
-	out := shared.InstallRequest{}
+	var optionValues []shared.OptionsRef = []shared.OptionsRef{}
+	for _, optionValuesItem := range r.OptionValues {
+		var componentID string
+		componentID = optionValuesItem.ComponentID.ValueString()
+
+		var optionsVar []shared.Option = []shared.Option{}
+		for _, optionsItem := range optionValuesItem.Options {
+			var key string
+			key = optionsItem.Key.ValueString()
+
+			var value string
+			value = optionsItem.Value.ValueString()
+
+			optionsVar = append(optionsVar, shared.Option{
+				Key:   key,
+				Value: value,
+			})
+		}
+		optionValues = append(optionValues, shared.OptionsRef{
+			ComponentID: componentID,
+			Options:     optionsVar,
+		})
+	}
+	out := shared.InstallRequest{
+		OptionValues: optionValues,
+	}
 	return &out
 }
 
-func (r *AppResourceModel) RefreshFromInterface(resp interface{}) {
-	if resp == nil {
-		r.Data = types.StringNull()
-	} else {
-		dataResult, _ := json.Marshal(resp)
-		r.Data = types.StringValue(string(dataResult))
+func (r *AppResourceModel) RefreshFromOperationsInstallResponseBody(resp *operations.InstallResponseBody) {
+	if resp != nil {
+		r.OptionValues = []tfTypes.OptionsRef{}
+		if len(r.OptionValues) > len(resp.OptionValues) {
+			r.OptionValues = r.OptionValues[:len(resp.OptionValues)]
+		}
+		for optionValuesCount, optionValuesItem := range resp.OptionValues {
+			var optionValues1 tfTypes.OptionsRef
+			optionValues1.ComponentID = types.StringValue(optionValuesItem.ComponentID)
+			optionValues1.Options = []tfTypes.Option{}
+			for optionsVarCount, optionsVarItem := range optionValuesItem.Options {
+				var optionsVar1 tfTypes.Option
+				optionsVar1.Key = types.StringValue(optionsVarItem.Key)
+				optionsVar1.Value = types.StringValue(optionsVarItem.Value)
+				if optionsVarCount+1 > len(optionValues1.Options) {
+					optionValues1.Options = append(optionValues1.Options, optionsVar1)
+				} else {
+					optionValues1.Options[optionsVarCount].Key = optionsVar1.Key
+					optionValues1.Options[optionsVarCount].Value = optionsVar1.Value
+				}
+			}
+			if optionValuesCount+1 > len(r.OptionValues) {
+				r.OptionValues = append(r.OptionValues, optionValues1)
+			} else {
+				r.OptionValues[optionValuesCount].ComponentID = optionValues1.ComponentID
+				r.OptionValues[optionValuesCount].Options = optionValues1.Options
+			}
+		}
 	}
 }
 

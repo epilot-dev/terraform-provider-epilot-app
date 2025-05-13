@@ -588,7 +588,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/requestBodies/InstallRequest"          
+                type: object
+                properties:
+                  option_values:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/OptionsRef"
         "404":
           description: App not found.
     patch:

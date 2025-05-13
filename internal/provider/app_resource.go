@@ -8,7 +8,6 @@ import (
 	tfTypes "github.com/epilot-dev/terraform-provider-epilot-app/internal/provider/types"
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk"
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/models/operations"
-	"github.com/epilot-dev/terraform-provider-epilot-app/internal/validators"
 	speakeasy_listvalidators "github.com/epilot-dev/terraform-provider-epilot-app/internal/validators/listvalidators"
 	speakeasy_objectvalidators "github.com/epilot-dev/terraform-provider-epilot-app/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/epilot-dev/terraform-provider-epilot-app/internal/validators/stringvalidators"
@@ -41,7 +40,6 @@ type AppResource struct {
 type AppResourceModel struct {
 	AppID             types.String               `tfsdk:"app_id"`
 	Components        []tfTypes.BaseComponent    `tfsdk:"components"`
-	Data              types.String               `tfsdk:"data"`
 	Enabled           types.Bool                 `tfsdk:"enabled"`
 	InstallationAudit *tfTypes.InstallationAudit `tfsdk:"installation_audit"`
 	InstalledVersion  types.String               `tfsdk:"installed_version"`
@@ -641,13 +639,6 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				},
 				Description: `List of component configurations for the installed version`,
 			},
-			"data": schema.StringAttribute{
-				Computed:    true,
-				Description: `Parsed as JSON.`,
-				Validators: []validator.String{
-					validators.IsValidJSON(),
-				},
-			},
 			"enabled": schema.BoolAttribute{
 				Computed:    true,
 				Default:     booldefault.StaticBool(true),
@@ -804,39 +795,11 @@ func (r *AppResource) Create(ctx context.Context, req resource.CreateRequest, re
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.InstallRequest != nil) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromInterface(res.InstallRequest)
-	refreshPlan(ctx, plan, &data, resp.Diagnostics)
-	var appId1 string
-	appId1 = data.AppID.ValueString()
-
-	request1 := operations.GetInstallationRequest{
-		AppID: appId1,
-	}
-	res1, err := r.client.AppInstallation.GetInstallation(ctx, request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Installation != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	data.RefreshFromSharedInstallation(res1.Installation)
+	data.RefreshFromOperationsInstallResponseBody(res.Object)
 	refreshPlan(ctx, plan, &data, resp.Diagnostics)
 
 	// Save updated data into Terraform state

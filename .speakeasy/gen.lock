@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 11c8545a-deb6-44f9-ba56-e71722af6a51
 management:
-  docChecksum: df819de432c55b75d80d736e5f570260
+  docChecksum: af402f19e0f8c24ea79b3afd79c336c5
   docVersion: 1.0.0
   speakeasyVersion: 1.477.0
   generationVersion: 2.497.0
-  releaseVersion: 0.8.6
-  configChecksum: 39bf4f12924b97e26d3d07d9635f98de
+  releaseVersion: 0.9.0
+  configChecksum: b14dc7a5550814e69e84c69cc076dd9b
   repoURL: https://github.com/epilot-dev/terraform-provider-epilot-app.git
   repoSubDirectory: .
   published: true
@@ -21,6 +21,7 @@ features:
     inputOutputModels: 2.83.0
     nullables: 0.0.0
     retries: 2.81.2
+    typeOverrides: 2.81.1
     unions: 2.81.17
 generatedFiles:
   - .gitattributes
@@ -61,25 +62,9 @@ generatedFiles:
   - internal/provider/reflect/primitive.go
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
-  - internal/provider/types/base_component.go
-  - internal/provider/types/call.go
-  - internal/provider/types/enum_arg_schemas.go
-  - internal/provider/types/hooks.go
   - internal/provider/types/installation_audit.go
-  - internal/provider/types/journey_block_component_args.go
-  - internal/provider/types/journey_block_component_schemas.go
-  - internal/provider/types/journey_block_config.go
-  - internal/provider/types/links.go
   - internal/provider/types/option.go
-  - internal/provider/types/options.go
   - internal/provider/types/options_ref.go
-  - internal/provider/types/portal_auth.go
-  - internal/provider/types/portal_extension_component_schemas.go
-  - internal/provider/types/portal_extension_config.go
-  - internal/provider/types/redirect.go
-  - internal/provider/types/schemas_options.go
-  - internal/provider/types/schemas_text_arg_description.go
-  - internal/provider/types/text_arg_schemas.go
   - internal/provider/utils.go
   - internal/sdk/.gitattributes
   - internal/sdk/appconfiguration.go
@@ -120,7 +105,7 @@ generatedFiles:
   - internal/sdk/models/operations/promoteversion.go
   - internal/sdk/models/operations/uninstall.go
   - internal/sdk/models/shared/author.go
-  - internal/sdk/models/shared/basecomponent.go
+  - internal/sdk/models/shared/basecomponentinput.go
   - internal/sdk/models/shared/billingfrequency.go
   - internal/sdk/models/shared/componenttype.go
   - internal/sdk/models/shared/configuration.go
@@ -132,7 +117,7 @@ generatedFiles:
   - internal/sdk/models/shared/installation.go
   - internal/sdk/models/shared/installrequest.go
   - internal/sdk/models/shared/journeyblockcomponentargs.go
-  - internal/sdk/models/shared/journeyblockconfig.go
+  - internal/sdk/models/shared/journeyblockconfiginput.go
   - internal/sdk/models/shared/notificationconfig.go
   - internal/sdk/models/shared/notificationevent.go
   - internal/sdk/models/shared/option.go

@@ -32,3 +32,6 @@ actions:
   - target: $["components"]["schemas"]["Installation"]
     update:
       x-speakeasy-entity: app
+  - target: $["components"]["schemas"]["Installation"]["properties"]["components"]
+    update:
+      x-speakeasy-type-override: any

@@ -51,7 +51,7 @@ type Installation struct {
 	// ID of the app configuration
 	AppID string `json:"app_id"`
 	// List of component configurations for the installed version
-	Components []BaseComponent `json:"components"`
+	Components any `json:"components"`
 	// Flag to indicate if the app is enabled. Enabled is set to true when required option values are set.
 	Enabled           *bool              `default:"true" json:"enabled"`
 	InstallationAudit *InstallationAudit `json:"installation_audit,omitempty"`
@@ -83,9 +83,9 @@ func (o *Installation) GetAppID() string {
 	return o.AppID
 }
 
-func (o *Installation) GetComponents() []BaseComponent {
+func (o *Installation) GetComponents() any {
 	if o == nil {
-		return []BaseComponent{}
+		return nil
 	}
 	return o.Components
 }

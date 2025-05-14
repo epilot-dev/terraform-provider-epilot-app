@@ -230,144 +230,6 @@ func (o *Name) GetEn() *string {
 	return o.En
 }
 
-type JourneyBlockComponentSchemas struct {
-	ComponentType SchemasJourneyBlockComponentComponentType `json:"component_type"`
-	Configuration JourneyBlockConfig                        `json:"configuration"`
-	Description   *SchemasJourneyBlockComponentDescription  `json:"description,omitempty"`
-	// Unique identifier for the component
-	ID   string `json:"id"`
-	Name *Name  `json:"name,omitempty"`
-	// List of options for the app component
-	Options []Options `json:"options,omitempty"`
-}
-
-func (o *JourneyBlockComponentSchemas) GetComponentType() SchemasJourneyBlockComponentComponentType {
-	if o == nil {
-		return SchemasJourneyBlockComponentComponentType("")
-	}
-	return o.ComponentType
-}
-
-func (o *JourneyBlockComponentSchemas) GetConfiguration() JourneyBlockConfig {
-	if o == nil {
-		return JourneyBlockConfig{}
-	}
-	return o.Configuration
-}
-
-func (o *JourneyBlockComponentSchemas) GetDescription() *SchemasJourneyBlockComponentDescription {
-	if o == nil {
-		return nil
-	}
-	return o.Description
-}
-
-func (o *JourneyBlockComponentSchemas) GetID() string {
-	if o == nil {
-		return ""
-	}
-	return o.ID
-}
-
-func (o *JourneyBlockComponentSchemas) GetName() *Name {
-	if o == nil {
-		return nil
-	}
-	return o.Name
-}
-
-func (o *JourneyBlockComponentSchemas) GetOptions() []Options {
-	if o == nil {
-		return nil
-	}
-	return o.Options
-}
-
-type BaseComponentType string
-
-const (
-	BaseComponentTypeCustomJourneyBlock BaseComponentType = "CUSTOM_JOURNEY_BLOCK"
-	BaseComponentTypePortalExtension    BaseComponentType = "PORTAL_EXTENSION"
-)
-
-type BaseComponent struct {
-	JourneyBlockComponentSchemas    *JourneyBlockComponentSchemas    `queryParam:"inline"`
-	PortalExtensionComponentSchemas *PortalExtensionComponentSchemas `queryParam:"inline"`
-
-	Type BaseComponentType
-}
-
-func CreateBaseComponentCustomJourneyBlock(customJourneyBlock JourneyBlockComponentSchemas) BaseComponent {
-	typ := BaseComponentTypeCustomJourneyBlock
-
-	typStr := SchemasJourneyBlockComponentComponentType(typ)
-	customJourneyBlock.ComponentType = typStr
-
-	return BaseComponent{
-		JourneyBlockComponentSchemas: &customJourneyBlock,
-		Type:                         typ,
-	}
-}
-
-func CreateBaseComponentPortalExtension(portalExtension PortalExtensionComponentSchemas) BaseComponent {
-	typ := BaseComponentTypePortalExtension
-
-	typStr := SchemasComponentType(typ)
-	portalExtension.ComponentType = typStr
-
-	return BaseComponent{
-		PortalExtensionComponentSchemas: &portalExtension,
-		Type:                            typ,
-	}
-}
-
-func (u *BaseComponent) UnmarshalJSON(data []byte) error {
-
-	type discriminator struct {
-		ComponentType string `json:"component_type"`
-	}
-
-	dis := new(discriminator)
-	if err := json.Unmarshal(data, &dis); err != nil {
-		return fmt.Errorf("could not unmarshal discriminator: %w", err)
-	}
-
-	switch dis.ComponentType {
-	case "CUSTOM_JOURNEY_BLOCK":
-		journeyBlockComponentSchemas := new(JourneyBlockComponentSchemas)
-		if err := utils.UnmarshalJSON(data, &journeyBlockComponentSchemas, "", true, false); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (ComponentType == CUSTOM_JOURNEY_BLOCK) type JourneyBlockComponentSchemas within BaseComponent: %w", string(data), err)
-		}
-
-		u.JourneyBlockComponentSchemas = journeyBlockComponentSchemas
-		u.Type = BaseComponentTypeCustomJourneyBlock
-		return nil
-	case "PORTAL_EXTENSION":
-		portalExtensionComponentSchemas := new(PortalExtensionComponentSchemas)
-		if err := utils.UnmarshalJSON(data, &portalExtensionComponentSchemas, "", true, false); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (ComponentType == PORTAL_EXTENSION) type PortalExtensionComponentSchemas within BaseComponent: %w", string(data), err)
-		}
-
-		u.PortalExtensionComponentSchemas = portalExtensionComponentSchemas
-		u.Type = BaseComponentTypePortalExtension
-		return nil
-	}
-
-	return fmt.Errorf("could not unmarshal `%s` into any supported union types for BaseComponent", string(data))
-}
-
-func (u BaseComponent) MarshalJSON() ([]byte, error) {
-	if u.JourneyBlockComponentSchemas != nil {
-		return utils.MarshalJSON(u.JourneyBlockComponentSchemas, "", true)
-	}
-
-	if u.PortalExtensionComponentSchemas != nil {
-		return utils.MarshalJSON(u.PortalExtensionComponentSchemas, "", true)
-	}
-
-	return nil, errors.New("could not marshal union type BaseComponent: all fields are null")
-}
-
 type SchemasInput struct {
 	ComponentType SchemasJourneyBlockComponentComponentType `json:"component_type"`
 	Configuration JourneyBlockConfigInput                   `json:"configuration"`
@@ -504,4 +366,142 @@ func (u BaseComponentInput) MarshalJSON() ([]byte, error) {
 	}
 
 	return nil, errors.New("could not marshal union type BaseComponentInput: all fields are null")
+}
+
+type JourneyBlockComponentSchemas struct {
+	ComponentType SchemasJourneyBlockComponentComponentType `json:"component_type"`
+	Configuration JourneyBlockConfig                        `json:"configuration"`
+	Description   *SchemasJourneyBlockComponentDescription  `json:"description,omitempty"`
+	// Unique identifier for the component
+	ID   string `json:"id"`
+	Name *Name  `json:"name,omitempty"`
+	// List of options for the app component
+	Options []Options `json:"options,omitempty"`
+}
+
+func (o *JourneyBlockComponentSchemas) GetComponentType() SchemasJourneyBlockComponentComponentType {
+	if o == nil {
+		return SchemasJourneyBlockComponentComponentType("")
+	}
+	return o.ComponentType
+}
+
+func (o *JourneyBlockComponentSchemas) GetConfiguration() JourneyBlockConfig {
+	if o == nil {
+		return JourneyBlockConfig{}
+	}
+	return o.Configuration
+}
+
+func (o *JourneyBlockComponentSchemas) GetDescription() *SchemasJourneyBlockComponentDescription {
+	if o == nil {
+		return nil
+	}
+	return o.Description
+}
+
+func (o *JourneyBlockComponentSchemas) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *JourneyBlockComponentSchemas) GetName() *Name {
+	if o == nil {
+		return nil
+	}
+	return o.Name
+}
+
+func (o *JourneyBlockComponentSchemas) GetOptions() []Options {
+	if o == nil {
+		return nil
+	}
+	return o.Options
+}
+
+type BaseComponentType string
+
+const (
+	BaseComponentTypeCustomJourneyBlock BaseComponentType = "CUSTOM_JOURNEY_BLOCK"
+	BaseComponentTypePortalExtension    BaseComponentType = "PORTAL_EXTENSION"
+)
+
+type BaseComponent struct {
+	JourneyBlockComponentSchemas    *JourneyBlockComponentSchemas    `queryParam:"inline"`
+	PortalExtensionComponentSchemas *PortalExtensionComponentSchemas `queryParam:"inline"`
+
+	Type BaseComponentType
+}
+
+func CreateBaseComponentCustomJourneyBlock(customJourneyBlock JourneyBlockComponentSchemas) BaseComponent {
+	typ := BaseComponentTypeCustomJourneyBlock
+
+	typStr := SchemasJourneyBlockComponentComponentType(typ)
+	customJourneyBlock.ComponentType = typStr
+
+	return BaseComponent{
+		JourneyBlockComponentSchemas: &customJourneyBlock,
+		Type:                         typ,
+	}
+}
+
+func CreateBaseComponentPortalExtension(portalExtension PortalExtensionComponentSchemas) BaseComponent {
+	typ := BaseComponentTypePortalExtension
+
+	typStr := SchemasComponentType(typ)
+	portalExtension.ComponentType = typStr
+
+	return BaseComponent{
+		PortalExtensionComponentSchemas: &portalExtension,
+		Type:                            typ,
+	}
+}
+
+func (u *BaseComponent) UnmarshalJSON(data []byte) error {
+
+	type discriminator struct {
+		ComponentType string `json:"component_type"`
+	}
+
+	dis := new(discriminator)
+	if err := json.Unmarshal(data, &dis); err != nil {
+		return fmt.Errorf("could not unmarshal discriminator: %w", err)
+	}
+
+	switch dis.ComponentType {
+	case "CUSTOM_JOURNEY_BLOCK":
+		journeyBlockComponentSchemas := new(JourneyBlockComponentSchemas)
+		if err := utils.UnmarshalJSON(data, &journeyBlockComponentSchemas, "", true, false); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (ComponentType == CUSTOM_JOURNEY_BLOCK) type JourneyBlockComponentSchemas within BaseComponent: %w", string(data), err)
+		}
+
+		u.JourneyBlockComponentSchemas = journeyBlockComponentSchemas
+		u.Type = BaseComponentTypeCustomJourneyBlock
+		return nil
+	case "PORTAL_EXTENSION":
+		portalExtensionComponentSchemas := new(PortalExtensionComponentSchemas)
+		if err := utils.UnmarshalJSON(data, &portalExtensionComponentSchemas, "", true, false); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (ComponentType == PORTAL_EXTENSION) type PortalExtensionComponentSchemas within BaseComponent: %w", string(data), err)
+		}
+
+		u.PortalExtensionComponentSchemas = portalExtensionComponentSchemas
+		u.Type = BaseComponentTypePortalExtension
+		return nil
+	}
+
+	return fmt.Errorf("could not unmarshal `%s` into any supported union types for BaseComponent", string(data))
+}
+
+func (u BaseComponent) MarshalJSON() ([]byte, error) {
+	if u.JourneyBlockComponentSchemas != nil {
+		return utils.MarshalJSON(u.JourneyBlockComponentSchemas, "", true)
+	}
+
+	if u.PortalExtensionComponentSchemas != nil {
+		return utils.MarshalJSON(u.PortalExtensionComponentSchemas, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type BaseComponent: all fields are null")
 }

@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 11c8545a-deb6-44f9-ba56-e71722af6a51
 management:
-  docChecksum: a68a6fd7ce2d05e2ed247fa43c6966e7
+  docChecksum: 6198dbc1c932be8a3b13e28da267473f
   docVersion: 1.0.0
   speakeasyVersion: 1.477.0
   generationVersion: 2.497.0
-  releaseVersion: 0.8.4
-  configChecksum: 22af347b911a922660f88e11b9dabc5d
+  releaseVersion: 0.8.5
+  configChecksum: b13756194aeb9d21719caf6d07e6abea
   repoURL: https://github.com/epilot-dev/terraform-provider-epilot-app.git
   repoSubDirectory: .
   published: true
@@ -235,6 +235,8 @@ examples:
           appId: "<id>"
       responses:
         "204":
+          application/json: {}
+        "201":
           application/json: {}
   listInstallations:
     "":

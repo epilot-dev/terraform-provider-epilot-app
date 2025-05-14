@@ -391,7 +391,7 @@ func (s *AppInstallation) Install(ctx context.Context, request operations.Instal
 	}
 
 	switch {
-	case httpRes.StatusCode == 204:
+	case httpRes.StatusCode == 201:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)

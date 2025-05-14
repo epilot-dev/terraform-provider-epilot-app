@@ -583,7 +583,7 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/InstallRequest"
       responses:
-        "204":
+        "201":
           description: App successfully installed.
           content:
             application/json:

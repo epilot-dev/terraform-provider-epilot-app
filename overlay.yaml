@@ -29,6 +29,6 @@ actions:
   - target: $["paths"]["/v1/app/{appId}"]["patch"]
     update:
       x-speakeasy-entity-operation: app#update
-  - target: $["components"]["schemas"]["App"]
+  - target: $["components"]["schemas"]["Installation"]
     update:
       x-speakeasy-entity: app

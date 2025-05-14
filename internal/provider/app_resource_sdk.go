@@ -4,7 +4,6 @@ package provider
 
 import (
 	tfTypes "github.com/epilot-dev/terraform-provider-epilot-app/internal/provider/types"
-	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/models/operations"
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"math/big"
@@ -38,37 +37,6 @@ func (r *AppResourceModel) ToSharedInstallRequest() *shared.InstallRequest {
 		OptionValues: optionValues,
 	}
 	return &out
-}
-
-func (r *AppResourceModel) RefreshFromOperationsInstallResponseBody(resp *operations.InstallResponseBody) {
-	if resp != nil {
-		r.OptionValues = []tfTypes.OptionsRef{}
-		if len(r.OptionValues) > len(resp.OptionValues) {
-			r.OptionValues = r.OptionValues[:len(resp.OptionValues)]
-		}
-		for optionValuesCount, optionValuesItem := range resp.OptionValues {
-			var optionValues1 tfTypes.OptionsRef
-			optionValues1.ComponentID = types.StringValue(optionValuesItem.ComponentID)
-			optionValues1.Options = []tfTypes.Option{}
-			for optionsVarCount, optionsVarItem := range optionValuesItem.Options {
-				var optionsVar1 tfTypes.Option
-				optionsVar1.Key = types.StringValue(optionsVarItem.Key)
-				optionsVar1.Value = types.StringValue(optionsVarItem.Value)
-				if optionsVarCount+1 > len(optionValues1.Options) {
-					optionValues1.Options = append(optionValues1.Options, optionsVar1)
-				} else {
-					optionValues1.Options[optionsVarCount].Key = optionsVar1.Key
-					optionValues1.Options[optionsVarCount].Value = optionsVar1.Value
-				}
-			}
-			if optionValuesCount+1 > len(r.OptionValues) {
-				r.OptionValues = append(r.OptionValues, optionValues1)
-			} else {
-				r.OptionValues[optionValuesCount].ComponentID = optionValues1.ComponentID
-				r.OptionValues[optionValuesCount].Options = optionValues1.Options
-			}
-		}
-	}
 }
 
 func (r *AppResourceModel) RefreshFromSharedInstallation(resp *shared.Installation) {

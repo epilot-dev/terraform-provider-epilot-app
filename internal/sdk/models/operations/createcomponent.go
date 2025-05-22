@@ -22,6 +22,10 @@ func (o *CreateComponentRequest) GetBaseComponent() shared.BaseComponentInput {
 	return o.BaseComponent
 }
 
+func (o *CreateComponentRequest) GetBaseComponentCustomFlowAction() *shared.CustomFlowActionComponentSchemas {
+	return o.GetBaseComponent().CustomFlowActionComponentSchemas
+}
+
 func (o *CreateComponentRequest) GetBaseComponentCustomJourneyBlock() *shared.SchemasInput {
 	return o.GetBaseComponent().SchemasInput
 }

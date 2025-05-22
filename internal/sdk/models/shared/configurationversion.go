@@ -113,6 +113,7 @@ type ConfigurationVersion struct {
 	Public *bool `default:"true" json:"public"`
 	// Status of the review process
 	ReviewStatus *ConfigurationVersionReviewStatus `json:"review_status,omitempty"`
+	Role         *Role                             `json:"role,omitempty"`
 	// Version of the app that is installed
 	Version      string                           `json:"version"`
 	VersionAudit ConfigurationVersionVersionAudit `json:"version_audit"`
@@ -190,6 +191,13 @@ func (o *ConfigurationVersion) GetReviewStatus() *ConfigurationVersionReviewStat
 		return nil
 	}
 	return o.ReviewStatus
+}
+
+func (o *ConfigurationVersion) GetRole() *Role {
+	if o == nil {
+		return nil
+	}
+	return o.Role
 }
 
 func (o *ConfigurationVersion) GetVersion() string {

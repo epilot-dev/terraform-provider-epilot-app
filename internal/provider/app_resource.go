@@ -42,8 +42,11 @@ type AppResourceModel struct {
 	InstallationAudit *tfTypes.InstallationAudit `tfsdk:"installation_audit"`
 	InstalledVersion  types.String               `tfsdk:"installed_version"`
 	InstallerOrgID    types.String               `tfsdk:"installer_org_id"`
+	Manifest          []types.String             `tfsdk:"manifest"`
 	Name              types.String               `tfsdk:"name"`
 	OptionValues      []tfTypes.OptionsRef       `tfsdk:"option_values"`
+	Role              types.String               `tfsdk:"role"`
+	Version           types.String               `tfsdk:"version"`
 }
 
 func (r *AppResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -99,6 +102,11 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Computed:    true,
 				Description: `Unique identifier for the organization the app is installed in`,
 			},
+			"manifest": schema.ListAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
+				Description: `Manifest ID used to create/update the entity`,
+			},
 			"name": schema.StringAttribute{
 				Computed:    true,
 				Description: `Name of the app`,
@@ -153,6 +161,14 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					},
 				},
 				Description: `Configuration values for the app components`,
+			},
+			"role": schema.StringAttribute{
+				Computed:    true,
+				Description: `The name of the role the app can use to access APIs`,
+			},
+			"version": schema.StringAttribute{
+				Optional:    true,
+				Description: `Version of the app to update to`,
 			},
 		},
 	}
@@ -225,6 +241,34 @@ func (r *AppResource) Create(ctx context.Context, req resource.CreateRequest, re
 		return
 	}
 	data.RefreshFromSharedInstallation(res.Installation)
+	refreshPlan(ctx, plan, &data, resp.Diagnostics)
+	var appId1 string
+	appId1 = data.AppID.ValueString()
+
+	request1 := operations.GetInstallationRequest{
+		AppID: appId1,
+	}
+	res1, err := r.client.AppInstallation.GetInstallation(ctx, request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Installation != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	data.RefreshFromSharedInstallation(res1.Installation)
 	refreshPlan(ctx, plan, &data, resp.Diagnostics)
 
 	// Save updated data into Terraform state
@@ -323,6 +367,34 @@ func (r *AppResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
+	refreshPlan(ctx, plan, &data, resp.Diagnostics)
+	var appId1 string
+	appId1 = data.AppID.ValueString()
+
+	request1 := operations.GetInstallationRequest{
+		AppID: appId1,
+	}
+	res1, err := r.client.AppInstallation.GetInstallation(ctx, request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Installation != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	data.RefreshFromSharedInstallation(res1.Installation)
 	refreshPlan(ctx, plan, &data, resp.Diagnostics)
 
 	// Save updated data into Terraform state

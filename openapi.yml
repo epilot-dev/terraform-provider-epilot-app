@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
   title: App API
   description: API for managing app publishing and installed app.
@@ -151,7 +151,18 @@ paths:
           description: Configuration patched successfully
         "404":
           description: App configuration not found
-
+    delete:
+      summary: Delete app configuration
+      description: Delete an app configuration and all its versions and components.
+      operationId: deleteConfiguration
+      tags:
+        - App Configuration
+      responses:
+        "204":
+          description: App configuration deleted successfully
+        "404":
+          description: App configuration not found
+    
   /v1/app-configurations/{appId}/bundle:
     post:
       summary: createBundleUploadUrl
@@ -292,7 +303,9 @@ paths:
                         type: integer
                       pageSize:
                         type: integer
-
+        "400":
+          description: Invalid parameter
+  
   /v1/app-configurations/{appId}/versions/{version}:
     get:
       summary: getVersion
@@ -350,6 +363,34 @@ paths:
           description: Version not found
         "409":
           description: Version is in use by installations
+    patch:
+      summary: patchVersion
+      description: Patch an existing app version
+      operationId: patchVersion
+      tags:
+        - App Configuration
+      parameters:
+        - name: appId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the app configuration
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Version to update
+      requestBody:
+        $ref: "#/components/requestBodies/PatchVersionRequest"
+      responses:
+        "204":
+          description: Version patched successfully
+        "400":
+          description: Invalid version format
+        "404":
+          description: Version not found 
 
   /v1/app-configurations/{appId}/versions/{version}/components:
     post:
@@ -447,8 +488,8 @@ paths:
         "404":
           description: Version or component not found
 
-  ? /v1/app-configurations/{appId}/versions/{sourceVersion}/clone-to/{targetVersion}
-  : post:
+  /v1/app-configurations/{appId}/versions/{sourceVersion}/clone-to/{targetVersion}:
+    post:
       summary: cloneVersion
       description: Clone an existing app version to create a new version
       operationId: cloneVersion
@@ -726,6 +767,20 @@ components:
                 type: string
                 description: Email address for support requests
 
+    PatchVersionRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              role_id:
+                nullable: true
+                type: string
+                description: Name of the role
+              grants:
+                $ref: "#/components/schemas/Grants"
+              
     UpsertComponentRequest:
       required: true
       content:
@@ -760,6 +815,9 @@ components:
           schema:
             type: object
             properties:
+              version:
+                type: string
+                description: Version of the app to update to
               option_values:
                 type: array
                 items:
@@ -779,6 +837,15 @@ components:
       type: apiKey
 
   schemas:
+    Role:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Name of the role
+        grants:
+          $ref: "#/components/schemas/Grants"
+
     Options:
       type: object
       description: Options for the component configuration
@@ -852,6 +919,7 @@ components:
       enum:
         - CUSTOM_JOURNEY_BLOCK
         - PORTAL_EXTENSION
+        - CUSTOM_FLOW_ACTION
       description: Type of app component
 
     Author:
@@ -924,9 +992,11 @@ components:
             mapping:
               CUSTOM_JOURNEY_BLOCK: "#/components/schemas/JourneyBlockComponent"
               PORTAL_EXTENSION: "#/components/schemas/PortalExtensionComponent"
+              CUSTOM_FLOW_ACTION: "#/components/schemas/CustomFlowActionComponent"
           oneOf:
             - $ref: "#/components/schemas/JourneyBlockComponent"
             - $ref: "#/components/schemas/PortalExtensionComponent"
+            - $ref: "#/components/schemas/CustomFlowActionComponent"
 
     JourneyBlockComponent:
       type: object
@@ -939,6 +1009,61 @@ components:
           enum: [CUSTOM_JOURNEY_BLOCK]
         configuration:
           $ref: "#/components/schemas/JourneyBlockConfig"
+    
+    CustomFlowActionComponent:
+      type: object
+      required:
+        - component_type
+        - configuration
+      properties:
+        component_type:
+          type: string
+          enum: [CUSTOM_FLOW_ACTION]
+        configuration:
+          $ref: "#/components/schemas/CustomFlowConfig"
+
+    BaseCustomActionConfig:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the custom action
+        description:
+          type: string
+          description: Description of the custom action
+
+    ExternalIntegrationCustomActionConfig:
+      allOf:
+        - $ref: "#/components/schemas/BaseCustomActionConfig"
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - external_integration
+            external_integration_settings:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: URL to call
+                headers:
+                  type: object
+                  additionalProperties: true
+                auth_token_ref:
+                  type: string
+                  description: SSM Reference to the auth token to use for the request
+          required:
+            - type
+
+    CustomFlowConfig:
+      type: object
+      oneOf:
+        - $ref: "#/components/schemas/ExternalIntegrationCustomActionConfig"
+      discriminator:
+        propertyName: "type"
+        mapping:
+          external_integration: "#/components/schemas/ExternalIntegrationCustomActionConfig"
 
     PortalExtensionComponent:
       type: object
@@ -1055,7 +1180,6 @@ components:
           description: Size of the bundle in bytes
           readOnly: true
         component_mapping:
-          x-speakeasy-terraform-ignore: true
           description: Define data which is mapped to entity mapping ui blocks
           type: object
           additionalProperties:
@@ -1066,6 +1190,7 @@ components:
               - date
               - datetime
               - link
+              - number
 
     JourneyBlockComponentArgs:
       allOf:
@@ -1313,6 +1438,8 @@ components:
           type: string
           enum: [approved, rejected, pending]
           description: Status of the review process
+        role:
+          $ref: "#/components/schemas/Role"
         version_audit:
           readOnly: true
           allOf:
@@ -1327,6 +1454,21 @@ components:
                   type: string
                   description: User ID of the user who last updated the app
                   readOnly: true
+
+    Grants:
+      type: array
+      description: Required grants for the app in order to call APIs for the installing tenant
+      items:
+        type: object
+        required:
+          - action
+        properties:
+          action:
+            type: string
+            description: The action the app can perform
+          resource:
+            type: string
+            description: The resource the app can access
 
     Installation:
       description: Information about the installed app. Has configuration data of the installed version
@@ -1372,12 +1514,21 @@ components:
           type: string
           description: Version of the app that is installed
           readOnly: true
+        role:
+          type: string
+          description: The name of the role the app can use to access APIs
         installation_audit:
           readOnly: true
           allOf:
             - description: Audit information for the app
             - $ref: "#/components/schemas/Audit"
-
+        _manifest:
+          type: array
+          description: Manifest ID used to create/update the entity
+          items:
+            type: string
+            format: uuid
+            example: 123e4567-e89b-12d3-a456-426614174000
     PublicConfiguration:
       description: Public configuration of the published app
       type: object
@@ -1435,6 +1586,22 @@ components:
           type: string
           description: Version of the app that is installed
           readOnly: true
+        role:
+          $ref: "#/components/schemas/Role"
+        latest_version:
+          type: string
+          description: Latest version of the app
+          readOnly: true
+        public:
+          type: boolean
+          default: true
+          description: Flag to indicate if the app is public.
+          readOnly: true
+        versions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConfigurationVersion"
+          description: List of available versions of the app
 
     Configuration:
       description: Configuration of the published app

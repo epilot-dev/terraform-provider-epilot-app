@@ -9,22 +9,22 @@ import (
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
 )
 
-// SchemasDescription - Description of what this component arg does
-type SchemasDescription struct {
+// SchemasEnumArgDescription - Description of what this component arg does
+type SchemasEnumArgDescription struct {
 	// German translation
 	De string `json:"de"`
 	// English translation
 	En *string `json:"en,omitempty"`
 }
 
-func (o *SchemasDescription) GetDe() string {
+func (o *SchemasEnumArgDescription) GetDe() string {
 	if o == nil {
 		return ""
 	}
 	return o.De
 }
 
-func (o *SchemasDescription) GetEn() *string {
+func (o *SchemasEnumArgDescription) GetEn() *string {
 	if o == nil {
 		return nil
 	}
@@ -125,7 +125,7 @@ func (e *SchemasType) UnmarshalJSON(data []byte) error {
 }
 
 type EnumArgSchemas struct {
-	Description *SchemasDescription `json:"description,omitempty"`
+	Description *SchemasEnumArgDescription `json:"description,omitempty"`
 	// If true, allows selection of multiple values
 	IsMulti *bool `default:"false" json:"isMulti"`
 	// Unique identifier for this component arg
@@ -149,7 +149,7 @@ func (e *EnumArgSchemas) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *EnumArgSchemas) GetDescription() *SchemasDescription {
+func (o *EnumArgSchemas) GetDescription() *SchemasEnumArgDescription {
 	if o == nil {
 		return nil
 	}

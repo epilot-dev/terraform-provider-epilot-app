@@ -13,6 +13,7 @@ type ComponentType string
 const (
 	ComponentTypeCustomJourneyBlock ComponentType = "CUSTOM_JOURNEY_BLOCK"
 	ComponentTypePortalExtension    ComponentType = "PORTAL_EXTENSION"
+	ComponentTypeCustomFlowAction   ComponentType = "CUSTOM_FLOW_ACTION"
 )
 
 func (e ComponentType) ToPointer() *ComponentType {
@@ -27,6 +28,8 @@ func (e *ComponentType) UnmarshalJSON(data []byte) error {
 	case "CUSTOM_JOURNEY_BLOCK":
 		fallthrough
 	case "PORTAL_EXTENSION":
+		fallthrough
+	case "CUSTOM_FLOW_ACTION":
 		*e = ComponentType(v)
 		return nil
 	default:

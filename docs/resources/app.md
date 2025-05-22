@@ -26,6 +26,7 @@ resource "epilot-app_app" "my_app" {
       ]
     }
   ]
+  version = "...my_version..."
 }
 ```
 
@@ -39,6 +40,7 @@ resource "epilot-app_app" "my_app" {
 ### Optional
 
 - `option_values` (Attributes List) Configuration values for the app components (see [below for nested schema](#nestedatt--option_values))
+- `version` (String) Version of the app to update to
 
 ### Read-Only
 
@@ -47,7 +49,9 @@ resource "epilot-app_app" "my_app" {
 - `installation_audit` (Attributes) Audit information for the app (see [below for nested schema](#nestedatt--installation_audit))
 - `installed_version` (String) Version of the app that is installed
 - `installer_org_id` (String) Unique identifier for the organization the app is installed in
+- `manifest` (List of String) Manifest ID used to create/update the entity
 - `name` (String) Name of the app
+- `role` (String) The name of the role the app can use to access APIs
 
 <a id="nestedatt--option_values"></a>
 ### Nested Schema for `option_values`

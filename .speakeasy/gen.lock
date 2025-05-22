@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 11c8545a-deb6-44f9-ba56-e71722af6a51
 management:
-  docChecksum: af402f19e0f8c24ea79b3afd79c336c5
+  docChecksum: 0119324ef16572f90cf43c2672f2941e
   docVersion: 1.0.0
   speakeasyVersion: 1.477.0
   generationVersion: 2.497.0
-  releaseVersion: 0.9.0
-  configChecksum: b14dc7a5550814e69e84c69cc076dd9b
+  releaseVersion: 0.9.2
+  configChecksum: d221dc779b8dd326f79c2f0004992e02
   repoURL: https://github.com/epilot-dev/terraform-provider-epilot-app.git
   repoSubDirectory: .
   published: true
@@ -88,6 +88,7 @@ generatedFiles:
   - internal/sdk/models/operations/createconfiguration.go
   - internal/sdk/models/operations/createlogouploadurl.go
   - internal/sdk/models/operations/deletecomponent.go
+  - internal/sdk/models/operations/deleteconfiguration.go
   - internal/sdk/models/operations/deletelogo.go
   - internal/sdk/models/operations/deleteversion.go
   - internal/sdk/models/operations/getconfiguration.go
@@ -102,6 +103,7 @@ generatedFiles:
   - internal/sdk/models/operations/patchcomponent.go
   - internal/sdk/models/operations/patchinstallation.go
   - internal/sdk/models/operations/patchmetadata.go
+  - internal/sdk/models/operations/patchversion.go
   - internal/sdk/models/operations/promoteversion.go
   - internal/sdk/models/operations/uninstall.go
   - internal/sdk/models/shared/author.go
@@ -114,6 +116,8 @@ generatedFiles:
   - internal/sdk/models/shared/createbundlepresignedrequest.go
   - internal/sdk/models/shared/createconfigrequest.go
   - internal/sdk/models/shared/createlogopresignedrequest.go
+  - internal/sdk/models/shared/customflowconfig.go
+  - internal/sdk/models/shared/grants.go
   - internal/sdk/models/shared/installation.go
   - internal/sdk/models/shared/installrequest.go
   - internal/sdk/models/shared/journeyblockcomponentargs.go
@@ -124,10 +128,12 @@ generatedFiles:
   - internal/sdk/models/shared/options.go
   - internal/sdk/models/shared/optionsref.go
   - internal/sdk/models/shared/patchconfigmetadatarequest.go
+  - internal/sdk/models/shared/patchversionrequest.go
   - internal/sdk/models/shared/portalauth.go
   - internal/sdk/models/shared/portalextensionconfig.go
   - internal/sdk/models/shared/pricing.go
   - internal/sdk/models/shared/publicconfiguration.go
+  - internal/sdk/models/shared/role.go
   - internal/sdk/models/shared/s3reference.go
   - internal/sdk/models/shared/security.go
   - internal/sdk/models/shared/translatedstring.go
@@ -332,7 +338,7 @@ examples:
         query: {}
       responses:
         "200":
-          application/json: {"app_id": "<id>", "components": [{"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}, {"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>", "component_url": "https://cdn.apps.com/123/v1.0.0/bundle.js"}, "id": "<id>"}], "name": "<value>", "owner_org_id": "<id>", "version": "<value>"}
+          application/json: {"app_id": "<id>", "components": [{"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}, {"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>", "component_url": "https://cdn.apps.com/123/v1.0.0/bundle.js"}, "id": "<id>"}], "name": "<value>", "owner_org_id": "<id>", "public": true, "version": "<value>"}
   getVersion:
     speakeasy-default-get-version:
       parameters:
@@ -378,5 +384,18 @@ examples:
           appId: "<id>"
       requestBody:
         application/json: {"notifications": {"email": "developer@example.com"}}
+  deleteConfiguration:
+    speakeasy-default-delete-configuration:
+      parameters:
+        path:
+          appId: "<id>"
+  patchVersion:
+    speakeasy-default-patch-version:
+      parameters:
+        path:
+          appId: "<id>"
+          version: "<value>"
+      requestBody:
+        application/json: {}
 examplesVersion: 1.0.0
 generatedTests: {}

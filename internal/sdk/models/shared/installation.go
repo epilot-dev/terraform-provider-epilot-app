@@ -48,6 +48,8 @@ func (o *InstallationAudit) GetUpdatedBy() *string {
 
 // Installation - Information about the installed app. Has configuration data of the installed version
 type Installation struct {
+	// Manifest ID used to create/update the entity
+	Manifest []string `json:"_manifest,omitempty"`
 	// ID of the app configuration
 	AppID string `json:"app_id"`
 	// List of component configurations for the installed version
@@ -63,6 +65,8 @@ type Installation struct {
 	Name string `json:"name"`
 	// Configuration values for the app components
 	OptionValues []OptionsRef `json:"option_values,omitempty"`
+	// The name of the role the app can use to access APIs
+	Role *string `json:"role,omitempty"`
 }
 
 func (i Installation) MarshalJSON() ([]byte, error) {
@@ -74,6 +78,13 @@ func (i *Installation) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (o *Installation) GetManifest() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Manifest
 }
 
 func (o *Installation) GetAppID() string {
@@ -130,4 +141,11 @@ func (o *Installation) GetOptionValues() []OptionsRef {
 		return nil
 	}
 	return o.OptionValues
+}
+
+func (o *Installation) GetRole() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Role
 }

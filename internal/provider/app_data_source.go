@@ -35,8 +35,10 @@ type AppDataSourceModel struct {
 	InstallationAudit *tfTypes.InstallationAudit `tfsdk:"installation_audit"`
 	InstalledVersion  types.String               `tfsdk:"installed_version"`
 	InstallerOrgID    types.String               `tfsdk:"installer_org_id"`
+	Manifest          []types.String             `tfsdk:"manifest"`
 	Name              types.String               `tfsdk:"name"`
 	OptionValues      []tfTypes.OptionsRef       `tfsdk:"option_values"`
+	Role              types.String               `tfsdk:"role"`
 }
 
 // Metadata returns the data source type name.
@@ -91,6 +93,11 @@ func (r *AppDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:    true,
 				Description: `Unique identifier for the organization the app is installed in`,
 			},
+			"manifest": schema.ListAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
+				Description: `Manifest ID used to create/update the entity`,
+			},
 			"name": schema.StringAttribute{
 				Computed:    true,
 				Description: `Name of the app`,
@@ -121,6 +128,10 @@ func (r *AppDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 				Description: `Configuration values for the app components`,
+			},
+			"role": schema.StringAttribute{
+				Computed:    true,
+				Description: `The name of the role the app can use to access APIs`,
 			},
 		},
 	}

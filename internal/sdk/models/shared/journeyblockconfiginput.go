@@ -15,6 +15,7 @@ const (
 	ComponentMappingDate     ComponentMapping = "date"
 	ComponentMappingDatetime ComponentMapping = "datetime"
 	ComponentMappingLink     ComponentMapping = "link"
+	ComponentMappingNumber   ComponentMapping = "number"
 )
 
 func (e ComponentMapping) ToPointer() *ComponentMapping {
@@ -35,6 +36,8 @@ func (e *ComponentMapping) UnmarshalJSON(data []byte) error {
 	case "datetime":
 		fallthrough
 	case "link":
+		fallthrough
+	case "number":
 		*e = ComponentMapping(v)
 		return nil
 	default:

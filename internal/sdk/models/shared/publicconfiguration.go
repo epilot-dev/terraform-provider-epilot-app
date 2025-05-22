@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
 )
 
 // PublicConfigurationDescription - Markdown description of the app.
@@ -105,15 +106,33 @@ type PublicConfiguration struct {
 	IconURL *string `json:"icon_url,omitempty"`
 	// Flag to indicate if the app is in beta.
 	IsBeta *bool `json:"is_beta,omitempty"`
+	// Latest version of the app
+	LatestVersion *string `json:"latest_version,omitempty"`
 	// Name of the app
 	Name string `json:"name"`
 	// Organization ID of the app owner
 	OwnerOrgID string                      `json:"owner_org_id"`
 	Pricing    *PublicConfigurationPricing `json:"pricing,omitempty"`
+	// Flag to indicate if the app is public.
+	Public *bool `default:"true" json:"public"`
+	Role   *Role `json:"role,omitempty"`
 	// Email address for support requests
 	SupportEmail *string `json:"support_email,omitempty"`
 	// Version of the app that is installed
 	Version string `json:"version"`
+	// List of available versions of the app
+	Versions []ConfigurationVersion `json:"versions,omitempty"`
+}
+
+func (p PublicConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PublicConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, false); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *PublicConfiguration) GetAppID() string {
@@ -179,6 +198,13 @@ func (o *PublicConfiguration) GetIsBeta() *bool {
 	return o.IsBeta
 }
 
+func (o *PublicConfiguration) GetLatestVersion() *string {
+	if o == nil {
+		return nil
+	}
+	return o.LatestVersion
+}
+
 func (o *PublicConfiguration) GetName() string {
 	if o == nil {
 		return ""
@@ -200,6 +226,20 @@ func (o *PublicConfiguration) GetPricing() *PublicConfigurationPricing {
 	return o.Pricing
 }
 
+func (o *PublicConfiguration) GetPublic() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Public
+}
+
+func (o *PublicConfiguration) GetRole() *Role {
+	if o == nil {
+		return nil
+	}
+	return o.Role
+}
+
 func (o *PublicConfiguration) GetSupportEmail() *string {
 	if o == nil {
 		return nil
@@ -212,4 +252,11 @@ func (o *PublicConfiguration) GetVersion() string {
 		return ""
 	}
 	return o.Version
+}
+
+func (o *PublicConfiguration) GetVersions() []ConfigurationVersion {
+	if o == nil {
+		return nil
+	}
+	return o.Versions
 }

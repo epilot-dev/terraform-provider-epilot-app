@@ -9,26 +9,150 @@ import (
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
 )
 
-type SchemasComponentType string
+type SchemasCustomFlowActionComponentComponentType string
 
 const (
-	SchemasComponentTypePortalExtension SchemasComponentType = "PORTAL_EXTENSION"
+	SchemasCustomFlowActionComponentComponentTypeCustomFlowAction SchemasCustomFlowActionComponentComponentType = "CUSTOM_FLOW_ACTION"
 )
 
-func (e SchemasComponentType) ToPointer() *SchemasComponentType {
+func (e SchemasCustomFlowActionComponentComponentType) ToPointer() *SchemasCustomFlowActionComponentComponentType {
 	return &e
 }
-func (e *SchemasComponentType) UnmarshalJSON(data []byte) error {
+func (e *SchemasCustomFlowActionComponentComponentType) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "CUSTOM_FLOW_ACTION":
+		*e = SchemasCustomFlowActionComponentComponentType(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for SchemasCustomFlowActionComponentComponentType: %v", v)
+	}
+}
+
+// SchemasDescription - Description of the component
+type SchemasDescription struct {
+	// German translation
+	De string `json:"de"`
+	// English translation
+	En *string `json:"en,omitempty"`
+}
+
+func (o *SchemasDescription) GetDe() string {
+	if o == nil {
+		return ""
+	}
+	return o.De
+}
+
+func (o *SchemasDescription) GetEn() *string {
+	if o == nil {
+		return nil
+	}
+	return o.En
+}
+
+// Name of the component
+type Name struct {
+	// German translation
+	De string `json:"de"`
+	// English translation
+	En *string `json:"en,omitempty"`
+}
+
+func (o *Name) GetDe() string {
+	if o == nil {
+		return ""
+	}
+	return o.De
+}
+
+func (o *Name) GetEn() *string {
+	if o == nil {
+		return nil
+	}
+	return o.En
+}
+
+type CustomFlowActionComponentSchemas struct {
+	ComponentType SchemasCustomFlowActionComponentComponentType `json:"component_type"`
+	Configuration CustomFlowConfig                              `json:"configuration"`
+	Description   *SchemasDescription                           `json:"description,omitempty"`
+	// Unique identifier for the component
+	ID   string `json:"id"`
+	Name *Name  `json:"name,omitempty"`
+	// List of options for the app component
+	Options []Options `json:"options,omitempty"`
+}
+
+func (o *CustomFlowActionComponentSchemas) GetComponentType() SchemasCustomFlowActionComponentComponentType {
+	if o == nil {
+		return SchemasCustomFlowActionComponentComponentType("")
+	}
+	return o.ComponentType
+}
+
+func (o *CustomFlowActionComponentSchemas) GetConfiguration() CustomFlowConfig {
+	if o == nil {
+		return CustomFlowConfig{}
+	}
+	return o.Configuration
+}
+
+func (o *CustomFlowActionComponentSchemas) GetConfigurationExternalIntegration() *ExternalIntegrationCustomActionConfigSchemas {
+	return o.GetConfiguration().ExternalIntegrationCustomActionConfigSchemas
+}
+
+func (o *CustomFlowActionComponentSchemas) GetDescription() *SchemasDescription {
+	if o == nil {
+		return nil
+	}
+	return o.Description
+}
+
+func (o *CustomFlowActionComponentSchemas) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *CustomFlowActionComponentSchemas) GetName() *Name {
+	if o == nil {
+		return nil
+	}
+	return o.Name
+}
+
+func (o *CustomFlowActionComponentSchemas) GetOptions() []Options {
+	if o == nil {
+		return nil
+	}
+	return o.Options
+}
+
+type SchemasPortalExtensionComponentComponentType string
+
+const (
+	SchemasPortalExtensionComponentComponentTypePortalExtension SchemasPortalExtensionComponentComponentType = "PORTAL_EXTENSION"
+)
+
+func (e SchemasPortalExtensionComponentComponentType) ToPointer() *SchemasPortalExtensionComponentComponentType {
+	return &e
+}
+func (e *SchemasPortalExtensionComponentComponentType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "PORTAL_EXTENSION":
-		*e = SchemasComponentType(v)
+		*e = SchemasPortalExtensionComponentComponentType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for SchemasComponentType: %v", v)
+		return fmt.Errorf("invalid value for SchemasPortalExtensionComponentComponentType: %v", v)
 	}
 }
 
@@ -54,22 +178,22 @@ func (o *SchemasPortalExtensionComponentDescription) GetEn() *string {
 	return o.En
 }
 
-// SchemasName - Name of the component
-type SchemasName struct {
+// SchemasPortalExtensionComponentName - Name of the component
+type SchemasPortalExtensionComponentName struct {
 	// German translation
 	De string `json:"de"`
 	// English translation
 	En *string `json:"en,omitempty"`
 }
 
-func (o *SchemasName) GetDe() string {
+func (o *SchemasPortalExtensionComponentName) GetDe() string {
 	if o == nil {
 		return ""
 	}
 	return o.De
 }
 
-func (o *SchemasName) GetEn() *string {
+func (o *SchemasPortalExtensionComponentName) GetEn() *string {
 	if o == nil {
 		return nil
 	}
@@ -103,20 +227,20 @@ func (e *Origin) UnmarshalJSON(data []byte) error {
 }
 
 type PortalExtensionComponentSchemas struct {
-	ComponentType SchemasComponentType                        `json:"component_type"`
-	Configuration PortalExtensionConfig                       `json:"configuration"`
-	Description   *SchemasPortalExtensionComponentDescription `json:"description,omitempty"`
+	ComponentType SchemasPortalExtensionComponentComponentType `json:"component_type"`
+	Configuration PortalExtensionConfig                        `json:"configuration"`
+	Description   *SchemasPortalExtensionComponentDescription  `json:"description,omitempty"`
 	// Unique identifier for the component
-	ID   string       `json:"id"`
-	Name *SchemasName `json:"name,omitempty"`
+	ID   string                               `json:"id"`
+	Name *SchemasPortalExtensionComponentName `json:"name,omitempty"`
 	// List of options for the app component
 	Options []Options `json:"options,omitempty"`
 	Origin  *Origin   `json:"origin,omitempty"`
 }
 
-func (o *PortalExtensionComponentSchemas) GetComponentType() SchemasComponentType {
+func (o *PortalExtensionComponentSchemas) GetComponentType() SchemasPortalExtensionComponentComponentType {
 	if o == nil {
-		return SchemasComponentType("")
+		return SchemasPortalExtensionComponentComponentType("")
 	}
 	return o.ComponentType
 }
@@ -142,7 +266,7 @@ func (o *PortalExtensionComponentSchemas) GetID() string {
 	return o.ID
 }
 
-func (o *PortalExtensionComponentSchemas) GetName() *SchemasName {
+func (o *PortalExtensionComponentSchemas) GetName() *SchemasPortalExtensionComponentName {
 	if o == nil {
 		return nil
 	}
@@ -163,26 +287,26 @@ func (o *PortalExtensionComponentSchemas) GetOrigin() *Origin {
 	return o.Origin
 }
 
-type SchemasJourneyBlockComponentComponentType string
+type SchemasComponentType string
 
 const (
-	SchemasJourneyBlockComponentComponentTypeCustomJourneyBlock SchemasJourneyBlockComponentComponentType = "CUSTOM_JOURNEY_BLOCK"
+	SchemasComponentTypeCustomJourneyBlock SchemasComponentType = "CUSTOM_JOURNEY_BLOCK"
 )
 
-func (e SchemasJourneyBlockComponentComponentType) ToPointer() *SchemasJourneyBlockComponentComponentType {
+func (e SchemasComponentType) ToPointer() *SchemasComponentType {
 	return &e
 }
-func (e *SchemasJourneyBlockComponentComponentType) UnmarshalJSON(data []byte) error {
+func (e *SchemasComponentType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "CUSTOM_JOURNEY_BLOCK":
-		*e = SchemasJourneyBlockComponentComponentType(v)
+		*e = SchemasComponentType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for SchemasJourneyBlockComponentComponentType: %v", v)
+		return fmt.Errorf("invalid value for SchemasComponentType: %v", v)
 	}
 }
 
@@ -208,22 +332,22 @@ func (o *SchemasJourneyBlockComponentDescription) GetEn() *string {
 	return o.En
 }
 
-// Name of the component
-type Name struct {
+// SchemasName - Name of the component
+type SchemasName struct {
 	// German translation
 	De string `json:"de"`
 	// English translation
 	En *string `json:"en,omitempty"`
 }
 
-func (o *Name) GetDe() string {
+func (o *SchemasName) GetDe() string {
 	if o == nil {
 		return ""
 	}
 	return o.De
 }
 
-func (o *Name) GetEn() *string {
+func (o *SchemasName) GetEn() *string {
 	if o == nil {
 		return nil
 	}
@@ -231,19 +355,19 @@ func (o *Name) GetEn() *string {
 }
 
 type SchemasInput struct {
-	ComponentType SchemasJourneyBlockComponentComponentType `json:"component_type"`
-	Configuration JourneyBlockConfigInput                   `json:"configuration"`
-	Description   *SchemasJourneyBlockComponentDescription  `json:"description,omitempty"`
+	ComponentType SchemasComponentType                     `json:"component_type"`
+	Configuration JourneyBlockConfigInput                  `json:"configuration"`
+	Description   *SchemasJourneyBlockComponentDescription `json:"description,omitempty"`
 	// Unique identifier for the component
-	ID   string `json:"id"`
-	Name *Name  `json:"name,omitempty"`
+	ID   string       `json:"id"`
+	Name *SchemasName `json:"name,omitempty"`
 	// List of options for the app component
 	Options []Options `json:"options,omitempty"`
 }
 
-func (o *SchemasInput) GetComponentType() SchemasJourneyBlockComponentComponentType {
+func (o *SchemasInput) GetComponentType() SchemasComponentType {
 	if o == nil {
-		return SchemasJourneyBlockComponentComponentType("")
+		return SchemasComponentType("")
 	}
 	return o.ComponentType
 }
@@ -269,7 +393,7 @@ func (o *SchemasInput) GetID() string {
 	return o.ID
 }
 
-func (o *SchemasInput) GetName() *Name {
+func (o *SchemasInput) GetName() *SchemasName {
 	if o == nil {
 		return nil
 	}
@@ -286,21 +410,35 @@ func (o *SchemasInput) GetOptions() []Options {
 type BaseComponentInputType string
 
 const (
+	BaseComponentInputTypeCustomFlowAction   BaseComponentInputType = "CUSTOM_FLOW_ACTION"
 	BaseComponentInputTypeCustomJourneyBlock BaseComponentInputType = "CUSTOM_JOURNEY_BLOCK"
 	BaseComponentInputTypePortalExtension    BaseComponentInputType = "PORTAL_EXTENSION"
 )
 
 type BaseComponentInput struct {
-	SchemasInput                    *SchemasInput                    `queryParam:"inline"`
-	PortalExtensionComponentSchemas *PortalExtensionComponentSchemas `queryParam:"inline"`
+	SchemasInput                     *SchemasInput                     `queryParam:"inline"`
+	PortalExtensionComponentSchemas  *PortalExtensionComponentSchemas  `queryParam:"inline"`
+	CustomFlowActionComponentSchemas *CustomFlowActionComponentSchemas `queryParam:"inline"`
 
 	Type BaseComponentInputType
+}
+
+func CreateBaseComponentInputCustomFlowAction(customFlowAction CustomFlowActionComponentSchemas) BaseComponentInput {
+	typ := BaseComponentInputTypeCustomFlowAction
+
+	typStr := SchemasCustomFlowActionComponentComponentType(typ)
+	customFlowAction.ComponentType = typStr
+
+	return BaseComponentInput{
+		CustomFlowActionComponentSchemas: &customFlowAction,
+		Type:                             typ,
+	}
 }
 
 func CreateBaseComponentInputCustomJourneyBlock(customJourneyBlock SchemasInput) BaseComponentInput {
 	typ := BaseComponentInputTypeCustomJourneyBlock
 
-	typStr := SchemasJourneyBlockComponentComponentType(typ)
+	typStr := SchemasComponentType(typ)
 	customJourneyBlock.ComponentType = typStr
 
 	return BaseComponentInput{
@@ -312,7 +450,7 @@ func CreateBaseComponentInputCustomJourneyBlock(customJourneyBlock SchemasInput)
 func CreateBaseComponentInputPortalExtension(portalExtension PortalExtensionComponentSchemas) BaseComponentInput {
 	typ := BaseComponentInputTypePortalExtension
 
-	typStr := SchemasComponentType(typ)
+	typStr := SchemasPortalExtensionComponentComponentType(typ)
 	portalExtension.ComponentType = typStr
 
 	return BaseComponentInput{
@@ -333,6 +471,15 @@ func (u *BaseComponentInput) UnmarshalJSON(data []byte) error {
 	}
 
 	switch dis.ComponentType {
+	case "CUSTOM_FLOW_ACTION":
+		customFlowActionComponentSchemas := new(CustomFlowActionComponentSchemas)
+		if err := utils.UnmarshalJSON(data, &customFlowActionComponentSchemas, "", true, false); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (ComponentType == CUSTOM_FLOW_ACTION) type CustomFlowActionComponentSchemas within BaseComponentInput: %w", string(data), err)
+		}
+
+		u.CustomFlowActionComponentSchemas = customFlowActionComponentSchemas
+		u.Type = BaseComponentInputTypeCustomFlowAction
+		return nil
 	case "CUSTOM_JOURNEY_BLOCK":
 		schemasInput := new(SchemasInput)
 		if err := utils.UnmarshalJSON(data, &schemasInput, "", true, false); err != nil {
@@ -365,23 +512,27 @@ func (u BaseComponentInput) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.PortalExtensionComponentSchemas, "", true)
 	}
 
+	if u.CustomFlowActionComponentSchemas != nil {
+		return utils.MarshalJSON(u.CustomFlowActionComponentSchemas, "", true)
+	}
+
 	return nil, errors.New("could not marshal union type BaseComponentInput: all fields are null")
 }
 
 type JourneyBlockComponentSchemas struct {
-	ComponentType SchemasJourneyBlockComponentComponentType `json:"component_type"`
-	Configuration JourneyBlockConfig                        `json:"configuration"`
-	Description   *SchemasJourneyBlockComponentDescription  `json:"description,omitempty"`
+	ComponentType SchemasComponentType                     `json:"component_type"`
+	Configuration JourneyBlockConfig                       `json:"configuration"`
+	Description   *SchemasJourneyBlockComponentDescription `json:"description,omitempty"`
 	// Unique identifier for the component
-	ID   string `json:"id"`
-	Name *Name  `json:"name,omitempty"`
+	ID   string       `json:"id"`
+	Name *SchemasName `json:"name,omitempty"`
 	// List of options for the app component
 	Options []Options `json:"options,omitempty"`
 }
 
-func (o *JourneyBlockComponentSchemas) GetComponentType() SchemasJourneyBlockComponentComponentType {
+func (o *JourneyBlockComponentSchemas) GetComponentType() SchemasComponentType {
 	if o == nil {
-		return SchemasJourneyBlockComponentComponentType("")
+		return SchemasComponentType("")
 	}
 	return o.ComponentType
 }
@@ -407,7 +558,7 @@ func (o *JourneyBlockComponentSchemas) GetID() string {
 	return o.ID
 }
 
-func (o *JourneyBlockComponentSchemas) GetName() *Name {
+func (o *JourneyBlockComponentSchemas) GetName() *SchemasName {
 	if o == nil {
 		return nil
 	}
@@ -424,21 +575,35 @@ func (o *JourneyBlockComponentSchemas) GetOptions() []Options {
 type BaseComponentType string
 
 const (
+	BaseComponentTypeCustomFlowAction   BaseComponentType = "CUSTOM_FLOW_ACTION"
 	BaseComponentTypeCustomJourneyBlock BaseComponentType = "CUSTOM_JOURNEY_BLOCK"
 	BaseComponentTypePortalExtension    BaseComponentType = "PORTAL_EXTENSION"
 )
 
 type BaseComponent struct {
-	JourneyBlockComponentSchemas    *JourneyBlockComponentSchemas    `queryParam:"inline"`
-	PortalExtensionComponentSchemas *PortalExtensionComponentSchemas `queryParam:"inline"`
+	JourneyBlockComponentSchemas     *JourneyBlockComponentSchemas     `queryParam:"inline"`
+	PortalExtensionComponentSchemas  *PortalExtensionComponentSchemas  `queryParam:"inline"`
+	CustomFlowActionComponentSchemas *CustomFlowActionComponentSchemas `queryParam:"inline"`
 
 	Type BaseComponentType
+}
+
+func CreateBaseComponentCustomFlowAction(customFlowAction CustomFlowActionComponentSchemas) BaseComponent {
+	typ := BaseComponentTypeCustomFlowAction
+
+	typStr := SchemasCustomFlowActionComponentComponentType(typ)
+	customFlowAction.ComponentType = typStr
+
+	return BaseComponent{
+		CustomFlowActionComponentSchemas: &customFlowAction,
+		Type:                             typ,
+	}
 }
 
 func CreateBaseComponentCustomJourneyBlock(customJourneyBlock JourneyBlockComponentSchemas) BaseComponent {
 	typ := BaseComponentTypeCustomJourneyBlock
 
-	typStr := SchemasJourneyBlockComponentComponentType(typ)
+	typStr := SchemasComponentType(typ)
 	customJourneyBlock.ComponentType = typStr
 
 	return BaseComponent{
@@ -450,7 +615,7 @@ func CreateBaseComponentCustomJourneyBlock(customJourneyBlock JourneyBlockCompon
 func CreateBaseComponentPortalExtension(portalExtension PortalExtensionComponentSchemas) BaseComponent {
 	typ := BaseComponentTypePortalExtension
 
-	typStr := SchemasComponentType(typ)
+	typStr := SchemasPortalExtensionComponentComponentType(typ)
 	portalExtension.ComponentType = typStr
 
 	return BaseComponent{
@@ -471,6 +636,15 @@ func (u *BaseComponent) UnmarshalJSON(data []byte) error {
 	}
 
 	switch dis.ComponentType {
+	case "CUSTOM_FLOW_ACTION":
+		customFlowActionComponentSchemas := new(CustomFlowActionComponentSchemas)
+		if err := utils.UnmarshalJSON(data, &customFlowActionComponentSchemas, "", true, false); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (ComponentType == CUSTOM_FLOW_ACTION) type CustomFlowActionComponentSchemas within BaseComponent: %w", string(data), err)
+		}
+
+		u.CustomFlowActionComponentSchemas = customFlowActionComponentSchemas
+		u.Type = BaseComponentTypeCustomFlowAction
+		return nil
 	case "CUSTOM_JOURNEY_BLOCK":
 		journeyBlockComponentSchemas := new(JourneyBlockComponentSchemas)
 		if err := utils.UnmarshalJSON(data, &journeyBlockComponentSchemas, "", true, false); err != nil {
@@ -501,6 +675,10 @@ func (u BaseComponent) MarshalJSON() ([]byte, error) {
 
 	if u.PortalExtensionComponentSchemas != nil {
 		return utils.MarshalJSON(u.PortalExtensionComponentSchemas, "", true)
+	}
+
+	if u.CustomFlowActionComponentSchemas != nil {
+		return utils.MarshalJSON(u.CustomFlowActionComponentSchemas, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type BaseComponent: all fields are null")

@@ -11,4 +11,5 @@ resource "epilot-app_app" "my_app" {
       ]
     }
   ]
+  version = "...my_version..."
 }

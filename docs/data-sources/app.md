@@ -32,8 +32,10 @@ data "epilot-app_app" "my_app" {
 - `installation_audit` (Attributes) Audit information for the app (see [below for nested schema](#nestedatt--installation_audit))
 - `installed_version` (String) Version of the app that is installed
 - `installer_org_id` (String) Unique identifier for the organization the app is installed in
+- `manifest` (List of String) Manifest ID used to create/update the entity
 - `name` (String) Name of the app
 - `option_values` (Attributes List) Configuration values for the app components (see [below for nested schema](#nestedatt--option_values))
+- `role` (String) The name of the role the app can use to access APIs
 
 <a id="nestedatt--installation_audit"></a>
 ### Nested Schema for `installation_audit`

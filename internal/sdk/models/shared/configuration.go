@@ -275,6 +275,7 @@ type Configuration struct {
 	PublicVersions []string `json:"public_versions,omitempty"`
 	// Status of the review process
 	ReviewStatus *ReviewStatus `json:"review_status,omitempty"`
+	Role         *Role         `json:"role,omitempty"`
 	// Email address for support requests
 	SupportEmail *string `json:"support_email,omitempty"`
 	// Version of the app that is installed
@@ -440,6 +441,13 @@ func (o *Configuration) GetReviewStatus() *ReviewStatus {
 		return nil
 	}
 	return o.ReviewStatus
+}
+
+func (o *Configuration) GetRole() *Role {
+	if o == nil {
+		return nil
+	}
+	return o.Role
 }
 
 func (o *Configuration) GetSupportEmail() *string {

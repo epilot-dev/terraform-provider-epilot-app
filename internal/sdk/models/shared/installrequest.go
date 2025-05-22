@@ -5,6 +5,8 @@ package shared
 type InstallRequest struct {
 	// Configuration values for the app components
 	OptionValues []OptionsRef `json:"option_values,omitempty"`
+	// Version of the app to update to
+	Version *string `json:"version,omitempty"`
 }
 
 func (o *InstallRequest) GetOptionValues() []OptionsRef {
@@ -12,4 +14,11 @@ func (o *InstallRequest) GetOptionValues() []OptionsRef {
 		return nil
 	}
 	return o.OptionValues
+}
+
+func (o *InstallRequest) GetVersion() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Version
 }

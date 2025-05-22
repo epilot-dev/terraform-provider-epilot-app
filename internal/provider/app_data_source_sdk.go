@@ -11,6 +11,10 @@ import (
 
 func (r *AppDataSourceModel) RefreshFromSharedInstallation(resp *shared.Installation) {
 	if resp != nil {
+		r.Manifest = []types.String{}
+		for _, v := range resp.Manifest {
+			r.Manifest = append(r.Manifest, types.StringValue(v))
+		}
 		r.AppID = types.StringValue(resp.AppID)
 		componentsResult, _ := json.Marshal(resp.Components)
 		r.Components = types.StringValue(string(componentsResult))
@@ -53,5 +57,6 @@ func (r *AppDataSourceModel) RefreshFromSharedInstallation(resp *shared.Installa
 				r.OptionValues[optionValuesCount].Options = optionValues1.Options
 			}
 		}
+		r.Role = types.StringPointerValue(resp.Role)
 	}
 }

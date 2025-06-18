@@ -5,6 +5,8 @@ package shared
 type PatchVersionRequest struct {
 	// Required grants for the app in order to call APIs for the installing tenant
 	Grants []Grants `json:"grants,omitempty"`
+	// ID of the manifest to use for this version
+	ManifestID *string `json:"manifest_id,omitempty"`
 	// Name of the role
 	RoleID *string `json:"role_id,omitempty"`
 }
@@ -14,6 +16,13 @@ func (o *PatchVersionRequest) GetGrants() []Grants {
 		return nil
 	}
 	return o.Grants
+}
+
+func (o *PatchVersionRequest) GetManifestID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ManifestID
 }
 
 func (o *PatchVersionRequest) GetRoleID() *string {

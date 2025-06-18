@@ -97,7 +97,8 @@ func (o *ConfigurationVersionVersionAudit) GetVersionedBy() *string {
 
 // ConfigurationVersion - Configuration data about your app which is versionable
 type ConfigurationVersion struct {
-	AppID string `json:"app_id"`
+	AppID        string        `json:"app_id"`
+	BlueprintRef *BlueprintRef `json:"blueprint_ref,omitempty"`
 	// Changelog for the app version
 	Changelog  *string         `json:"changelog,omitempty"`
 	Components []BaseComponent `json:"components"`
@@ -135,6 +136,13 @@ func (o *ConfigurationVersion) GetAppID() string {
 		return ""
 	}
 	return o.AppID
+}
+
+func (o *ConfigurationVersion) GetBlueprintRef() *BlueprintRef {
+	if o == nil {
+		return nil
+	}
+	return o.BlueprintRef
 }
 
 func (o *ConfigurationVersion) GetChangelog() *string {

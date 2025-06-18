@@ -4,7 +4,9 @@ package shared
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
 )
 
 type OptionsType string
@@ -39,6 +41,91 @@ func (e *OptionsType) UnmarshalJSON(data []byte) error {
 	}
 }
 
+type OptionsValueType string
+
+const (
+	OptionsValueTypeStr     OptionsValueType = "str"
+	OptionsValueTypeBoolean OptionsValueType = "boolean"
+	OptionsValueTypeNumber  OptionsValueType = "number"
+)
+
+type OptionsValue struct {
+	Str     *string  `queryParam:"inline"`
+	Boolean *bool    `queryParam:"inline"`
+	Number  *float64 `queryParam:"inline"`
+
+	Type OptionsValueType
+}
+
+func CreateOptionsValueStr(str string) OptionsValue {
+	typ := OptionsValueTypeStr
+
+	return OptionsValue{
+		Str:  &str,
+		Type: typ,
+	}
+}
+
+func CreateOptionsValueBoolean(boolean bool) OptionsValue {
+	typ := OptionsValueTypeBoolean
+
+	return OptionsValue{
+		Boolean: &boolean,
+		Type:    typ,
+	}
+}
+
+func CreateOptionsValueNumber(number float64) OptionsValue {
+	typ := OptionsValueTypeNumber
+
+	return OptionsValue{
+		Number: &number,
+		Type:   typ,
+	}
+}
+
+func (u *OptionsValue) UnmarshalJSON(data []byte) error {
+
+	var str string = ""
+	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+		u.Str = &str
+		u.Type = OptionsValueTypeStr
+		return nil
+	}
+
+	var boolean bool = false
+	if err := utils.UnmarshalJSON(data, &boolean, "", true, true); err == nil {
+		u.Boolean = &boolean
+		u.Type = OptionsValueTypeBoolean
+		return nil
+	}
+
+	var number float64 = float64(0)
+	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+		u.Number = &number
+		u.Type = OptionsValueTypeNumber
+		return nil
+	}
+
+	return fmt.Errorf("could not unmarshal `%s` into any supported union types for OptionsValue", string(data))
+}
+
+func (u OptionsValue) MarshalJSON() ([]byte, error) {
+	if u.Str != nil {
+		return utils.MarshalJSON(u.Str, "", true)
+	}
+
+	if u.Boolean != nil {
+		return utils.MarshalJSON(u.Boolean, "", true)
+	}
+
+	if u.Number != nil {
+		return utils.MarshalJSON(u.Number, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type OptionsValue: all fields are null")
+}
+
 // Options for the component configuration
 type Options struct {
 	// Detailed description of what this configuration option does
@@ -51,7 +138,7 @@ type Options struct {
 	Required *bool       `json:"required,omitempty"`
 	Type     OptionsType `json:"type"`
 	// The configured value for this option. Is only present when the component is installed.
-	Value *string `json:"value,omitempty"`
+	Value *OptionsValue `json:"value,omitempty"`
 }
 
 func (o *Options) GetDescription() *string {
@@ -89,7 +176,7 @@ func (o *Options) GetType() OptionsType {
 	return o.Type
 }
 
-func (o *Options) GetValue() *string {
+func (o *Options) GetValue() *OptionsValue {
 	if o == nil {
 		return nil
 	}

@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 11c8545a-deb6-44f9-ba56-e71722af6a51
 management:
-  docChecksum: 0119324ef16572f90cf43c2672f2941e
+  docChecksum: 7d3129b33e37d4c36d3e322595521dfb
   docVersion: 1.0.0
   speakeasyVersion: 1.477.0
   generationVersion: 2.497.0
-  releaseVersion: 0.9.2
-  configChecksum: d221dc779b8dd326f79c2f0004992e02
+  releaseVersion: 0.9.5
+  configChecksum: 32543c7384d6247e0258b181ca766ee5
   repoURL: https://github.com/epilot-dev/terraform-provider-epilot-app.git
   repoSubDirectory: .
   published: true
@@ -62,11 +62,14 @@ generatedFiles:
   - internal/provider/reflect/primitive.go
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
+  - internal/provider/types/blueprint_ref.go
   - internal/provider/types/installation_audit.go
   - internal/provider/types/option.go
   - internal/provider/types/options_ref.go
+  - internal/provider/types/value.go
   - internal/provider/utils.go
   - internal/sdk/.gitattributes
+  - internal/sdk/appanalytics.go
   - internal/sdk/appconfiguration.go
   - internal/sdk/appinstallation.go
   - internal/sdk/internal/hooks/hooks.go
@@ -87,6 +90,7 @@ generatedFiles:
   - internal/sdk/models/operations/createcomponent.go
   - internal/sdk/models/operations/createconfiguration.go
   - internal/sdk/models/operations/createlogouploadurl.go
+  - internal/sdk/models/operations/createzipuploadurl.go
   - internal/sdk/models/operations/deletecomponent.go
   - internal/sdk/models/operations/deleteconfiguration.go
   - internal/sdk/models/operations/deletelogo.go
@@ -94,7 +98,9 @@ generatedFiles:
   - internal/sdk/models/operations/getconfiguration.go
   - internal/sdk/models/operations/getinstallation.go
   - internal/sdk/models/operations/getpublicconfiguration.go
+  - internal/sdk/models/operations/getpublickey.go
   - internal/sdk/models/operations/getversion.go
+  - internal/sdk/models/operations/ingestevent.go
   - internal/sdk/models/operations/install.go
   - internal/sdk/models/operations/listconfigurations.go
   - internal/sdk/models/operations/listinstallations.go
@@ -105,10 +111,16 @@ generatedFiles:
   - internal/sdk/models/operations/patchmetadata.go
   - internal/sdk/models/operations/patchversion.go
   - internal/sdk/models/operations/promoteversion.go
+  - internal/sdk/models/operations/queryevents.go
   - internal/sdk/models/operations/uninstall.go
+  - internal/sdk/models/shared/actor.go
+  - internal/sdk/models/shared/aggregatedevents.go
+  - internal/sdk/models/shared/appeventdatainput.go
   - internal/sdk/models/shared/author.go
-  - internal/sdk/models/shared/basecomponentinput.go
+  - internal/sdk/models/shared/basecomponent.go
+  - internal/sdk/models/shared/batcheventrequest.go
   - internal/sdk/models/shared/billingfrequency.go
+  - internal/sdk/models/shared/blueprintref.go
   - internal/sdk/models/shared/componenttype.go
   - internal/sdk/models/shared/configuration.go
   - internal/sdk/models/shared/configurationmetadata.go
@@ -117,22 +129,26 @@ generatedFiles:
   - internal/sdk/models/shared/createconfigrequest.go
   - internal/sdk/models/shared/createlogopresignedrequest.go
   - internal/sdk/models/shared/customflowconfig.go
+  - internal/sdk/models/shared/eventsquery.go
+  - internal/sdk/models/shared/eventsqueryresponse.go
   - internal/sdk/models/shared/grants.go
   - internal/sdk/models/shared/installation.go
   - internal/sdk/models/shared/installrequest.go
   - internal/sdk/models/shared/journeyblockcomponentargs.go
-  - internal/sdk/models/shared/journeyblockconfiginput.go
+  - internal/sdk/models/shared/journeyblockconfig.go
   - internal/sdk/models/shared/notificationconfig.go
   - internal/sdk/models/shared/notificationevent.go
   - internal/sdk/models/shared/option.go
   - internal/sdk/models/shared/options.go
   - internal/sdk/models/shared/optionsref.go
+  - internal/sdk/models/shared/overridedevmode.go
   - internal/sdk/models/shared/patchconfigmetadatarequest.go
   - internal/sdk/models/shared/patchversionrequest.go
   - internal/sdk/models/shared/portalauth.go
   - internal/sdk/models/shared/portalextensionconfig.go
   - internal/sdk/models/shared/pricing.go
   - internal/sdk/models/shared/publicconfiguration.go
+  - internal/sdk/models/shared/rawevents.go
   - internal/sdk/models/shared/role.go
   - internal/sdk/models/shared/s3reference.go
   - internal/sdk/models/shared/security.go
@@ -286,6 +302,9 @@ examples:
           version: "<value>"
       requestBody:
         application/json: {"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}
+      responses:
+        "200":
+          application/json: {"component": {"component_type": "ERP_INFORM_TOOLKIT", "configuration": {"type": "inbound"}, "id": "<id>"}}
   createConfiguration:
     speakeasy-default-create-configuration:
       requestBody:
@@ -397,5 +416,34 @@ examples:
           version: "<value>"
       requestBody:
         application/json: {}
+  createZipUploadUrl:
+    speakeasy-default-create-zip-upload-url:
+      parameters:
+        path:
+          appId: "<id>"
+      requestBody:
+        application/json: {"filename": "dist.zip"}
+      responses:
+        "200":
+          application/json: {"artifact_url": "https://fine-pants.biz", "s3ref": {"bucket": "my-bucket", "key": "manifest.json"}, "upload_url": "https://biodegradable-switch.biz/"}
+  getPublicKey:
+    speakeasy-default-get-public-key:
+      responses:
+        "200":
+          application/json: {"algorithm": "rsa-sha256", "issuer": "epilot"}
+  ingestEvent:
+    speakeasy-default-ingest-event:
+      requestBody:
+        application/json: {"events": []}
+  queryEvents:
+    speakeasy-default-query-events:
+      parameters:
+        path:
+          appId: "<id>"
+      requestBody:
+        application/json: {"filters": {"source": ["CUSTOM_JOURNEY_BLOCK"]}}
+      responses:
+        "200":
+          application/json: {"query": {"filters": {"source": ["CUSTOM_JOURNEY_BLOCK"]}}, "results": {"events": [{"actor": {"type": "system"}, "app_id": "<id>", "component_id": "<id>", "event_type": "INFO", "source": "CUSTOM_JOURNEY_BLOCK", "version": "<value>"}, {"actor": {"type": "system"}, "app_id": "<id>", "component_id": "<id>", "event_type": "INFO", "source": "CUSTOM_JOURNEY_BLOCK", "version": "<value>"}]}}
 examplesVersion: 1.0.0
 generatedTests: {}

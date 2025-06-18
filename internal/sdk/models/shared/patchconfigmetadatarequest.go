@@ -3,9 +3,11 @@
 package shared
 
 type PatchConfigMetadataRequest struct {
-	Category         *string           `json:"category,omitempty"`
-	Description      *TranslatedString `json:"description,omitempty"`
-	DocumentationURL *string           `json:"documentation_url,omitempty"`
+	Category    *string           `json:"category,omitempty"`
+	Description *TranslatedString `json:"description,omitempty"`
+	// Flag to indicate if the app is in dev mode. If true, the app takes the override properties of components into account.
+	DevMode          *bool   `json:"dev_mode,omitempty"`
+	DocumentationURL *string `json:"documentation_url,omitempty"`
 	// S3 key of the logo file
 	LogoURLKey *string `json:"logo_url_key,omitempty"`
 	// Name of the app
@@ -28,6 +30,13 @@ func (o *PatchConfigMetadataRequest) GetDescription() *TranslatedString {
 		return nil
 	}
 	return o.Description
+}
+
+func (o *PatchConfigMetadataRequest) GetDevMode() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.DevMode
 }
 
 func (o *PatchConfigMetadataRequest) GetDocumentationURL() *string {

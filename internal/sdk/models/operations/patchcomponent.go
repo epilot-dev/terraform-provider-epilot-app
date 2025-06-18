@@ -32,6 +32,10 @@ func (o *PatchComponentRequest) GetBaseComponentCustomJourneyBlock() *shared.Sch
 	return o.GetBaseComponent().SchemasInput
 }
 
+func (o *PatchComponentRequest) GetBaseComponentErpInformToolkit() *shared.ErpInformToolkitComponentSchemas {
+	return o.GetBaseComponent().ErpInformToolkitComponentSchemas
+}
+
 func (o *PatchComponentRequest) GetBaseComponentPortalExtension() *shared.PortalExtensionComponentSchemas {
 	return o.GetBaseComponent().PortalExtensionComponentSchemas
 }

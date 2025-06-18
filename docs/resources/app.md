@@ -20,8 +20,12 @@ resource "epilot-app_app" "my_app" {
       component_id = "...my_component_id..."
       options = [
         {
-          key   = "...my_key..."
-          value = "...my_value..."
+          key = "...my_key..."
+          value = {
+            boolean = false
+            number  = 4.53
+            str     = "...my_str..."
+          }
         }
       ]
     }
@@ -44,6 +48,7 @@ resource "epilot-app_app" "my_app" {
 
 ### Read-Only
 
+- `blueprint_ref` (Attributes) (see [below for nested schema](#nestedatt--blueprint_ref))
 - `components` (String) List of component configurations for the installed version. Parsed as JSON.
 - `enabled` (Boolean) Flag to indicate if the app is enabled. Enabled is set to true when required option values are set. Default: true
 - `installation_audit` (Attributes) Audit information for the app (see [below for nested schema](#nestedatt--installation_audit))
@@ -51,6 +56,7 @@ resource "epilot-app_app" "my_app" {
 - `installer_org_id` (String) Unique identifier for the organization the app is installed in
 - `manifest` (List of String) Manifest ID used to create/update the entity
 - `name` (String) Name of the app
+- `owner_org_id` (String) Organization ID of the app creator
 - `role` (String) The name of the role the app can use to access APIs
 
 <a id="nestedatt--option_values"></a>
@@ -67,8 +73,27 @@ Optional:
 Optional:
 
 - `key` (String) Key matching a config_option from the component. Not Null
-- `value` (String) The configured value for this option. Not Null
+- `value` (Attributes) The configured value for this option. Not Null (see [below for nested schema](#nestedatt--option_values--options--value))
 
+<a id="nestedatt--option_values--options--value"></a>
+### Nested Schema for `option_values.options.value`
+
+Optional:
+
+- `boolean` (Boolean)
+- `number` (Number)
+- `str` (String)
+
+
+
+
+<a id="nestedatt--blueprint_ref"></a>
+### Nested Schema for `blueprint_ref`
+
+Read-Only:
+
+- `job_id` (String) ID of the job that created the blueprint
+- `manifest_id` (String) ID of the blueprint
 
 
 <a id="nestedatt--installation_audit"></a>

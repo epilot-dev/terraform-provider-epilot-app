@@ -74,6 +74,8 @@ type SDK struct {
 	AppInstallation *AppInstallation
 	// Create and manage app configurations
 	AppConfiguration *AppConfiguration
+	// Analytics for installed apps
+	AppAnalytics *AppAnalytics
 
 	sdkConfiguration sdkConfiguration
 }
@@ -151,9 +153,9 @@ func New(opts ...SDKOption) *SDK {
 		sdkConfiguration: sdkConfiguration{
 			Language:          "go",
 			OpenAPIDocVersion: "1.0.0",
-			SDKVersion:        "0.9.2",
+			SDKVersion:        "0.9.5",
 			GenVersion:        "2.497.0",
-			UserAgent:         "speakeasy-sdk/terraform 0.9.2 2.497.0 1.0.0 github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk",
+			UserAgent:         "speakeasy-sdk/terraform 0.9.5 2.497.0 1.0.0 github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk",
 			Hooks:             hooks.New(),
 		},
 	}
@@ -176,6 +178,8 @@ func New(opts ...SDKOption) *SDK {
 	sdk.AppInstallation = newAppInstallation(sdk.sdkConfiguration)
 
 	sdk.AppConfiguration = newAppConfiguration(sdk.sdkConfiguration)
+
+	sdk.AppAnalytics = newAppAnalytics(sdk.sdkConfiguration)
 
 	return sdk
 }

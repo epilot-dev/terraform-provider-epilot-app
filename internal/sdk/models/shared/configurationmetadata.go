@@ -159,6 +159,8 @@ type ConfigurationMetadata struct {
 	Category           *string                                  `json:"category,omitempty"`
 	ConfigurationAudit *ConfigurationMetadataConfigurationAudit `json:"configuration_audit,omitempty"`
 	Description        ConfigurationMetadataDescription         `json:"description"`
+	// Flag to indicate if the app is in dev mode. If true, the app takes the override_url property of components into account.
+	DevMode *bool `json:"dev_mode,omitempty"`
 	// URL of the app documentation.
 	DocumentationURL *string `json:"documentation_url,omitempty"`
 	// URL of the app icon.
@@ -225,6 +227,13 @@ func (o *ConfigurationMetadata) GetDescription() ConfigurationMetadataDescriptio
 		return ConfigurationMetadataDescription{}
 	}
 	return o.Description
+}
+
+func (o *ConfigurationMetadata) GetDevMode() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.DevMode
 }
 
 func (o *ConfigurationMetadata) GetDocumentationURL() *string {

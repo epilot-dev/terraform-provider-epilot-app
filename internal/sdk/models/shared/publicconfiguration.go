@@ -92,14 +92,17 @@ func (o *PublicConfigurationPricing) GetPricingType() *PublicConfigurationPricin
 // PublicConfiguration - Public configuration of the published app
 type PublicConfiguration struct {
 	// ID of the app configuration
-	AppID  string  `json:"app_id"`
-	Author *Author `json:"author,omitempty"`
+	AppID        string        `json:"app_id"`
+	Author       *Author       `json:"author,omitempty"`
+	BlueprintRef *BlueprintRef `json:"blueprint_ref,omitempty"`
 	// Category of the app.
 	Category   *string         `json:"category,omitempty"`
 	Components []BaseComponent `json:"components"`
 	// Timestamp when the app version is deprecated
 	DeprecatedAt *string                         `json:"deprecated_at,omitempty"`
 	Description  *PublicConfigurationDescription `json:"description,omitempty"`
+	// Flag to indicate if the app is in dev mode.
+	DevMode *bool `json:"dev_mode,omitempty"`
 	// URL of the app documentation.
 	DocumentationURL *string `json:"documentation_url,omitempty"`
 	// URL of the app icon.
@@ -149,6 +152,13 @@ func (o *PublicConfiguration) GetAuthor() *Author {
 	return o.Author
 }
 
+func (o *PublicConfiguration) GetBlueprintRef() *BlueprintRef {
+	if o == nil {
+		return nil
+	}
+	return o.BlueprintRef
+}
+
 func (o *PublicConfiguration) GetCategory() *string {
 	if o == nil {
 		return nil
@@ -175,6 +185,13 @@ func (o *PublicConfiguration) GetDescription() *PublicConfigurationDescription {
 		return nil
 	}
 	return o.Description
+}
+
+func (o *PublicConfiguration) GetDevMode() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.DevMode
 }
 
 func (o *PublicConfiguration) GetDocumentationURL() *string {

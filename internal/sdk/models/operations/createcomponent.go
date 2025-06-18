@@ -30,6 +30,10 @@ func (o *CreateComponentRequest) GetBaseComponentCustomJourneyBlock() *shared.Sc
 	return o.GetBaseComponent().SchemasInput
 }
 
+func (o *CreateComponentRequest) GetBaseComponentErpInformToolkit() *shared.ErpInformToolkitComponentSchemas {
+	return o.GetBaseComponent().ErpInformToolkitComponentSchemas
+}
+
 func (o *CreateComponentRequest) GetBaseComponentPortalExtension() *shared.PortalExtensionComponentSchemas {
 	return o.GetBaseComponent().PortalExtensionComponentSchemas
 }
@@ -48,6 +52,46 @@ func (o *CreateComponentRequest) GetVersion() string {
 	return o.Version
 }
 
+// CreateComponentResponseBody - Component created successfully
+type CreateComponentResponseBody struct {
+	Component *shared.BaseComponent `json:"component,omitempty"`
+}
+
+func (o *CreateComponentResponseBody) GetComponent() *shared.BaseComponent {
+	if o == nil {
+		return nil
+	}
+	return o.Component
+}
+
+func (o *CreateComponentResponseBody) GetComponentCustomFlowAction() *shared.CustomFlowActionComponentSchemas {
+	if v := o.GetComponent(); v != nil {
+		return v.CustomFlowActionComponentSchemas
+	}
+	return nil
+}
+
+func (o *CreateComponentResponseBody) GetComponentCustomJourneyBlock() *shared.JourneyBlockComponentSchemas {
+	if v := o.GetComponent(); v != nil {
+		return v.JourneyBlockComponentSchemas
+	}
+	return nil
+}
+
+func (o *CreateComponentResponseBody) GetComponentErpInformToolkit() *shared.ErpInformToolkitComponentSchemas {
+	if v := o.GetComponent(); v != nil {
+		return v.ErpInformToolkitComponentSchemas
+	}
+	return nil
+}
+
+func (o *CreateComponentResponseBody) GetComponentPortalExtension() *shared.PortalExtensionComponentSchemas {
+	if v := o.GetComponent(); v != nil {
+		return v.PortalExtensionComponentSchemas
+	}
+	return nil
+}
+
 type CreateComponentResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -55,6 +99,8 @@ type CreateComponentResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
+	// Component created successfully
+	Object *CreateComponentResponseBody
 }
 
 func (o *CreateComponentResponse) GetContentType() string {
@@ -76,4 +122,11 @@ func (o *CreateComponentResponse) GetRawResponse() *http.Response {
 		return nil
 	}
 	return o.RawResponse
+}
+
+func (o *CreateComponentResponse) GetObject() *CreateComponentResponseBody {
+	if o == nil {
+		return nil
+	}
+	return o.Object
 }

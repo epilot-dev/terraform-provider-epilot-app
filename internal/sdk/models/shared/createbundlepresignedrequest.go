@@ -3,7 +3,7 @@
 package shared
 
 type CreateBundlePresignedRequest struct {
-	// ID of the journye block component
+	// ID of the journey block component
 	ComponentID *string `json:"component_id,omitempty"`
 	// Version of the app
 	Version string `json:"version"`

@@ -45,36 +45,6 @@ func (e *ComponentMapping) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type JourneyBlockConfigInput struct {
-	// Arguments to pass to the component
-	ComponentArgs []JourneyBlockComponentArgs `json:"component_args,omitempty"`
-	// Define data which is mapped to entity mapping ui blocks
-	ComponentMapping map[string]ComponentMapping `json:"component_mapping,omitempty"`
-	// Custom element tag for the component
-	ComponentTag string `json:"component_tag"`
-}
-
-func (o *JourneyBlockConfigInput) GetComponentArgs() []JourneyBlockComponentArgs {
-	if o == nil {
-		return nil
-	}
-	return o.ComponentArgs
-}
-
-func (o *JourneyBlockConfigInput) GetComponentMapping() map[string]ComponentMapping {
-	if o == nil {
-		return nil
-	}
-	return o.ComponentMapping
-}
-
-func (o *JourneyBlockConfigInput) GetComponentTag() string {
-	if o == nil {
-		return ""
-	}
-	return o.ComponentTag
-}
-
 type JourneyBlockConfig struct {
 	// Arguments to pass to the component
 	ComponentArgs []JourneyBlockComponentArgs `json:"component_args,omitempty"`
@@ -86,6 +56,8 @@ type JourneyBlockConfig struct {
 	ComponentTag string `json:"component_tag"`
 	// URL of the web component object
 	ComponentURL string `json:"component_url"`
+	// Override URL when app is in dev mode
+	OverrideDevMode *OverrideDevMode `json:"override_dev_mode,omitempty"`
 }
 
 func (o *JourneyBlockConfig) GetComponentArgs() []JourneyBlockComponentArgs {
@@ -121,4 +93,50 @@ func (o *JourneyBlockConfig) GetComponentURL() string {
 		return ""
 	}
 	return o.ComponentURL
+}
+
+func (o *JourneyBlockConfig) GetOverrideDevMode() *OverrideDevMode {
+	if o == nil {
+		return nil
+	}
+	return o.OverrideDevMode
+}
+
+type JourneyBlockConfigInput struct {
+	// Arguments to pass to the component
+	ComponentArgs []JourneyBlockComponentArgs `json:"component_args,omitempty"`
+	// Define data which is mapped to entity mapping ui blocks
+	ComponentMapping map[string]ComponentMapping `json:"component_mapping,omitempty"`
+	// Custom element tag for the component
+	ComponentTag string `json:"component_tag"`
+	// Override URL when app is in dev mode
+	OverrideDevMode *OverrideDevMode `json:"override_dev_mode,omitempty"`
+}
+
+func (o *JourneyBlockConfigInput) GetComponentArgs() []JourneyBlockComponentArgs {
+	if o == nil {
+		return nil
+	}
+	return o.ComponentArgs
+}
+
+func (o *JourneyBlockConfigInput) GetComponentMapping() map[string]ComponentMapping {
+	if o == nil {
+		return nil
+	}
+	return o.ComponentMapping
+}
+
+func (o *JourneyBlockConfigInput) GetComponentTag() string {
+	if o == nil {
+		return ""
+	}
+	return o.ComponentTag
+}
+
+func (o *JourneyBlockConfigInput) GetOverrideDevMode() *OverrideDevMode {
+	if o == nil {
+		return nil
+	}
+	return o.OverrideDevMode
 }

@@ -30,6 +30,7 @@ type AppDataSource struct {
 // AppDataSourceModel describes the data model.
 type AppDataSourceModel struct {
 	AppID             types.String               `tfsdk:"app_id"`
+	BlueprintRef      *tfTypes.BlueprintRef      `tfsdk:"blueprint_ref"`
 	Components        types.String               `tfsdk:"components"`
 	Enabled           types.Bool                 `tfsdk:"enabled"`
 	InstallationAudit *tfTypes.InstallationAudit `tfsdk:"installation_audit"`
@@ -38,6 +39,7 @@ type AppDataSourceModel struct {
 	Manifest          []types.String             `tfsdk:"manifest"`
 	Name              types.String               `tfsdk:"name"`
 	OptionValues      []tfTypes.OptionsRef       `tfsdk:"option_values"`
+	OwnerOrgID        types.String               `tfsdk:"owner_org_id"`
 	Role              types.String               `tfsdk:"role"`
 }
 
@@ -54,6 +56,19 @@ func (r *AppDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 		Attributes: map[string]schema.Attribute{
 			"app_id": schema.StringAttribute{
 				Required: true,
+			},
+			"blueprint_ref": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"job_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `ID of the job that created the blueprint`,
+					},
+					"manifest_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `ID of the blueprint`,
+					},
+				},
 			},
 			"components": schema.StringAttribute{
 				Computed:    true,
@@ -118,8 +133,19 @@ func (r *AppDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										Computed:    true,
 										Description: `Key matching a config_option from the component`,
 									},
-									"value": schema.StringAttribute{
-										Computed:    true,
+									"value": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"boolean": schema.BoolAttribute{
+												Computed: true,
+											},
+											"number": schema.NumberAttribute{
+												Computed: true,
+											},
+											"str": schema.StringAttribute{
+												Computed: true,
+											},
+										},
 										Description: `The configured value for this option`,
 									},
 								},
@@ -128,6 +154,10 @@ func (r *AppDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 				Description: `Configuration values for the app components`,
+			},
+			"owner_org_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Organization ID of the app creator`,
 			},
 			"role": schema.StringAttribute{
 				Computed:    true,

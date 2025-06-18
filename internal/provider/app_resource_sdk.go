@@ -7,6 +7,7 @@ import (
 	tfTypes "github.com/epilot-dev/terraform-provider-epilot-app/internal/provider/types"
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"math/big"
 )
 
 func (r *AppResourceModel) ToSharedInstallRequest() *shared.InstallRequest {
@@ -20,9 +21,40 @@ func (r *AppResourceModel) ToSharedInstallRequest() *shared.InstallRequest {
 			var key string
 			key = optionsItem.Key.ValueString()
 
-			var value string
-			value = optionsItem.Value.ValueString()
-
+			var value shared.Value
+			str := new(string)
+			if !optionsItem.Value.Str.IsUnknown() && !optionsItem.Value.Str.IsNull() {
+				*str = optionsItem.Value.Str.ValueString()
+			} else {
+				str = nil
+			}
+			if str != nil {
+				value = shared.Value{
+					Str: str,
+				}
+			}
+			boolean := new(bool)
+			if !optionsItem.Value.Boolean.IsUnknown() && !optionsItem.Value.Boolean.IsNull() {
+				*boolean = optionsItem.Value.Boolean.ValueBool()
+			} else {
+				boolean = nil
+			}
+			if boolean != nil {
+				value = shared.Value{
+					Boolean: boolean,
+				}
+			}
+			number := new(float64)
+			if !optionsItem.Value.Number.IsUnknown() && !optionsItem.Value.Number.IsNull() {
+				*number, _ = optionsItem.Value.Number.ValueBigFloat().Float64()
+			} else {
+				number = nil
+			}
+			if number != nil {
+				value = shared.Value{
+					Number: number,
+				}
+			}
 			optionsVar = append(optionsVar, shared.Option{
 				Key:   key,
 				Value: value,
@@ -53,6 +85,13 @@ func (r *AppResourceModel) RefreshFromSharedInstallation(resp *shared.Installati
 			r.Manifest = append(r.Manifest, types.StringValue(v))
 		}
 		r.AppID = types.StringValue(resp.AppID)
+		if resp.BlueprintRef == nil {
+			r.BlueprintRef = nil
+		} else {
+			r.BlueprintRef = &tfTypes.BlueprintRef{}
+			r.BlueprintRef.JobID = types.StringPointerValue(resp.BlueprintRef.JobID)
+			r.BlueprintRef.ManifestID = types.StringPointerValue(resp.BlueprintRef.ManifestID)
+		}
 		componentsResult, _ := json.Marshal(resp.Components)
 		r.Components = types.StringValue(string(componentsResult))
 		r.Enabled = types.BoolPointerValue(resp.Enabled)
@@ -79,7 +118,19 @@ func (r *AppResourceModel) RefreshFromSharedInstallation(resp *shared.Installati
 			for optionsVarCount, optionsVarItem := range optionValuesItem.Options {
 				var optionsVar1 tfTypes.Option
 				optionsVar1.Key = types.StringValue(optionsVarItem.Key)
-				optionsVar1.Value = types.StringValue(optionsVarItem.Value)
+				if optionsVarItem.Value.Str != nil {
+					optionsVar1.Value.Str = types.StringPointerValue(optionsVarItem.Value.Str)
+				}
+				if optionsVarItem.Value.Boolean != nil {
+					optionsVar1.Value.Boolean = types.BoolPointerValue(optionsVarItem.Value.Boolean)
+				}
+				if optionsVarItem.Value.Number != nil {
+					if optionsVarItem.Value.Number != nil {
+						optionsVar1.Value.Number = types.NumberValue(big.NewFloat(float64(*optionsVarItem.Value.Number)))
+					} else {
+						optionsVar1.Value.Number = types.NumberNull()
+					}
+				}
 				if optionsVarCount+1 > len(optionValues1.Options) {
 					optionValues1.Options = append(optionValues1.Options, optionsVar1)
 				} else {
@@ -94,6 +145,7 @@ func (r *AppResourceModel) RefreshFromSharedInstallation(resp *shared.Installati
 				r.OptionValues[optionValuesCount].Options = optionValues1.Options
 			}
 		}
+		r.OwnerOrgID = types.StringPointerValue(resp.OwnerOrgID)
 		r.Role = types.StringPointerValue(resp.Role)
 	}
 }

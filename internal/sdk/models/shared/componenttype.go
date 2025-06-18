@@ -14,6 +14,7 @@ const (
 	ComponentTypeCustomJourneyBlock ComponentType = "CUSTOM_JOURNEY_BLOCK"
 	ComponentTypePortalExtension    ComponentType = "PORTAL_EXTENSION"
 	ComponentTypeCustomFlowAction   ComponentType = "CUSTOM_FLOW_ACTION"
+	ComponentTypeErpInformToolkit   ComponentType = "ERP_INFORM_TOOLKIT"
 )
 
 func (e ComponentType) ToPointer() *ComponentType {
@@ -30,6 +31,8 @@ func (e *ComponentType) UnmarshalJSON(data []byte) error {
 	case "PORTAL_EXTENSION":
 		fallthrough
 	case "CUSTOM_FLOW_ACTION":
+		fallthrough
+	case "ERP_INFORM_TOOLKIT":
 		*e = ComponentType(v)
 		return nil
 	default:

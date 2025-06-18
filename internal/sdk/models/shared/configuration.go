@@ -240,8 +240,9 @@ func (o *VersionAudit) GetVersionedBy() *string {
 
 // Configuration of the published app
 type Configuration struct {
-	AppID  string  `json:"app_id"`
-	Author *Author `json:"author,omitempty"`
+	AppID        string        `json:"app_id"`
+	Author       *Author       `json:"author,omitempty"`
+	BlueprintRef *BlueprintRef `json:"blueprint_ref,omitempty"`
 	// Category of the app.
 	Category *string `json:"category,omitempty"`
 	// Changelog for the app version
@@ -251,6 +252,8 @@ type Configuration struct {
 	// Timestamp when the app version is deprecated
 	DeprecatedAt *string                  `json:"deprecated_at,omitempty"`
 	Description  ConfigurationDescription `json:"description"`
+	// Flag to indicate if the app is in dev mode. If true, the app takes the override_url property of components into account.
+	DevMode *bool `json:"dev_mode,omitempty"`
 	// URL of the app documentation.
 	DocumentationURL *string `json:"documentation_url,omitempty"`
 	// URL of the app icon.
@@ -310,6 +313,13 @@ func (o *Configuration) GetAuthor() *Author {
 	return o.Author
 }
 
+func (o *Configuration) GetBlueprintRef() *BlueprintRef {
+	if o == nil {
+		return nil
+	}
+	return o.BlueprintRef
+}
+
 func (o *Configuration) GetCategory() *string {
 	if o == nil {
 		return nil
@@ -350,6 +360,13 @@ func (o *Configuration) GetDescription() ConfigurationDescription {
 		return ConfigurationDescription{}
 	}
 	return o.Description
+}
+
+func (o *Configuration) GetDevMode() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.DevMode
 }
 
 func (o *Configuration) GetDocumentationURL() *string {

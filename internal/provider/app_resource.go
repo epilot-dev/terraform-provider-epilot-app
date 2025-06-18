@@ -12,6 +12,9 @@ import (
 	speakeasy_listvalidators "github.com/epilot-dev/terraform-provider-epilot-app/internal/validators/listvalidators"
 	speakeasy_objectvalidators "github.com/epilot-dev/terraform-provider-epilot-app/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/epilot-dev/terraform-provider-epilot-app/internal/validators/stringvalidators"
+	"github.com/hashicorp/terraform-plugin-framework-validators/boolvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/numbervalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -37,6 +40,7 @@ type AppResource struct {
 // AppResourceModel describes the resource data model.
 type AppResourceModel struct {
 	AppID             types.String               `tfsdk:"app_id"`
+	BlueprintRef      *tfTypes.BlueprintRef      `tfsdk:"blueprint_ref"`
 	Components        types.String               `tfsdk:"components"`
 	Enabled           types.Bool                 `tfsdk:"enabled"`
 	InstallationAudit *tfTypes.InstallationAudit `tfsdk:"installation_audit"`
@@ -45,6 +49,7 @@ type AppResourceModel struct {
 	Manifest          []types.String             `tfsdk:"manifest"`
 	Name              types.String               `tfsdk:"name"`
 	OptionValues      []tfTypes.OptionsRef       `tfsdk:"option_values"`
+	OwnerOrgID        types.String               `tfsdk:"owner_org_id"`
 	Role              types.String               `tfsdk:"role"`
 	Version           types.String               `tfsdk:"version"`
 }
@@ -59,6 +64,19 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 		Attributes: map[string]schema.Attribute{
 			"app_id": schema.StringAttribute{
 				Required: true,
+			},
+			"blueprint_ref": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"job_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `ID of the job that created the blueprint`,
+					},
+					"manifest_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `ID of the blueprint`,
+					},
+				},
 			},
 			"components": schema.StringAttribute{
 				Computed:    true,
@@ -143,12 +161,44 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 											speakeasy_stringvalidators.NotNull(),
 										},
 									},
-									"value": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+									"value": schema.SingleNestedAttribute{
+										Computed: true,
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"boolean": schema.BoolAttribute{
+												Computed: true,
+												Optional: true,
+												Validators: []validator.Bool{
+													boolvalidator.ConflictsWith(path.Expressions{
+														path.MatchRelative().AtParent().AtName("str"),
+														path.MatchRelative().AtParent().AtName("number"),
+													}...),
+												},
+											},
+											"number": schema.NumberAttribute{
+												Computed: true,
+												Optional: true,
+												Validators: []validator.Number{
+													numbervalidator.ConflictsWith(path.Expressions{
+														path.MatchRelative().AtParent().AtName("str"),
+														path.MatchRelative().AtParent().AtName("boolean"),
+													}...),
+												},
+											},
+											"str": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												Validators: []validator.String{
+													stringvalidator.ConflictsWith(path.Expressions{
+														path.MatchRelative().AtParent().AtName("boolean"),
+														path.MatchRelative().AtParent().AtName("number"),
+													}...),
+												},
+											},
+										},
 										Description: `The configured value for this option. Not Null`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
+										Validators: []validator.Object{
+											speakeasy_objectvalidators.NotNull(),
 										},
 									},
 								},
@@ -161,6 +211,10 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					},
 				},
 				Description: `Configuration values for the app components`,
+			},
+			"owner_org_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Organization ID of the app creator`,
 			},
 			"role": schema.StringAttribute{
 				Computed:    true,

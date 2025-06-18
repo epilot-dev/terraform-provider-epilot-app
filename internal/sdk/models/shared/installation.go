@@ -51,7 +51,8 @@ type Installation struct {
 	// Manifest ID used to create/update the entity
 	Manifest []string `json:"_manifest,omitempty"`
 	// ID of the app configuration
-	AppID string `json:"app_id"`
+	AppID        string        `json:"app_id"`
+	BlueprintRef *BlueprintRef `json:"blueprint_ref,omitempty"`
 	// List of component configurations for the installed version
 	Components any `json:"components"`
 	// Flag to indicate if the app is enabled. Enabled is set to true when required option values are set.
@@ -65,6 +66,8 @@ type Installation struct {
 	Name string `json:"name"`
 	// Configuration values for the app components
 	OptionValues []OptionsRef `json:"option_values,omitempty"`
+	// Organization ID of the app creator
+	OwnerOrgID *string `json:"owner_org_id,omitempty"`
 	// The name of the role the app can use to access APIs
 	Role *string `json:"role,omitempty"`
 }
@@ -92,6 +95,13 @@ func (o *Installation) GetAppID() string {
 		return ""
 	}
 	return o.AppID
+}
+
+func (o *Installation) GetBlueprintRef() *BlueprintRef {
+	if o == nil {
+		return nil
+	}
+	return o.BlueprintRef
 }
 
 func (o *Installation) GetComponents() any {
@@ -141,6 +151,13 @@ func (o *Installation) GetOptionValues() []OptionsRef {
 		return nil
 	}
 	return o.OptionValues
+}
+
+func (o *Installation) GetOwnerOrgID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.OwnerOrgID
 }
 
 func (o *Installation) GetRole() *string {

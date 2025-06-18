@@ -8,6 +8,8 @@ tags:
     description: Create and manage app configurations
   - name: App Installation
     description: Install and uninstall apps
+  - name: App Analytics
+    description: Analytics for installed apps
 
 servers:
   - url: https://app.sls.epilot.io
@@ -17,6 +19,32 @@ security:
   - EpilotOrg: []
 
 paths:
+  /v1/public/.well-known/public-key:
+    get:
+      security: []
+      summary: getPublicKey
+      operationId: getPublicKey
+      description: Retrieve the public key for verifying signatures
+      tags:
+        - App Configuration
+      responses:
+        "200":
+          description: Public key for signature verification
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  algorithm:
+                    type: string
+                    example: "rsa-sha256"
+                  public_key:
+                    type: string
+                    description: PEM-formatted RSA public key
+                  issuer:
+                    type: string
+                    example: "epilot"
+
   /v1/app-configurations:
     get:
       summary: listConfigurations
@@ -162,11 +190,43 @@ paths:
           description: App configuration deleted successfully
         "404":
           description: App configuration not found
-    
+  
+  /v1/app-configurations/{appId}/events:
+    post:
+      summary: queryEvents
+      description: Query analytics events for a specific app with flexible filtering
+      operationId: queryEvents
+      tags:
+        - App Analytics
+      parameters:
+        - name: appId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the app configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventsQuery"
+      responses:
+        "200":
+          description: Analytics events
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsQueryResponse"
+        "400":
+          description: Invalid query parameters
+        "404":
+          description: App configuration not found
+
   /v1/app-configurations/{appId}/bundle:
     post:
       summary: createBundleUploadUrl
-      description: Generate a presigned URL for uploading app bundle to /<app-id>/bundle.zip path
+      description: Generate a presigned URL for uploading app bundle to /<app-id>/bundle.js path
       operationId: createBundleUploadUrl
       tags:
         - App Configuration
@@ -198,6 +258,57 @@ paths:
                   upload_url:
                     type: string
                     description: Presigned S3 URL for uploading the bundle
+                  s3ref:
+                    $ref: "#/components/schemas/S3Reference"
+                  expires_at:
+                    type: string
+                    format: date-time
+                    description: Timestamp when the upload URL expires
+        "404":
+          description: App configuration not found
+
+  /v1/app-configurations/{appId}/zip:
+    post:
+      summary: createZipUploadUrl
+      operationId: createZipUploadUrl
+      description: |
+        Generate a presigned URL to upload a zip file with artifacts that will be unpacked in a new directory under the /<app-id>/ path
+      tags:
+        - App Configuration
+      parameters:
+        - name: appId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the app configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                filename:
+                  type: string
+                  example: dist.zip
+      responses:
+        "200":
+          description: Upload URL generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - upload_url
+                  - artifact_url
+                properties:
+                  upload_url:
+                    type: string
+                    description: Presigned S3 URL for uploading the bundle
+                  artifact_url:
+                    type: string
+                    description: Public CDN URL for the unpacked artifacts
                   s3ref:
                     $ref: "#/components/schemas/S3Reference"
                   expires_at:
@@ -415,8 +526,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/UpsertComponentRequest"
       responses:
-        "204":
+        "200":
           description: Component created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  component:
+                    $ref: "#/components/schemas/BaseComponent"
         "400":
           description: Invalid version format
         "404":
@@ -699,6 +817,27 @@ paths:
         "404":
           description: App installation not found
 
+  /v1/app-events:
+    post:
+      summary: ingestEvent
+      operationId: ingestEvent
+      description: Internal endpoint for services to submit app events for analytic purposes
+      tags:
+        - App Analytics
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/AppEventData"
+                - $ref: "#/components/schemas/BatchEventRequest"
+      responses:
+        "202":
+          description: Events accepted for processing
+        "400":
+          description: Invalid event format
+
 components:
   requestBodies:
     CreateLogoPresignedRequest:
@@ -738,7 +877,7 @@ components:
                 description: Version of the app
               component_id:
                 type: string
-                description: ID of the journye block component
+                description: ID of the journey block component
 
     PatchConfigMetadataRequest:
       required: true
@@ -766,6 +905,9 @@ components:
               support_email:
                 type: string
                 description: Email address for support requests
+              dev_mode:
+                type: boolean
+                description: Flag to indicate if the app is in dev mode. If true, the app takes the override properties of components into account.
 
     PatchVersionRequest:
       required: true
@@ -774,6 +916,9 @@ components:
           schema:
             type: object
             properties:
+              manifest_id:
+                type: string
+                description: ID of the manifest to use for this version
               role_id:
                 nullable: true
                 type: string
@@ -866,7 +1011,7 @@ components:
           type: string
           description: Detailed description of what this configuration option does
         value:
-          type: string
+          type: [string, boolean, number]
           description: The configured value for this option. Is only present when the component is installed.
         type:
           type: string
@@ -882,7 +1027,7 @@ components:
           type: string
           description: Key matching a config_option from the component
         value:
-          type: string
+          type: [string, boolean, number]
           description: The configured value for this option
 
     OptionsRef:
@@ -920,6 +1065,7 @@ components:
         - CUSTOM_JOURNEY_BLOCK
         - PORTAL_EXTENSION
         - CUSTOM_FLOW_ACTION
+        - ERP_INFORM_TOOLKIT
       description: Type of app component
 
     Author:
@@ -982,6 +1128,8 @@ components:
           items:
             $ref: "#/components/schemas/Options"
           description: List of options for the app component
+        surfaces:
+          type: object
 
     BaseComponent:
       allOf:
@@ -993,10 +1141,12 @@ components:
               CUSTOM_JOURNEY_BLOCK: "#/components/schemas/JourneyBlockComponent"
               PORTAL_EXTENSION: "#/components/schemas/PortalExtensionComponent"
               CUSTOM_FLOW_ACTION: "#/components/schemas/CustomFlowActionComponent"
+              ERP_INFORM_TOOLKIT: "#/components/schemas/ErpInformToolkitComponent"
           oneOf:
             - $ref: "#/components/schemas/JourneyBlockComponent"
             - $ref: "#/components/schemas/PortalExtensionComponent"
             - $ref: "#/components/schemas/CustomFlowActionComponent"
+            - $ref: "#/components/schemas/ErpInformToolkitComponent"
 
     JourneyBlockComponent:
       type: object
@@ -1010,6 +1160,24 @@ components:
         configuration:
           $ref: "#/components/schemas/JourneyBlockConfig"
     
+    ErpInformToolkitComponent:
+      type: object
+      required:
+        - component_type
+        - configuration
+      properties:
+        component_type:
+          type: string
+          enum: [ERP_INFORM_TOOLKIT]
+        configuration:
+          type: object
+          required:
+            - type
+          properties:
+            type:
+              type: string
+              enum: [inbound, outbound]
+    
     CustomFlowActionComponent:
       type: object
       required:
@@ -1021,6 +1189,11 @@ components:
           enum: [CUSTOM_FLOW_ACTION]
         configuration:
           $ref: "#/components/schemas/CustomFlowConfig"
+        surfaces:
+          type: object
+          properties:
+            flow_action_config:
+              $ref: "#/components/schemas/AppBridgeSurfaceConfig"
 
     BaseCustomActionConfig:
       type: object
@@ -1050,9 +1223,6 @@ components:
                 headers:
                   type: object
                   additionalProperties: true
-                auth_token_ref:
-                  type: string
-                  description: SSM Reference to the auth token to use for the request
           required:
             - type
 
@@ -1156,12 +1326,23 @@ components:
           additionalProperties:
             type: string
 
+    OverrideDevMode:
+      type: object
+      description: Override URL when app is in dev mode
+      properties:
+        override_url:
+          type: string
+          description: URL of the web component object in dev mode
+          example: "http://localhost:3000"
+
     JourneyBlockConfig:
       type: object
       required:
         - component_url
         - component_tag
       properties:
+        override_dev_mode:
+          $ref: "#/components/schemas/OverrideDevMode"
         component_url:
           type: string
           description: URL of the web component object
@@ -1191,6 +1372,19 @@ components:
               - datetime
               - link
               - number
+
+    AppBridgeSurfaceConfig:
+      type: object
+      properties:
+        app_url:
+          type: string
+          description: URL of the uploaded App Bridge App. This is the entrypoint for the app
+        zip_url:
+          type: string
+          description: URL of the uploaded zip file containing the app
+        override_url:
+          type: string
+          description: URL of the app in dev mode
 
     JourneyBlockComponentArgs:
       allOf:
@@ -1331,6 +1525,9 @@ components:
           description: Name of the app
         author:
           $ref: "#/components/schemas/Author"
+        dev_mode:
+          type: boolean
+          description: Flag to indicate if the app is in dev mode. If true, the app takes the override_url property of components into account.
         versions:
           type: array
           items:
@@ -1440,6 +1637,8 @@ components:
           description: Status of the review process
         role:
           $ref: "#/components/schemas/Role"
+        blueprint_ref:
+          $ref: "#/components/schemas/BlueprintRef"
         version_audit:
           readOnly: true
           allOf:
@@ -1470,6 +1669,16 @@ components:
             type: string
             description: The resource the app can access
 
+    BlueprintRef:
+      type: object
+      properties:
+        manifest_id:
+          type: string
+          description: ID of the blueprint
+        job_id:
+          type: string
+          description: ID of the job that created the blueprint
+
     Installation:
       description: Information about the installed app. Has configuration data of the installed version
       type: object
@@ -1488,6 +1697,10 @@ components:
         installer_org_id:
           type: string
           description: Unique identifier for the organization the app is installed in
+          readOnly: true
+        owner_org_id:
+          type: string
+          description: Organization ID of the app creator
           readOnly: true
         enabled:
           readOnly: true
@@ -1517,6 +1730,8 @@ components:
         role:
           type: string
           description: The name of the role the app can use to access APIs
+        blueprint_ref:
+          $ref: "#/components/schemas/BlueprintRef"
         installation_audit:
           readOnly: true
           allOf:
@@ -1529,6 +1744,7 @@ components:
             type: string
             format: uuid
             example: 123e4567-e89b-12d3-a456-426614174000
+
     PublicConfiguration:
       description: Public configuration of the published app
       type: object
@@ -1553,6 +1769,9 @@ components:
           description: Name of the app
         author:
           $ref: "#/components/schemas/Author"
+        dev_mode:
+          type: boolean
+          description: Flag to indicate if the app is in dev mode.
         category:
           type: string
           description: Category of the app.
@@ -1588,6 +1807,8 @@ components:
           readOnly: true
         role:
           $ref: "#/components/schemas/Role"
+        blueprint_ref:
+          $ref: "#/components/schemas/BlueprintRef"
         latest_version:
           type: string
           description: Latest version of the app
@@ -1642,3 +1863,205 @@ components:
           example: api_5ZugdRXasLfWBypHi93Fk
       required:
         - org_id
+
+    BatchEventRequest:
+      type: object
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppEventData"
+          maxItems: 100
+
+    Actor:
+      type: object
+      readOnly: true
+      required:
+        - type
+      properties:
+        org_id:
+          type: string
+          description: Organization ID of the actor
+        user_id:
+          type: string
+          description: User ID of the actor
+        type:
+          type: string
+          description: Type of the actor (e.g., user, system)
+          enum: [user, system]
+
+    AppEventData:
+      type: object
+      required:
+        - app_id
+        - event_type
+        - component_id
+        - version
+        - source
+        - actor
+      properties:
+        app_id:
+          type: string
+          description: ID of the app configuration
+        version:
+          type: string
+          description: Version of the app configuration
+        event_id:
+          type: string
+          readOnly: true
+        component_id:
+          type: string
+        timestamp:
+          type: string
+          readOnly: true
+        correlation_id:
+          type: string
+        event_type:
+          type: string
+          enum: [ERROR, WARNING, INFO]
+        source:
+          $ref: "#/components/schemas/ComponentType"
+        actor:
+          $ref: "#/components/schemas/Actor"
+        details:
+          type: object
+          description: Details about the event
+          additionalProperties: true
+    
+    EventsQuery:
+      type: object
+      properties:
+        time_range:
+          type: object
+          properties:
+            start:
+              type: string
+              format: date-time
+              description: Start time (ISO 8601)
+            end:
+              type: string
+              format: date-time
+              description: End time (ISO 8601)
+            preset:
+              type: string
+              enum: [1h, 6h, 24h, 7d, 30d]
+              description: Predefined time range (alternative to start/end)
+          description: Either use preset OR start+end
+        filters:
+          type: object
+          properties:
+            source:
+              type: array
+              items:
+                $ref: "#/components/schemas/ComponentType"
+              description: Filter by component types
+            component_id:
+              type: array
+              items:
+                type: string
+              description: Filter by specific component IDs
+            event_type:
+              type: array
+              items:
+                type: string
+                enum: [ERROR, WARNING, INFO]
+              description: Filter by event types
+            correlation_id:
+              type: string
+              description: Filter by correlation ID for tracing
+        aggregation:
+          type: object
+          properties:
+            group_by:
+              type: array
+              items:
+                type: string
+                enum: [source, component_id, event_type, hour, day]
+              description: Group results by specified fields
+            metrics:
+              type: array
+              items:
+                type: string
+                enum: [count, error_rate, unique_users]
+              default: [count]
+              description: Metrics to calculate
+        pagination:
+          type: object
+          properties:
+            page:
+              type: integer
+              minimum: 1
+              default: 1
+            page_size:
+              type: integer
+              minimum: 1
+              maximum: 1000
+              default: 100
+        sort:
+          type: object
+          properties:
+            field:
+              type: string
+              enum: [timestamp, event_type, component_id]
+              default: timestamp
+            order:
+              type: string
+              enum: [asc, desc]
+              default: desc
+
+    EventsQueryResponse:
+      type: object
+      properties:
+        query:
+          $ref: "#/components/schemas/EventsQuery"
+        results:
+          oneOf:
+            - $ref: "#/components/schemas/RawEvents"
+            - $ref: "#/components/schemas/AggregatedEvents"
+        pagination:
+          type: object
+          properties:
+            page:
+              type: integer
+            page_size:
+              type: integer
+            total_items:
+              type: integer
+            has_next:
+              type: boolean
+
+    RawEvents:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [raw]
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppEventData"
+
+    AggregatedEvents:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [aggregated]
+        groups:
+          type: array
+          items:
+            type: object
+            properties:
+              dimensions:
+                type: object
+                description: 'The grouped dimensions e.g., "source": "CUSTOM_JOURNEY_BLOCK", "event_type": "ERROR"'
+                additionalProperties: true
+              metrics:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  error_rate:
+                    type: number

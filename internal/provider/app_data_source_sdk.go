@@ -7,6 +7,7 @@ import (
 	tfTypes "github.com/epilot-dev/terraform-provider-epilot-app/internal/provider/types"
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"math/big"
 )
 
 func (r *AppDataSourceModel) RefreshFromSharedInstallation(resp *shared.Installation) {
@@ -16,6 +17,13 @@ func (r *AppDataSourceModel) RefreshFromSharedInstallation(resp *shared.Installa
 			r.Manifest = append(r.Manifest, types.StringValue(v))
 		}
 		r.AppID = types.StringValue(resp.AppID)
+		if resp.BlueprintRef == nil {
+			r.BlueprintRef = nil
+		} else {
+			r.BlueprintRef = &tfTypes.BlueprintRef{}
+			r.BlueprintRef.JobID = types.StringPointerValue(resp.BlueprintRef.JobID)
+			r.BlueprintRef.ManifestID = types.StringPointerValue(resp.BlueprintRef.ManifestID)
+		}
 		componentsResult, _ := json.Marshal(resp.Components)
 		r.Components = types.StringValue(string(componentsResult))
 		r.Enabled = types.BoolPointerValue(resp.Enabled)
@@ -42,7 +50,19 @@ func (r *AppDataSourceModel) RefreshFromSharedInstallation(resp *shared.Installa
 			for optionsVarCount, optionsVarItem := range optionValuesItem.Options {
 				var optionsVar1 tfTypes.Option
 				optionsVar1.Key = types.StringValue(optionsVarItem.Key)
-				optionsVar1.Value = types.StringValue(optionsVarItem.Value)
+				if optionsVarItem.Value.Str != nil {
+					optionsVar1.Value.Str = types.StringPointerValue(optionsVarItem.Value.Str)
+				}
+				if optionsVarItem.Value.Boolean != nil {
+					optionsVar1.Value.Boolean = types.BoolPointerValue(optionsVarItem.Value.Boolean)
+				}
+				if optionsVarItem.Value.Number != nil {
+					if optionsVarItem.Value.Number != nil {
+						optionsVar1.Value.Number = types.NumberValue(big.NewFloat(float64(*optionsVarItem.Value.Number)))
+					} else {
+						optionsVar1.Value.Number = types.NumberNull()
+					}
+				}
 				if optionsVarCount+1 > len(optionValues1.Options) {
 					optionValues1.Options = append(optionValues1.Options, optionsVar1)
 				} else {
@@ -57,6 +77,7 @@ func (r *AppDataSourceModel) RefreshFromSharedInstallation(resp *shared.Installa
 				r.OptionValues[optionValuesCount].Options = optionValues1.Options
 			}
 		}
+		r.OwnerOrgID = types.StringPointerValue(resp.OwnerOrgID)
 		r.Role = types.StringPointerValue(resp.Role)
 	}
 }

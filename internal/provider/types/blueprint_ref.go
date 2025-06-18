@@ -4,7 +4,7 @@ package types
 
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
-type Option struct {
-	Key   types.String `tfsdk:"key"`
-	Value Value        `tfsdk:"value"`
+type BlueprintRef struct {
+	JobID      types.String `tfsdk:"job_id"`
+	ManifestID types.String `tfsdk:"manifest_id"`
 }

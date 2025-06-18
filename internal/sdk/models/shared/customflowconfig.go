@@ -10,18 +10,9 @@ import (
 )
 
 type ExternalIntegrationSettings struct {
-	// SSM Reference to the auth token to use for the request
-	AuthTokenRef *string        `json:"auth_token_ref,omitempty"`
-	Headers      map[string]any `json:"headers,omitempty"`
+	Headers map[string]any `json:"headers,omitempty"`
 	// URL to call
 	URL *string `json:"url,omitempty"`
-}
-
-func (o *ExternalIntegrationSettings) GetAuthTokenRef() *string {
-	if o == nil {
-		return nil
-	}
-	return o.AuthTokenRef
 }
 
 func (o *ExternalIntegrationSettings) GetHeaders() map[string]any {

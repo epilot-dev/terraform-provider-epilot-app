@@ -2,11 +2,102 @@
 
 package shared
 
+import (
+	"errors"
+	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
+)
+
+type ValueType string
+
+const (
+	ValueTypeStr     ValueType = "str"
+	ValueTypeBoolean ValueType = "boolean"
+	ValueTypeNumber  ValueType = "number"
+)
+
+type Value struct {
+	Str     *string  `queryParam:"inline"`
+	Boolean *bool    `queryParam:"inline"`
+	Number  *float64 `queryParam:"inline"`
+
+	Type ValueType
+}
+
+func CreateValueStr(str string) Value {
+	typ := ValueTypeStr
+
+	return Value{
+		Str:  &str,
+		Type: typ,
+	}
+}
+
+func CreateValueBoolean(boolean bool) Value {
+	typ := ValueTypeBoolean
+
+	return Value{
+		Boolean: &boolean,
+		Type:    typ,
+	}
+}
+
+func CreateValueNumber(number float64) Value {
+	typ := ValueTypeNumber
+
+	return Value{
+		Number: &number,
+		Type:   typ,
+	}
+}
+
+func (u *Value) UnmarshalJSON(data []byte) error {
+
+	var str string = ""
+	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+		u.Str = &str
+		u.Type = ValueTypeStr
+		return nil
+	}
+
+	var boolean bool = false
+	if err := utils.UnmarshalJSON(data, &boolean, "", true, true); err == nil {
+		u.Boolean = &boolean
+		u.Type = ValueTypeBoolean
+		return nil
+	}
+
+	var number float64 = float64(0)
+	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+		u.Number = &number
+		u.Type = ValueTypeNumber
+		return nil
+	}
+
+	return fmt.Errorf("could not unmarshal `%s` into any supported union types for Value", string(data))
+}
+
+func (u Value) MarshalJSON() ([]byte, error) {
+	if u.Str != nil {
+		return utils.MarshalJSON(u.Str, "", true)
+	}
+
+	if u.Boolean != nil {
+		return utils.MarshalJSON(u.Boolean, "", true)
+	}
+
+	if u.Number != nil {
+		return utils.MarshalJSON(u.Number, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type Value: all fields are null")
+}
+
 type Option struct {
 	// Key matching a config_option from the component
 	Key string `json:"key"`
 	// The configured value for this option
-	Value string `json:"value"`
+	Value Value `json:"value"`
 }
 
 func (o *Option) GetKey() string {
@@ -16,9 +107,9 @@ func (o *Option) GetKey() string {
 	return o.Key
 }
 
-func (o *Option) GetValue() string {
+func (o *Option) GetValue() Value {
 	if o == nil {
-		return ""
+		return Value{}
 	}
 	return o.Value
 }

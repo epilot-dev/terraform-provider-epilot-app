@@ -122,6 +122,7 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 			},
 			"manifest": schema.ListAttribute{
 				Computed:    true,
+				Optional:    true,
 				ElementType: types.StringType,
 				Description: `Manifest ID used to create/update the entity`,
 			},

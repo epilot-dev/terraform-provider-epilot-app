@@ -11,6 +11,10 @@ import (
 )
 
 func (r *AppResourceModel) ToSharedInstallRequest() *shared.InstallRequest {
+	var manifest []string = []string{}
+	for _, manifestItem := range r.Manifest {
+		manifest = append(manifest, manifestItem.ValueString())
+	}
 	var optionValues []shared.OptionsRef = []shared.OptionsRef{}
 	for _, optionValuesItem := range r.OptionValues {
 		var componentID string
@@ -72,6 +76,7 @@ func (r *AppResourceModel) ToSharedInstallRequest() *shared.InstallRequest {
 		version = nil
 	}
 	out := shared.InstallRequest{
+		Manifest:     manifest,
 		OptionValues: optionValues,
 		Version:      version,
 	}

@@ -3,10 +3,19 @@
 package shared
 
 type InstallRequest struct {
+	// Manifest ID used to create/update the entity
+	Manifest []string `json:"_manifest,omitempty"`
 	// Configuration values for the app components
 	OptionValues []OptionsRef `json:"option_values,omitempty"`
 	// Version of the app to update to
 	Version *string `json:"version,omitempty"`
+}
+
+func (o *InstallRequest) GetManifest() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Manifest
 }
 
 func (o *InstallRequest) GetOptionValues() []OptionsRef {

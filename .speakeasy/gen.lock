@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 11c8545a-deb6-44f9-ba56-e71722af6a51
 management:
-  docChecksum: 7d3129b33e37d4c36d3e322595521dfb
+  docChecksum: 8f4675d06be44de4fd9dc5ad2a7eb60e
   docVersion: 1.0.0
   speakeasyVersion: 1.477.0
   generationVersion: 2.497.0
-  releaseVersion: 0.9.5
-  configChecksum: 32543c7384d6247e0258b181ca766ee5
+  releaseVersion: 0.9.6
+  configChecksum: 09abc2c805dca13365d2e7172548a828
   repoURL: https://github.com/epilot-dev/terraform-provider-epilot-app.git
   repoSubDirectory: .
   published: true
@@ -240,6 +240,8 @@ examples:
       parameters:
         path:
           appId: "<id>"
+      requestBody:
+        application/json: {"_manifest": ["123e4567-e89b-12d3-a456-426614174000"]}
       responses:
         "204":
           application/json: {}
@@ -260,6 +262,8 @@ examples:
       parameters:
         path:
           appId: "<id>"
+      requestBody:
+        application/json: {"_manifest": ["123e4567-e89b-12d3-a456-426614174000"]}
   promoteVersion:
     speakeasy-default-promote-version:
       parameters:

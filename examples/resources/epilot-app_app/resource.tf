@@ -11,8 +11,6 @@ resource "epilot-app_app" "my_app" {
           key = "...my_key..."
           value = {
             boolean = false
-            number  = 4.53
-            str     = "...my_str..."
           }
         }
       ]

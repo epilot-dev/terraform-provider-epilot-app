@@ -7,7 +7,6 @@ import (
 	"fmt"
 	tfTypes "github.com/epilot-dev/terraform-provider-epilot-app/internal/provider/types"
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk"
-	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/models/operations"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -139,7 +138,7 @@ func (r *AppDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 											"boolean": schema.BoolAttribute{
 												Computed: true,
 											},
-											"number": schema.NumberAttribute{
+											"number": schema.Float64Attribute{
 												Computed: true,
 											},
 											"str": schema.StringAttribute{
@@ -205,13 +204,13 @@ func (r *AppDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		return
 	}
 
-	var appID string
-	appID = data.AppID.ValueString()
+	request, requestDiags := data.ToOperationsGetInstallationRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
 
-	request := operations.GetInstallationRequest{
-		AppID: appID,
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	res, err := r.client.AppInstallation.GetInstallation(ctx, request)
+	res, err := r.client.AppInstallation.GetInstallation(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -223,10 +222,6 @@ func (r *AppDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode == 404 {
-		resp.State.RemoveResource(ctx)
-		return
-	}
 	if res.StatusCode != 200 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
@@ -235,7 +230,11 @@ func (r *AppDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSharedInstallation(res.Installation)
+	resp.Diagnostics.Append(data.RefreshFromSharedInstallation(ctx, res.Installation)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

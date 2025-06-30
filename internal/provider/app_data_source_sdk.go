@@ -3,16 +3,33 @@
 package provider
 
 import (
+	"context"
 	"encoding/json"
 	tfTypes "github.com/epilot-dev/terraform-provider-epilot-app/internal/provider/types"
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/models/operations"
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"math/big"
 )
 
-func (r *AppDataSourceModel) RefreshFromSharedInstallation(resp *shared.Installation) {
+func (r *AppDataSourceModel) ToOperationsGetInstallationRequest(ctx context.Context) (*operations.GetInstallationRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var appID string
+	appID = r.AppID.ValueString()
+
+	out := operations.GetInstallationRequest{
+		AppID: appID,
+	}
+
+	return &out, diags
+}
+
+func (r *AppDataSourceModel) RefreshFromSharedInstallation(ctx context.Context, resp *shared.Installation) diag.Diagnostics {
+	var diags diag.Diagnostics
+
 	if resp != nil {
-		r.Manifest = []types.String{}
+		r.Manifest = make([]types.String, 0, len(resp.Manifest))
 		for _, v := range resp.Manifest {
 			r.Manifest = append(r.Manifest, types.StringValue(v))
 		}
@@ -44,40 +61,38 @@ func (r *AppDataSourceModel) RefreshFromSharedInstallation(resp *shared.Installa
 			r.OptionValues = r.OptionValues[:len(resp.OptionValues)]
 		}
 		for optionValuesCount, optionValuesItem := range resp.OptionValues {
-			var optionValues1 tfTypes.OptionsRef
-			optionValues1.ComponentID = types.StringValue(optionValuesItem.ComponentID)
-			optionValues1.Options = []tfTypes.Option{}
+			var optionValues tfTypes.OptionsRef
+			optionValues.ComponentID = types.StringValue(optionValuesItem.ComponentID)
+			optionValues.Options = []tfTypes.Option{}
 			for optionsVarCount, optionsVarItem := range optionValuesItem.Options {
-				var optionsVar1 tfTypes.Option
-				optionsVar1.Key = types.StringValue(optionsVarItem.Key)
+				var optionsVar tfTypes.Option
+				optionsVar.Key = types.StringValue(optionsVarItem.Key)
 				if optionsVarItem.Value.Str != nil {
-					optionsVar1.Value.Str = types.StringPointerValue(optionsVarItem.Value.Str)
+					optionsVar.Value.Str = types.StringPointerValue(optionsVarItem.Value.Str)
 				}
 				if optionsVarItem.Value.Boolean != nil {
-					optionsVar1.Value.Boolean = types.BoolPointerValue(optionsVarItem.Value.Boolean)
+					optionsVar.Value.Boolean = types.BoolPointerValue(optionsVarItem.Value.Boolean)
 				}
 				if optionsVarItem.Value.Number != nil {
-					if optionsVarItem.Value.Number != nil {
-						optionsVar1.Value.Number = types.NumberValue(big.NewFloat(float64(*optionsVarItem.Value.Number)))
-					} else {
-						optionsVar1.Value.Number = types.NumberNull()
-					}
+					optionsVar.Value.Number = types.Float64PointerValue(optionsVarItem.Value.Number)
 				}
-				if optionsVarCount+1 > len(optionValues1.Options) {
-					optionValues1.Options = append(optionValues1.Options, optionsVar1)
+				if optionsVarCount+1 > len(optionValues.Options) {
+					optionValues.Options = append(optionValues.Options, optionsVar)
 				} else {
-					optionValues1.Options[optionsVarCount].Key = optionsVar1.Key
-					optionValues1.Options[optionsVarCount].Value = optionsVar1.Value
+					optionValues.Options[optionsVarCount].Key = optionsVar.Key
+					optionValues.Options[optionsVarCount].Value = optionsVar.Value
 				}
 			}
 			if optionValuesCount+1 > len(r.OptionValues) {
-				r.OptionValues = append(r.OptionValues, optionValues1)
+				r.OptionValues = append(r.OptionValues, optionValues)
 			} else {
-				r.OptionValues[optionValuesCount].ComponentID = optionValues1.ComponentID
-				r.OptionValues[optionValuesCount].Options = optionValues1.Options
+				r.OptionValues[optionValuesCount].ComponentID = optionValues.ComponentID
+				r.OptionValues[optionValuesCount].Options = optionValues.Options
 			}
 		}
 		r.OwnerOrgID = types.StringPointerValue(resp.OwnerOrgID)
 		r.Role = types.StringPointerValue(resp.Role)
 	}
+
+	return diags
 }

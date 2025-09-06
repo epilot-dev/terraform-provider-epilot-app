@@ -172,7 +172,7 @@ func (p Pagination) MarshalJSON() ([]byte, error) {
 }
 
 func (p *Pagination) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -257,7 +257,7 @@ func (s Sort) MarshalJSON() ([]byte, error) {
 }
 
 func (s *Sort) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -328,7 +328,7 @@ func (t TimeRange) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TimeRange) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil

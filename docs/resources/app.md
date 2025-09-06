@@ -26,8 +26,6 @@ resource "epilot-app_app" "my_app" {
           key = "...my_key..."
           value = {
             boolean = false
-            number  = 4.53
-            str     = "...my_str..."
           }
         }
       ]
@@ -113,6 +111,17 @@ Read-Only:
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = epilot-app_app.my_epilot-app_app
+  id = "..."
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
-terraform import epilot-app_app.my_epilot-app_app ""
+terraform import epilot-app_app.my_epilot-app_app "..."
 ```

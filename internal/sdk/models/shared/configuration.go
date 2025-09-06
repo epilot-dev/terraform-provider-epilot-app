@@ -293,7 +293,7 @@ func (c Configuration) MarshalJSON() ([]byte, error) {
 }
 
 func (c *Configuration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"app_id", "components", "description", "latest_version", "name", "owner_org_id", "version", "version_audit", "versions"}); err != nil {
 		return err
 	}
 	return nil

@@ -3,24 +3,23 @@ id: 11c8545a-deb6-44f9-ba56-e71722af6a51
 management:
   docChecksum: 8f4675d06be44de4fd9dc5ad2a7eb60e
   docVersion: 1.0.0
-  speakeasyVersion: 1.477.0
-  generationVersion: 2.497.0
-  releaseVersion: 0.9.6
-  configChecksum: 09abc2c805dca13365d2e7172548a828
+  speakeasyVersion: 1.611.0
+  generationVersion: 2.694.1
+  releaseVersion: 0.10.0
+  configChecksum: d25fce683cbc5ad87e3738fc58f3aa28
   repoURL: https://github.com/epilot-dev/terraform-provider-epilot-app.git
   repoSubDirectory: .
   published: true
 features:
   terraform:
     additionalDependencies: 0.1.0
-    constsAndDefaults: 0.2.0
-    core: 3.29.0
-    envVarSecurityUsage: 0.1.0
-    globalSecurity: 2.81.9
-    globalServerURLs: 2.82.1
+    constsAndDefaults: 0.2.1
+    core: 3.44.1
+    globalSecurity: 2.82.0
+    globalServerURLs: 2.83.0
     inputOutputModels: 2.83.0
     nullables: 0.0.0
-    retries: 2.81.2
+    retries: 2.81.4
     typeOverrides: 2.81.1
     unions: 2.81.17
 generatedFiles:
@@ -29,12 +28,15 @@ generatedFiles:
   - examples/README.md
   - examples/data-sources/epilot-app_app/data-source.tf
   - examples/provider/provider.tf
+  - examples/resources/epilot-app_app/import-by-string-id.tf
   - examples/resources/epilot-app_app/import.sh
   - examples/resources/epilot-app_app/resource.tf
   - go.mod
   - go.sum
   - internal/planmodifiers/boolplanmodifier/suppress_diff.go
+  - internal/planmodifiers/float32planmodifier/suppress_diff.go
   - internal/planmodifiers/float64planmodifier/suppress_diff.go
+  - internal/planmodifiers/int32planmodifier/suppress_diff.go
   - internal/planmodifiers/int64planmodifier/suppress_diff.go
   - internal/planmodifiers/listplanmodifier/suppress_diff.go
   - internal/planmodifiers/mapplanmodifier/suppress_diff.go
@@ -62,6 +64,9 @@ generatedFiles:
   - internal/provider/reflect/primitive.go
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
+  - internal/provider/typeconvert/date.go
+  - internal/provider/typeconvert/datetime.go
+  - internal/provider/typeconvert/int.go
   - internal/provider/types/blueprint_ref.go
   - internal/provider/types/installation_audit.go
   - internal/provider/types/option.go
@@ -72,6 +77,8 @@ generatedFiles:
   - internal/sdk/appanalytics.go
   - internal/sdk/appconfiguration.go
   - internal/sdk/appinstallation.go
+  - internal/sdk/docs/models/operations/option.md
+  - internal/sdk/internal/config/sdkconfiguration.go
   - internal/sdk/internal/hooks/hooks.go
   - internal/sdk/internal/utils/contenttype.go
   - internal/sdk/internal/utils/env.go
@@ -165,7 +172,9 @@ generatedFiles:
   - internal/validators/JSONParseValidator.go
   - internal/validators/RFC3339Validator.go
   - internal/validators/boolvalidators/not_null.go
+  - internal/validators/float32validators/not_null.go
   - internal/validators/float64validators/not_null.go
+  - internal/validators/int32validators/not_null.go
   - internal/validators/int64validators/not_null.go
   - internal/validators/listvalidators/not_null.go
   - internal/validators/mapvalidators/not_null.go
@@ -177,56 +186,6 @@ generatedFiles:
   - terraform-registry-manifest.json
   - tools/tools.go
 examples:
-  getAppConfiguration:
-    speakeasy-default-get-app-configuration:
-      parameters:
-        path:
-          appId: "<id>"
-      responses:
-        "200":
-          application/json: {"access_level": "public", "components": [{"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>", "component_url": "https://cdn.apps.com/123/v1.0.0/bundle.js"}, "id": "<id>"}], "internal": false}
-  getInstalledApp:
-    speakeasy-default-get-installed-app:
-      parameters:
-        path:
-          appId: "<id>"
-      responses:
-        "200":
-          application/json: {"access_level": "public", "components": [{"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>", "component_url": "https://cdn.apps.com/123/v1.0.0/bundle.js"}, "id": "<id>"}], "enabled": true, "internal": false}
-  getUploadUrl:
-    speakeasy-default-get-upload-url:
-      requestBody:
-        application/json: {}
-      responses:
-        "200":
-          application/json: {"s3_reference": {"bucket": "my-bucket", "key": "manifest.json"}, "upload_url": "https://bony-dusk.info/"}
-  installApp:
-    speakeasy-default-install-app:
-      parameters:
-        path:
-          appId: "<id>"
-  listInstalledApps:
-    "":
-      parameters:
-        query:
-          component_type: "CUSTOM_JOURNEY_BLOCK"
-          page: 1
-          pageSize: 20
-      responses:
-        "200":
-          application/json: {"apps": [{"access_level": "public", "components": [{"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>", "component_url": "https://cdn.apps.com/123/v1.0.0/bundle.js"}, "id": "<id>"}, {"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>", "component_url": "https://cdn.apps.com/123/v1.0.0/bundle.js"}, "id": "<id>"}, {"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}], "enabled": true, "internal": false}, {"access_level": "public", "components": [{"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}, {"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}], "enabled": true, "internal": false}, {"access_level": "public", "components": [{"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}, {"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}, {"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>", "component_url": "https://cdn.apps.com/123/v1.0.0/bundle.js"}, "id": "<id>"}], "enabled": true, "internal": false}]}
-  publishApp:
-    speakeasy-default-publish-app:
-      requestBody:
-        application/json: {"s3_reference": {"bucket": "my-bucket", "key": "manifest.json"}}
-      responses:
-        "202":
-          application/json: {"app_id": "<id>", "status": "pending"}
-  uninstallApp:
-    speakeasy-default-uninstall-app:
-      parameters:
-        path:
-          appId: "<id>"
   getInstallation:
     speakeasy-default-get-installation:
       parameters:
@@ -234,7 +193,7 @@ examples:
           appId: "<id>"
       responses:
         "200":
-          application/json: {"app_id": "<id>", "components": [], "enabled": true, "installed_version": "<value>", "installer_org_id": "<id>", "name": "<value>"}
+          application/json: {"_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "app_id": "<id>", "components": "<value>", "enabled": true, "installed_version": "<value>", "installer_org_id": "<id>", "name": "<value>"}
   install:
     speakeasy-default-install:
       parameters:
@@ -243,12 +202,10 @@ examples:
       requestBody:
         application/json: {"_manifest": ["123e4567-e89b-12d3-a456-426614174000"]}
       responses:
-        "204":
-          application/json: {}
         "201":
-          application/json: {}
+          application/json: {"_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "app_id": "<id>", "components": "<value>", "enabled": true, "installed_version": "<value>", "installer_org_id": "<id>", "name": "<value>"}
   listInstallations:
-    "":
+    speakeasy-default-list-installations:
       parameters:
         query:
           componentType: "CUSTOM_JOURNEY_BLOCK"
@@ -256,7 +213,7 @@ examples:
           pageSize: 20
       responses:
         "200":
-          application/json: {"apps": [{"app_id": "<id>", "components": [{"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}, {"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}, {"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}], "enabled": true, "installed_version": "<value>", "installer_org_id": "<id>", "name": "<value>"}]}
+          application/json: {"apps": [{"_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "app_id": "<id>", "components": "<value>", "enabled": true, "installed_version": "<value>", "installer_org_id": "<id>", "name": "<value>"}]}
   patchInstallation:
     speakeasy-default-patch-installation:
       parameters:
@@ -272,7 +229,7 @@ examples:
           version: "<value>"
       responses:
         "200":
-          application/json: {"app_id": "<id>", "components": [], "enabled": true, "installed_version": "<value>", "installer_org_id": "<id>", "name": "<value>"}
+          application/json: {"_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "app_id": "<id>", "components": "<value>", "enabled": true, "installed_version": "<value>", "installer_org_id": "<id>", "name": "<value>"}
   uninstall:
     speakeasy-default-uninstall:
       parameters:
@@ -297,7 +254,7 @@ examples:
         application/json: {"version": "<value>"}
       responses:
         "200":
-          application/json: {"s3ref": {"bucket": "my-bucket", "key": "manifest.json"}, "upload_url": "https://pure-wear.biz"}
+          application/json: {"s3ref": {"bucket": "my-bucket", "key": "manifest.json"}, "upload_url": "https://haunting-suitcase.biz/"}
   createComponent:
     speakeasy-default-create-component:
       parameters:
@@ -308,7 +265,7 @@ examples:
         application/json: {"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}
       responses:
         "200":
-          application/json: {"component": {"component_type": "ERP_INFORM_TOOLKIT", "configuration": {"type": "inbound"}, "id": "<id>"}}
+          application/json: {"component": {"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>", "component_url": "https://cdn.apps.com/123/v1.0.0/bundle.js", "override_dev_mode": {"override_url": "http://localhost:3000"}}, "id": "<id>"}}
   createConfiguration:
     speakeasy-default-create-configuration:
       requestBody:
@@ -325,7 +282,17 @@ examples:
         application/json: {"filename": "company-logo.png", "mime_type": "image/png"}
       responses:
         "200":
-          application/json: {"s3ref": {"bucket": "my-bucket", "key": "manifest.json"}, "upload_url": "https://lumbering-e-mail.com"}
+          application/json: {"s3ref": {"bucket": "my-bucket", "key": "manifest.json"}, "upload_url": "https://crafty-jungle.info/"}
+  createZipUploadUrl:
+    speakeasy-default-create-zip-upload-url:
+      parameters:
+        path:
+          appId: "<id>"
+      requestBody:
+        application/json: {"filename": "dist.zip"}
+      responses:
+        "200":
+          application/json: {"artifact_url": "https://entire-chiffonier.com", "s3ref": {"bucket": "my-bucket", "key": "manifest.json"}, "upload_url": "https://aggressive-pear.com"}
   deleteComponent:
     speakeasy-default-delete-component:
       parameters:
@@ -333,6 +300,11 @@ examples:
           appId: "<id>"
           version: "<value>"
           componentId: "<id>"
+  deleteConfiguration:
+    speakeasy-default-delete-configuration:
+      parameters:
+        path:
+          appId: "<id>"
   deleteLogo:
     speakeasy-default-delete-logo:
       parameters:
@@ -349,19 +321,22 @@ examples:
       parameters:
         path:
           appId: "<id>"
-        query: {}
       responses:
         "200":
-          application/json: {"app_id": "<id>", "components": [], "description": {"de": "<value>"}, "internal": false, "latest_version": "<value>", "name": "<value>", "notifications": {"email": "developer@example.com"}, "owner_org_id": "<id>", "pending": false, "public": true, "version": "<value>", "version_audit": {}, "versions": ["<value>", "<value>"]}
+          application/json: {"app_id": "<id>", "components": [{"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}], "description": {"de": "<value>"}, "internal": false, "latest_version": "<value>", "name": "<value>", "notifications": {"email": "developer@example.com"}, "owner_org_id": "<id>", "pending": false, "public": true, "version": "<value>", "version_audit": {}, "versions": ["<value 1>", "<value 2>"]}
   getPublicConfiguration:
     speakeasy-default-get-public-configuration:
       parameters:
         path:
           appId: "<id>"
-        query: {}
       responses:
         "200":
-          application/json: {"app_id": "<id>", "components": [{"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}, {"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>", "component_url": "https://cdn.apps.com/123/v1.0.0/bundle.js"}, "id": "<id>"}], "name": "<value>", "owner_org_id": "<id>", "public": true, "version": "<value>"}
+          application/json: {"app_id": "<id>", "components": [{"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>", "component_url": "https://cdn.apps.com/123/v1.0.0/bundle.js", "override_dev_mode": {"override_url": "http://localhost:3000"}}, "id": "<id>"}], "name": "<value>", "owner_org_id": "<id>", "public": true, "version": "<value>", "versions": [{"app_id": "<id>", "components": [{"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>", "component_url": "https://cdn.apps.com/123/v1.0.0/bundle.js", "override_dev_mode": {"override_url": "http://localhost:3000"}}, "id": "<id>"}], "owner_org_id": "<id>", "pending": false, "public": true, "version": "<value>", "version_audit": {}}]}
+  getPublicKey:
+    speakeasy-default-get-public-key:
+      responses:
+        "200":
+          application/json: {"algorithm": "rsa-sha256", "issuer": "epilot"}
   getVersion:
     speakeasy-default-get-version:
       parameters:
@@ -370,7 +345,7 @@ examples:
           version: "<value>"
       responses:
         "200":
-          application/json: {"app_id": "<id>", "components": [{"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}], "description": {"de": "<value>"}, "internal": false, "latest_version": "<value>", "name": "<value>", "notifications": {"email": "developer@example.com"}, "owner_org_id": "<id>", "pending": false, "public": true, "version": "<value>", "version_audit": {}, "versions": []}
+          application/json: {"app_id": "<id>", "components": [], "description": {"de": "<value>"}, "internal": false, "latest_version": "<value>", "name": "<value>", "notifications": {"email": "developer@example.com"}, "owner_org_id": "<id>", "pending": false, "public": true, "version": "<value>", "version_audit": {}, "versions": ["<value 1>"]}
   listConfigurations:
     speakeasy-default-list-configurations:
       parameters:
@@ -379,7 +354,7 @@ examples:
           pageSize: 20
       responses:
         "200":
-          application/json: {"configurations": [{"app_id": "<id>", "description": {"de": "<value>"}, "internal": false, "latest_version": "<value>", "name": "<value>", "notifications": {"email": "developer@example.com"}, "owner_org_id": "<id>", "versions": ["<value>"]}, {"app_id": "<id>", "description": {"de": "<value>"}, "internal": false, "latest_version": "<value>", "name": "<value>", "notifications": {"email": "developer@example.com"}, "owner_org_id": "<id>", "versions": ["<value>"]}]}
+          application/json: {"configurations": [{"app_id": "<id>", "description": {"de": "<value>"}, "internal": false, "latest_version": "<value>", "name": "<value>", "notifications": {"email": "developer@example.com"}, "owner_org_id": "<id>", "versions": []}]}
   listVersions:
     speakeasy-default-list-versions:
       parameters:
@@ -390,7 +365,7 @@ examples:
           pageSize: 20
       responses:
         "200":
-          application/json: {"versions": [{"app_id": "<id>", "components": [{"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>", "component_url": "https://cdn.apps.com/123/v1.0.0/bundle.js"}, "id": "<id>"}], "owner_org_id": "<id>", "pending": false, "public": true, "version": "<value>", "version_audit": {}}]}
+          application/json: {"versions": [{"app_id": "<id>", "components": [{"component_type": "PORTAL_EXTENSION", "configuration": {}, "id": "<id>"}], "owner_org_id": "<id>", "pending": false, "public": true, "version": "<value>", "version_audit": {}}]}
   patchComponent:
     speakeasy-default-patch-component:
       parameters:
@@ -399,7 +374,7 @@ examples:
           version: "<value>"
           componentId: "<id>"
       requestBody:
-        application/json: {"component_type": "CUSTOM_JOURNEY_BLOCK", "configuration": {"component_tag": "<value>"}, "id": "<id>"}
+        application/json: {"component_type": "CUSTOM_FLOW_ACTION", "configuration": {"type": "external_integration"}, "id": "<id>"}
   patchMetadata:
     speakeasy-default-patch-metadata:
       parameters:
@@ -407,11 +382,6 @@ examples:
           appId: "<id>"
       requestBody:
         application/json: {"notifications": {"email": "developer@example.com"}}
-  deleteConfiguration:
-    speakeasy-default-delete-configuration:
-      parameters:
-        path:
-          appId: "<id>"
   patchVersion:
     speakeasy-default-patch-version:
       parameters:
@@ -420,25 +390,10 @@ examples:
           version: "<value>"
       requestBody:
         application/json: {}
-  createZipUploadUrl:
-    speakeasy-default-create-zip-upload-url:
-      parameters:
-        path:
-          appId: "<id>"
-      requestBody:
-        application/json: {"filename": "dist.zip"}
-      responses:
-        "200":
-          application/json: {"artifact_url": "https://fine-pants.biz", "s3ref": {"bucket": "my-bucket", "key": "manifest.json"}, "upload_url": "https://biodegradable-switch.biz/"}
-  getPublicKey:
-    speakeasy-default-get-public-key:
-      responses:
-        "200":
-          application/json: {"algorithm": "rsa-sha256", "issuer": "epilot"}
   ingestEvent:
     speakeasy-default-ingest-event:
       requestBody:
-        application/json: {"events": []}
+        application/json: {"events": [{"app_id": "<id>", "component_id": "<id>", "event_type": "INFO", "source": "CUSTOM_JOURNEY_BLOCK", "version": "<value>"}]}
   queryEvents:
     speakeasy-default-query-events:
       parameters:
@@ -448,6 +403,6 @@ examples:
         application/json: {"filters": {"source": ["CUSTOM_JOURNEY_BLOCK"]}}
       responses:
         "200":
-          application/json: {"query": {"filters": {"source": ["CUSTOM_JOURNEY_BLOCK"]}}, "results": {"events": [{"actor": {"type": "system"}, "app_id": "<id>", "component_id": "<id>", "event_type": "INFO", "source": "CUSTOM_JOURNEY_BLOCK", "version": "<value>"}, {"actor": {"type": "system"}, "app_id": "<id>", "component_id": "<id>", "event_type": "INFO", "source": "CUSTOM_JOURNEY_BLOCK", "version": "<value>"}]}}
-examplesVersion: 1.0.0
+          application/json: {"query": {"filters": {"source": ["CUSTOM_JOURNEY_BLOCK"]}}, "results": {"events": [{"actor": {"type": "system"}, "app_id": "<id>", "component_id": "<id>", "event_type": "INFO", "source": "CUSTOM_JOURNEY_BLOCK", "version": "<value>"}]}}
+examplesVersion: 1.0.2
 generatedTests: {}

@@ -77,7 +77,7 @@ func (i Installation) MarshalJSON() ([]byte, error) {
 }
 
 func (i *Installation) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"app_id", "components", "installed_version", "installer_org_id", "name"}); err != nil {
 		return err
 	}
 	return nil

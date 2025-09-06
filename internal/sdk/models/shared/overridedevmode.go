@@ -2,10 +2,25 @@
 
 package shared
 
+import (
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
+)
+
 // OverrideDevMode - Override URL when app is in dev mode
 type OverrideDevMode struct {
 	// URL of the web component object in dev mode
 	OverrideURL *string `json:"override_url,omitempty"`
+}
+
+func (o OverrideDevMode) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OverrideDevMode) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OverrideDevMode) GetOverrideURL() *string {

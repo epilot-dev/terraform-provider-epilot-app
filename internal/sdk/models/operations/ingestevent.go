@@ -18,8 +18,8 @@ const (
 )
 
 type IngestEventRequestBody struct {
-	AppEventDataInput *shared.AppEventDataInput `queryParam:"inline"`
-	BatchEventRequest *shared.BatchEventRequest `queryParam:"inline"`
+	AppEventDataInput *shared.AppEventDataInput `queryParam:"inline" name:"requestBody"`
+	BatchEventRequest *shared.BatchEventRequest `queryParam:"inline" name:"requestBody"`
 
 	Type IngestEventRequestBodyType
 }
@@ -44,17 +44,17 @@ func CreateIngestEventRequestBodyBatchEventRequest(batchEventRequest shared.Batc
 
 func (u *IngestEventRequestBody) UnmarshalJSON(data []byte) error {
 
-	var batchEventRequest shared.BatchEventRequest = shared.BatchEventRequest{}
-	if err := utils.UnmarshalJSON(data, &batchEventRequest, "", true, true); err == nil {
-		u.BatchEventRequest = &batchEventRequest
-		u.Type = IngestEventRequestBodyTypeBatchEventRequest
+	var appEventDataInput shared.AppEventDataInput = shared.AppEventDataInput{}
+	if err := utils.UnmarshalJSON(data, &appEventDataInput, "", true, nil); err == nil {
+		u.AppEventDataInput = &appEventDataInput
+		u.Type = IngestEventRequestBodyTypeAppEventDataInput
 		return nil
 	}
 
-	var appEventDataInput shared.AppEventDataInput = shared.AppEventDataInput{}
-	if err := utils.UnmarshalJSON(data, &appEventDataInput, "", true, true); err == nil {
-		u.AppEventDataInput = &appEventDataInput
-		u.Type = IngestEventRequestBodyTypeAppEventDataInput
+	var batchEventRequest shared.BatchEventRequest = shared.BatchEventRequest{}
+	if err := utils.UnmarshalJSON(data, &batchEventRequest, "", true, nil); err == nil {
+		u.BatchEventRequest = &batchEventRequest
+		u.Type = IngestEventRequestBodyTypeBatchEventRequest
 		return nil
 	}
 

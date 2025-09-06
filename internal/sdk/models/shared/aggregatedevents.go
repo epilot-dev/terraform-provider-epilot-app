@@ -5,11 +5,23 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
 )
 
 type Metrics struct {
 	Count     *int64   `json:"count,omitempty"`
 	ErrorRate *float64 `json:"error_rate,omitempty"`
+}
+
+func (m Metrics) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(m, "", false)
+}
+
+func (m *Metrics) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &m, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *Metrics) GetCount() *int64 {
@@ -30,6 +42,17 @@ type Groups struct {
 	// The grouped dimensions e.g., "source": "CUSTOM_JOURNEY_BLOCK", "event_type": "ERROR"
 	Dimensions map[string]any `json:"dimensions,omitempty"`
 	Metrics    *Metrics       `json:"metrics,omitempty"`
+}
+
+func (g Groups) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *Groups) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *Groups) GetDimensions() map[string]any {
@@ -72,6 +95,17 @@ func (e *AggregatedEventsType) UnmarshalJSON(data []byte) error {
 type AggregatedEvents struct {
 	Groups []Groups              `json:"groups,omitempty"`
 	Type   *AggregatedEventsType `json:"type,omitempty"`
+}
+
+func (a AggregatedEvents) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AggregatedEvents) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *AggregatedEvents) GetGroups() []Groups {

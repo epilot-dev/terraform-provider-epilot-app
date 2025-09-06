@@ -2,11 +2,26 @@
 
 package shared
 
+import (
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
+)
+
 type TranslatedString struct {
 	// German translation
 	De string `json:"de"`
 	// English translation
 	En *string `json:"en,omitempty"`
+}
+
+func (t TranslatedString) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(t, "", false)
+}
+
+func (t *TranslatedString) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *TranslatedString) GetDe() string {

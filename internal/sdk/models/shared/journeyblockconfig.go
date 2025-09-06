@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
 )
 
 type ComponentMapping string
@@ -60,6 +61,17 @@ type JourneyBlockConfig struct {
 	OverrideDevMode *OverrideDevMode `json:"override_dev_mode,omitempty"`
 }
 
+func (j JourneyBlockConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(j, "", false)
+}
+
+func (j *JourneyBlockConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &j, "", false, []string{"component_tag", "component_url"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *JourneyBlockConfig) GetComponentArgs() []JourneyBlockComponentArgs {
 	if o == nil {
 		return nil
@@ -111,6 +123,17 @@ type JourneyBlockConfigInput struct {
 	ComponentTag string `json:"component_tag"`
 	// Override URL when app is in dev mode
 	OverrideDevMode *OverrideDevMode `json:"override_dev_mode,omitempty"`
+}
+
+func (j JourneyBlockConfigInput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(j, "", false)
+}
+
+func (j *JourneyBlockConfigInput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &j, "", false, []string{"component_tag"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *JourneyBlockConfigInput) GetComponentArgs() []JourneyBlockComponentArgs {

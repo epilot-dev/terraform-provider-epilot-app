@@ -51,8 +51,8 @@ const (
 )
 
 type Results struct {
-	RawEvents        *RawEvents        `queryParam:"inline"`
-	AggregatedEvents *AggregatedEvents `queryParam:"inline"`
+	RawEvents        *RawEvents        `queryParam:"inline" name:"results"`
+	AggregatedEvents *AggregatedEvents `queryParam:"inline" name:"results"`
 
 	Type ResultsType
 }
@@ -78,14 +78,14 @@ func CreateResultsAggregatedEvents(aggregatedEvents AggregatedEvents) Results {
 func (u *Results) UnmarshalJSON(data []byte) error {
 
 	var rawEvents RawEvents = RawEvents{}
-	if err := utils.UnmarshalJSON(data, &rawEvents, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &rawEvents, "", true, nil); err == nil {
 		u.RawEvents = &rawEvents
 		u.Type = ResultsTypeRawEvents
 		return nil
 	}
 
 	var aggregatedEvents AggregatedEvents = AggregatedEvents{}
-	if err := utils.UnmarshalJSON(data, &aggregatedEvents, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &aggregatedEvents, "", true, nil); err == nil {
 		u.AggregatedEvents = &aggregatedEvents
 		u.Type = ResultsTypeAggregatedEvents
 		return nil

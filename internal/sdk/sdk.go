@@ -2,9 +2,12 @@
 
 package sdk
 
+// Generated from OpenAPI doc version 1.0.0 and generator version 2.694.1
+
 import (
 	"context"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/config"
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/hooks"
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/models/shared"
@@ -19,7 +22,7 @@ var ServerList = []string{
 	"https://app.sls.epilot.io",
 }
 
-// HTTPClient provides an interface for suplying the SDK with a custom HTTP client
+// HTTPClient provides an interface for supplying the SDK with a custom HTTP client
 type HTTPClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
@@ -45,31 +48,9 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-type sdkConfiguration struct {
-	Client            HTTPClient
-	Security          func(context.Context) (interface{}, error)
-	ServerURL         string
-	ServerIndex       int
-	Language          string
-	OpenAPIDocVersion string
-	SDKVersion        string
-	GenVersion        string
-	UserAgent         string
-	RetryConfig       *retry.Config
-	Hooks             *hooks.Hooks
-	Timeout           *time.Duration
-}
-
-func (c *sdkConfiguration) GetServerDetails() (string, map[string]string) {
-	if c.ServerURL != "" {
-		return c.ServerURL, nil
-	}
-
-	return ServerList[c.ServerIndex], nil
-}
-
 // SDK - App API: API for managing app publishing and installed app.
 type SDK struct {
+	SDKVersion string
 	// Install and uninstall apps
 	AppInstallation *AppInstallation
 	// Create and manage app configurations
@@ -77,7 +58,8 @@ type SDK struct {
 	// Analytics for installed apps
 	AppAnalytics *AppAnalytics
 
-	sdkConfiguration sdkConfiguration
+	sdkConfiguration config.SDKConfiguration
+	hooks            *hooks.Hooks
 }
 
 type SDKOption func(*SDK)
@@ -150,14 +132,12 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *SDK {
 	sdk := &SDK{
-		sdkConfiguration: sdkConfiguration{
-			Language:          "go",
-			OpenAPIDocVersion: "1.0.0",
-			SDKVersion:        "0.9.6",
-			GenVersion:        "2.497.0",
-			UserAgent:         "speakeasy-sdk/terraform 0.9.6 2.497.0 1.0.0 github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk",
-			Hooks:             hooks.New(),
+		SDKVersion: "0.10.0",
+		sdkConfiguration: config.SDKConfiguration{
+			UserAgent:  "speakeasy-sdk/terraform 0.10.0 2.694.1 1.0.0 github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk",
+			ServerList: ServerList,
 		},
+		hooks: hooks.New(),
 	}
 	for _, opt := range opts {
 		opt(sdk)
@@ -170,16 +150,14 @@ func New(opts ...SDKOption) *SDK {
 
 	currentServerURL, _ := sdk.sdkConfiguration.GetServerDetails()
 	serverURL := currentServerURL
-	serverURL, sdk.sdkConfiguration.Client = sdk.sdkConfiguration.Hooks.SDKInit(currentServerURL, sdk.sdkConfiguration.Client)
-	if serverURL != currentServerURL {
+	serverURL, sdk.sdkConfiguration.Client = sdk.hooks.SDKInit(currentServerURL, sdk.sdkConfiguration.Client)
+	if currentServerURL != serverURL {
 		sdk.sdkConfiguration.ServerURL = serverURL
 	}
 
-	sdk.AppInstallation = newAppInstallation(sdk.sdkConfiguration)
-
-	sdk.AppConfiguration = newAppConfiguration(sdk.sdkConfiguration)
-
-	sdk.AppAnalytics = newAppAnalytics(sdk.sdkConfiguration)
+	sdk.AppInstallation = newAppInstallation(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.AppConfiguration = newAppConfiguration(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.AppAnalytics = newAppAnalytics(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk
 }

@@ -56,7 +56,7 @@ func (c CreateZipUploadURLResponseBody) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateZipUploadURLResponseBody) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"artifact_url", "upload_url"}); err != nil {
 		return err
 	}
 	return nil

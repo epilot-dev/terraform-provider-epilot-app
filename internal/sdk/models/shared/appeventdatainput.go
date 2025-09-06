@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
 )
 
 type EventType string
@@ -48,6 +49,17 @@ type AppEventDataInput struct {
 	Source ComponentType `json:"source"`
 	// Version of the app configuration
 	Version string `json:"version"`
+}
+
+func (a AppEventDataInput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AppEventDataInput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"app_id", "component_id", "event_type", "source", "version"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *AppEventDataInput) GetAppID() string {
@@ -114,6 +126,17 @@ type AppEventData struct {
 	Timestamp *string       `json:"timestamp,omitempty"`
 	// Version of the app configuration
 	Version string `json:"version"`
+}
+
+func (a AppEventData) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AppEventData) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"actor", "app_id", "component_id", "event_type", "source", "version"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *AppEventData) GetActor() Actor {

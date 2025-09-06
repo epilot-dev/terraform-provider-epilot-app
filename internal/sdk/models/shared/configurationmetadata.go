@@ -188,7 +188,7 @@ func (c ConfigurationMetadata) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ConfigurationMetadata) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"app_id", "description", "latest_version", "name", "owner_org_id", "versions"}); err != nil {
 		return err
 	}
 	return nil

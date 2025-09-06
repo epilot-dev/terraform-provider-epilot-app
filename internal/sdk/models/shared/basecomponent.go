@@ -62,6 +62,17 @@ type SchemasConfiguration struct {
 	Type SchemasErpInformToolkitComponentType `json:"type"`
 }
 
+func (s SchemasConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SchemasConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"type"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SchemasConfiguration) GetType() SchemasErpInformToolkitComponentType {
 	if o == nil {
 		return SchemasErpInformToolkitComponentType("")
@@ -75,6 +86,17 @@ type SchemasErpInformToolkitComponentDescription struct {
 	De string `json:"de"`
 	// English translation
 	En *string `json:"en,omitempty"`
+}
+
+func (s SchemasErpInformToolkitComponentDescription) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SchemasErpInformToolkitComponentDescription) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *SchemasErpInformToolkitComponentDescription) GetDe() string {
@@ -99,6 +121,17 @@ type SchemasName struct {
 	En *string `json:"en,omitempty"`
 }
 
+func (s SchemasName) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SchemasName) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SchemasName) GetDe() string {
 	if o == nil {
 		return ""
@@ -116,6 +149,17 @@ func (o *SchemasName) GetEn() *string {
 type SchemasSurfaces struct {
 }
 
+func (s SchemasSurfaces) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SchemasSurfaces) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type ErpInformToolkitComponentSchemas struct {
 	ComponentType SchemasComponentType                         `json:"component_type"`
 	Configuration SchemasConfiguration                         `json:"configuration"`
@@ -126,6 +170,17 @@ type ErpInformToolkitComponentSchemas struct {
 	// List of options for the app component
 	Options  []Options        `json:"options,omitempty"`
 	Surfaces *SchemasSurfaces `json:"surfaces,omitempty"`
+}
+
+func (e ErpInformToolkitComponentSchemas) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(e, "", false)
+}
+
+func (e *ErpInformToolkitComponentSchemas) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"component_type", "configuration", "id"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *ErpInformToolkitComponentSchemas) GetComponentType() SchemasComponentType {
@@ -208,6 +263,17 @@ type SchemasDescription struct {
 	En *string `json:"en,omitempty"`
 }
 
+func (s SchemasDescription) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SchemasDescription) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SchemasDescription) GetDe() string {
 	if o == nil {
 		return ""
@@ -230,6 +296,17 @@ type Name struct {
 	En *string `json:"en,omitempty"`
 }
 
+func (n Name) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *Name) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *Name) GetDe() string {
 	if o == nil {
 		return ""
@@ -247,6 +324,17 @@ func (o *Name) GetEn() *string {
 type Surfaces struct {
 }
 
+func (s Surfaces) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *Surfaces) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type CustomFlowActionComponentSchemas struct {
 	ComponentType SchemasCustomFlowActionComponentComponentType `json:"component_type"`
 	Configuration CustomFlowConfig                              `json:"configuration"`
@@ -257,6 +345,17 @@ type CustomFlowActionComponentSchemas struct {
 	// List of options for the app component
 	Options  []Options `json:"options,omitempty"`
 	Surfaces *Surfaces `json:"surfaces,omitempty"`
+}
+
+func (c CustomFlowActionComponentSchemas) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CustomFlowActionComponentSchemas) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"component_type", "configuration", "id"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *CustomFlowActionComponentSchemas) GetComponentType() SchemasCustomFlowActionComponentComponentType {
@@ -343,6 +442,17 @@ type SchemasPortalExtensionComponentDescription struct {
 	En *string `json:"en,omitempty"`
 }
 
+func (s SchemasPortalExtensionComponentDescription) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SchemasPortalExtensionComponentDescription) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SchemasPortalExtensionComponentDescription) GetDe() string {
 	if o == nil {
 		return ""
@@ -363,6 +473,17 @@ type SchemasPortalExtensionComponentName struct {
 	De string `json:"de"`
 	// English translation
 	En *string `json:"en,omitempty"`
+}
+
+func (s SchemasPortalExtensionComponentName) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SchemasPortalExtensionComponentName) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *SchemasPortalExtensionComponentName) GetDe() string {
@@ -408,6 +529,17 @@ func (e *Origin) UnmarshalJSON(data []byte) error {
 type SchemasPortalExtensionComponentSurfaces struct {
 }
 
+func (s SchemasPortalExtensionComponentSurfaces) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SchemasPortalExtensionComponentSurfaces) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type PortalExtensionComponentSchemas struct {
 	ComponentType SchemasPortalExtensionComponentComponentType `json:"component_type"`
 	Configuration PortalExtensionConfig                        `json:"configuration"`
@@ -419,6 +551,17 @@ type PortalExtensionComponentSchemas struct {
 	Options  []Options                                `json:"options,omitempty"`
 	Origin   *Origin                                  `json:"origin,omitempty"`
 	Surfaces *SchemasPortalExtensionComponentSurfaces `json:"surfaces,omitempty"`
+}
+
+func (p PortalExtensionComponentSchemas) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PortalExtensionComponentSchemas) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"component_type", "configuration", "id"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *PortalExtensionComponentSchemas) GetComponentType() SchemasPortalExtensionComponentComponentType {
@@ -508,6 +651,17 @@ type SchemasJourneyBlockComponentDescription struct {
 	En *string `json:"en,omitempty"`
 }
 
+func (s SchemasJourneyBlockComponentDescription) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SchemasJourneyBlockComponentDescription) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SchemasJourneyBlockComponentDescription) GetDe() string {
 	if o == nil {
 		return ""
@@ -530,6 +684,17 @@ type SchemasJourneyBlockComponentName struct {
 	En *string `json:"en,omitempty"`
 }
 
+func (s SchemasJourneyBlockComponentName) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SchemasJourneyBlockComponentName) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SchemasJourneyBlockComponentName) GetDe() string {
 	if o == nil {
 		return ""
@@ -547,6 +712,17 @@ func (o *SchemasJourneyBlockComponentName) GetEn() *string {
 type SchemasJourneyBlockComponentSurfaces struct {
 }
 
+func (s SchemasJourneyBlockComponentSurfaces) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SchemasJourneyBlockComponentSurfaces) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type JourneyBlockComponentSchemas struct {
 	ComponentType SchemasJourneyBlockComponentComponentType `json:"component_type"`
 	Configuration JourneyBlockConfig                        `json:"configuration"`
@@ -557,6 +733,17 @@ type JourneyBlockComponentSchemas struct {
 	// List of options for the app component
 	Options  []Options                             `json:"options,omitempty"`
 	Surfaces *SchemasJourneyBlockComponentSurfaces `json:"surfaces,omitempty"`
+}
+
+func (j JourneyBlockComponentSchemas) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(j, "", false)
+}
+
+func (j *JourneyBlockComponentSchemas) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &j, "", false, []string{"component_type", "configuration", "id"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *JourneyBlockComponentSchemas) GetComponentType() SchemasJourneyBlockComponentComponentType {
@@ -618,10 +805,10 @@ const (
 )
 
 type BaseComponent struct {
-	JourneyBlockComponentSchemas     *JourneyBlockComponentSchemas     `queryParam:"inline"`
-	PortalExtensionComponentSchemas  *PortalExtensionComponentSchemas  `queryParam:"inline"`
-	CustomFlowActionComponentSchemas *CustomFlowActionComponentSchemas `queryParam:"inline"`
-	ErpInformToolkitComponentSchemas *ErpInformToolkitComponentSchemas `queryParam:"inline"`
+	JourneyBlockComponentSchemas     *JourneyBlockComponentSchemas     `queryParam:"inline" name:"BaseComponent"`
+	PortalExtensionComponentSchemas  *PortalExtensionComponentSchemas  `queryParam:"inline" name:"BaseComponent"`
+	CustomFlowActionComponentSchemas *CustomFlowActionComponentSchemas `queryParam:"inline" name:"BaseComponent"`
+	ErpInformToolkitComponentSchemas *ErpInformToolkitComponentSchemas `queryParam:"inline" name:"BaseComponent"`
 
 	Type BaseComponentType
 }
@@ -688,7 +875,7 @@ func (u *BaseComponent) UnmarshalJSON(data []byte) error {
 	switch dis.ComponentType {
 	case "CUSTOM_FLOW_ACTION":
 		customFlowActionComponentSchemas := new(CustomFlowActionComponentSchemas)
-		if err := utils.UnmarshalJSON(data, &customFlowActionComponentSchemas, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &customFlowActionComponentSchemas, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (ComponentType == CUSTOM_FLOW_ACTION) type CustomFlowActionComponentSchemas within BaseComponent: %w", string(data), err)
 		}
 
@@ -697,7 +884,7 @@ func (u *BaseComponent) UnmarshalJSON(data []byte) error {
 		return nil
 	case "CUSTOM_JOURNEY_BLOCK":
 		journeyBlockComponentSchemas := new(JourneyBlockComponentSchemas)
-		if err := utils.UnmarshalJSON(data, &journeyBlockComponentSchemas, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &journeyBlockComponentSchemas, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (ComponentType == CUSTOM_JOURNEY_BLOCK) type JourneyBlockComponentSchemas within BaseComponent: %w", string(data), err)
 		}
 
@@ -706,7 +893,7 @@ func (u *BaseComponent) UnmarshalJSON(data []byte) error {
 		return nil
 	case "ERP_INFORM_TOOLKIT":
 		erpInformToolkitComponentSchemas := new(ErpInformToolkitComponentSchemas)
-		if err := utils.UnmarshalJSON(data, &erpInformToolkitComponentSchemas, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &erpInformToolkitComponentSchemas, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (ComponentType == ERP_INFORM_TOOLKIT) type ErpInformToolkitComponentSchemas within BaseComponent: %w", string(data), err)
 		}
 
@@ -715,7 +902,7 @@ func (u *BaseComponent) UnmarshalJSON(data []byte) error {
 		return nil
 	case "PORTAL_EXTENSION":
 		portalExtensionComponentSchemas := new(PortalExtensionComponentSchemas)
-		if err := utils.UnmarshalJSON(data, &portalExtensionComponentSchemas, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &portalExtensionComponentSchemas, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (ComponentType == PORTAL_EXTENSION) type PortalExtensionComponentSchemas within BaseComponent: %w", string(data), err)
 		}
 
@@ -757,6 +944,17 @@ type SchemasInput struct {
 	// List of options for the app component
 	Options  []Options                             `json:"options,omitempty"`
 	Surfaces *SchemasJourneyBlockComponentSurfaces `json:"surfaces,omitempty"`
+}
+
+func (s SchemasInput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SchemasInput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"component_type", "configuration", "id"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *SchemasInput) GetComponentType() SchemasJourneyBlockComponentComponentType {
@@ -818,10 +1016,10 @@ const (
 )
 
 type BaseComponentInput struct {
-	SchemasInput                     *SchemasInput                     `queryParam:"inline"`
-	PortalExtensionComponentSchemas  *PortalExtensionComponentSchemas  `queryParam:"inline"`
-	CustomFlowActionComponentSchemas *CustomFlowActionComponentSchemas `queryParam:"inline"`
-	ErpInformToolkitComponentSchemas *ErpInformToolkitComponentSchemas `queryParam:"inline"`
+	SchemasInput                     *SchemasInput                     `queryParam:"inline" name:"BaseComponent"`
+	PortalExtensionComponentSchemas  *PortalExtensionComponentSchemas  `queryParam:"inline" name:"BaseComponent"`
+	CustomFlowActionComponentSchemas *CustomFlowActionComponentSchemas `queryParam:"inline" name:"BaseComponent"`
+	ErpInformToolkitComponentSchemas *ErpInformToolkitComponentSchemas `queryParam:"inline" name:"BaseComponent"`
 
 	Type BaseComponentInputType
 }
@@ -888,7 +1086,7 @@ func (u *BaseComponentInput) UnmarshalJSON(data []byte) error {
 	switch dis.ComponentType {
 	case "CUSTOM_FLOW_ACTION":
 		customFlowActionComponentSchemas := new(CustomFlowActionComponentSchemas)
-		if err := utils.UnmarshalJSON(data, &customFlowActionComponentSchemas, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &customFlowActionComponentSchemas, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (ComponentType == CUSTOM_FLOW_ACTION) type CustomFlowActionComponentSchemas within BaseComponentInput: %w", string(data), err)
 		}
 
@@ -897,7 +1095,7 @@ func (u *BaseComponentInput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "CUSTOM_JOURNEY_BLOCK":
 		schemasInput := new(SchemasInput)
-		if err := utils.UnmarshalJSON(data, &schemasInput, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &schemasInput, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (ComponentType == CUSTOM_JOURNEY_BLOCK) type SchemasInput within BaseComponentInput: %w", string(data), err)
 		}
 
@@ -906,7 +1104,7 @@ func (u *BaseComponentInput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "ERP_INFORM_TOOLKIT":
 		erpInformToolkitComponentSchemas := new(ErpInformToolkitComponentSchemas)
-		if err := utils.UnmarshalJSON(data, &erpInformToolkitComponentSchemas, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &erpInformToolkitComponentSchemas, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (ComponentType == ERP_INFORM_TOOLKIT) type ErpInformToolkitComponentSchemas within BaseComponentInput: %w", string(data), err)
 		}
 
@@ -915,7 +1113,7 @@ func (u *BaseComponentInput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "PORTAL_EXTENSION":
 		portalExtensionComponentSchemas := new(PortalExtensionComponentSchemas)
-		if err := utils.UnmarshalJSON(data, &portalExtensionComponentSchemas, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &portalExtensionComponentSchemas, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (ComponentType == PORTAL_EXTENSION) type PortalExtensionComponentSchemas within BaseComponentInput: %w", string(data), err)
 		}
 

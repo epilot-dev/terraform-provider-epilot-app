@@ -2,10 +2,25 @@
 
 package shared
 
+import (
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
+)
+
 type Call struct {
 	Headers map[string]string `json:"headers,omitempty"`
 	Params  map[string]string `json:"params,omitempty"`
 	URL     *string           `json:"url,omitempty"`
+}
+
+func (c Call) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *Call) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *Call) GetHeaders() map[string]string {
@@ -36,6 +51,17 @@ type Hooks struct {
 	Interval []string          `json:"interval,omitempty"`
 	Name     *TranslatedString `json:"name,omitempty"`
 	Type     *string           `json:"type,omitempty"`
+}
+
+func (h Hooks) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(h, "", false)
+}
+
+func (h *Hooks) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &h, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *Hooks) GetAuth() *PortalAuth {
@@ -85,6 +111,17 @@ type Redirect struct {
 	URL    *string           `json:"url,omitempty"`
 }
 
+func (r Redirect) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(r, "", false)
+}
+
+func (r *Redirect) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *Redirect) GetParams() map[string]string {
 	if o == nil {
 		return nil
@@ -107,6 +144,17 @@ type Links struct {
 	Name        *TranslatedString `json:"name,omitempty"`
 	Redirect    *Redirect         `json:"redirect,omitempty"`
 	Type        *string           `json:"type,omitempty"`
+}
+
+func (l Links) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *Links) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *Links) GetAuth() *PortalAuth {
@@ -162,6 +210,17 @@ type PortalExtensionConfig struct {
 	Hooks []Hooks `json:"hooks,omitempty"`
 	ID    *string `json:"id,omitempty"`
 	Links []Links `json:"links,omitempty"`
+}
+
+func (p PortalExtensionConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PortalExtensionConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *PortalExtensionConfig) GetHooks() []Hooks {

@@ -17,9 +17,9 @@ const (
 )
 
 type Value struct {
-	Str     *string  `queryParam:"inline"`
-	Boolean *bool    `queryParam:"inline"`
-	Number  *float64 `queryParam:"inline"`
+	Str     *string  `queryParam:"inline" name:"value"`
+	Boolean *bool    `queryParam:"inline" name:"value"`
+	Number  *float64 `queryParam:"inline" name:"value"`
 
 	Type ValueType
 }
@@ -54,21 +54,21 @@ func CreateValueNumber(number float64) Value {
 func (u *Value) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = ValueTypeStr
 		return nil
 	}
 
 	var boolean bool = false
-	if err := utils.UnmarshalJSON(data, &boolean, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &boolean, "", true, nil); err == nil {
 		u.Boolean = &boolean
 		u.Type = ValueTypeBoolean
 		return nil
 	}
 
 	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		u.Number = &number
 		u.Type = ValueTypeNumber
 		return nil

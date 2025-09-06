@@ -2,11 +2,26 @@
 
 package shared
 
+import (
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
+)
+
 type PortalAuth struct {
 	Headers map[string]string `json:"headers,omitempty"`
 	Method  *string           `json:"method,omitempty"`
 	Type    *string           `json:"type,omitempty"`
 	URL     *string           `json:"url,omitempty"`
+}
+
+func (p PortalAuth) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PortalAuth) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *PortalAuth) GetHeaders() map[string]string {

@@ -15,6 +15,17 @@ type ExternalIntegrationSettings struct {
 	URL *string `json:"url,omitempty"`
 }
 
+func (e ExternalIntegrationSettings) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(e, "", false)
+}
+
+func (e *ExternalIntegrationSettings) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &e, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *ExternalIntegrationSettings) GetHeaders() map[string]any {
 	if o == nil {
 		return nil
@@ -61,6 +72,17 @@ type ExternalIntegrationCustomActionConfigSchemas struct {
 	Type SchemasExternalIntegrationCustomActionConfigType `json:"type"`
 }
 
+func (e ExternalIntegrationCustomActionConfigSchemas) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(e, "", false)
+}
+
+func (e *ExternalIntegrationCustomActionConfigSchemas) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"type"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *ExternalIntegrationCustomActionConfigSchemas) GetDescription() *string {
 	if o == nil {
 		return nil
@@ -96,7 +118,7 @@ const (
 )
 
 type CustomFlowConfig struct {
-	ExternalIntegrationCustomActionConfigSchemas *ExternalIntegrationCustomActionConfigSchemas `queryParam:"inline"`
+	ExternalIntegrationCustomActionConfigSchemas *ExternalIntegrationCustomActionConfigSchemas `queryParam:"inline" name:"CustomFlowConfig"`
 
 	Type CustomFlowConfigType
 }
@@ -127,7 +149,7 @@ func (u *CustomFlowConfig) UnmarshalJSON(data []byte) error {
 	switch dis.Type {
 	case "external_integration":
 		externalIntegrationCustomActionConfigSchemas := new(ExternalIntegrationCustomActionConfigSchemas)
-		if err := utils.UnmarshalJSON(data, &externalIntegrationCustomActionConfigSchemas, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &externalIntegrationCustomActionConfigSchemas, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Type == external_integration) type ExternalIntegrationCustomActionConfigSchemas within CustomFlowConfig: %w", string(data), err)
 		}
 

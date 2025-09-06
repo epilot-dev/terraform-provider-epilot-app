@@ -22,7 +22,7 @@ func (l ListVersionsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListVersionsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"appId"}); err != nil {
 		return err
 	}
 	return nil

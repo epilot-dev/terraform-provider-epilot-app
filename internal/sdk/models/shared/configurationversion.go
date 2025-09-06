@@ -125,7 +125,7 @@ func (c ConfigurationVersion) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ConfigurationVersion) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"app_id", "components", "owner_org_id", "version", "version_audit"}); err != nil {
 		return err
 	}
 	return nil

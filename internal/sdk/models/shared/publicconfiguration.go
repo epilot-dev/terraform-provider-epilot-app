@@ -132,7 +132,7 @@ func (p PublicConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PublicConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"app_id", "components", "name", "owner_org_id", "version"}); err != nil {
 		return err
 	}
 	return nil

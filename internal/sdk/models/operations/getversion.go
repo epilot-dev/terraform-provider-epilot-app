@@ -14,18 +14,18 @@ type GetVersionRequest struct {
 	Version string `pathParam:"style=simple,explode=false,name=version"`
 }
 
-func (o *GetVersionRequest) GetAppID() string {
-	if o == nil {
+func (g *GetVersionRequest) GetAppID() string {
+	if g == nil {
 		return ""
 	}
-	return o.AppID
+	return g.AppID
 }
 
-func (o *GetVersionRequest) GetVersion() string {
-	if o == nil {
+func (g *GetVersionRequest) GetVersion() string {
+	if g == nil {
 		return ""
 	}
-	return o.Version
+	return g.Version
 }
 
 type GetVersionResponse struct {
@@ -39,30 +39,30 @@ type GetVersionResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *GetVersionResponse) GetConfiguration() *shared.Configuration {
-	if o == nil {
+func (g *GetVersionResponse) GetConfiguration() *shared.Configuration {
+	if g == nil {
 		return nil
 	}
-	return o.Configuration
+	return g.Configuration
 }
 
-func (o *GetVersionResponse) GetContentType() string {
-	if o == nil {
+func (g *GetVersionResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetVersionResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetVersionResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetVersionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetVersionResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }

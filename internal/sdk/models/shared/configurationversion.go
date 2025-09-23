@@ -53,46 +53,46 @@ type ConfigurationVersionVersionAudit struct {
 	VersionedBy *string `json:"versioned_by,omitempty"`
 }
 
-func (o *ConfigurationVersionVersionAudit) GetCreatedAt() *string {
-	if o == nil {
+func (c *ConfigurationVersionVersionAudit) GetCreatedAt() *string {
+	if c == nil {
 		return nil
 	}
-	return o.CreatedAt
+	return c.CreatedAt
 }
 
-func (o *ConfigurationVersionVersionAudit) GetCreatedBy() *string {
-	if o == nil {
+func (c *ConfigurationVersionVersionAudit) GetCreatedBy() *string {
+	if c == nil {
 		return nil
 	}
-	return o.CreatedBy
+	return c.CreatedBy
 }
 
-func (o *ConfigurationVersionVersionAudit) GetUpdatedAt() *string {
-	if o == nil {
+func (c *ConfigurationVersionVersionAudit) GetUpdatedAt() *string {
+	if c == nil {
 		return nil
 	}
-	return o.UpdatedAt
+	return c.UpdatedAt
 }
 
-func (o *ConfigurationVersionVersionAudit) GetUpdatedBy() *string {
-	if o == nil {
+func (c *ConfigurationVersionVersionAudit) GetUpdatedBy() *string {
+	if c == nil {
 		return nil
 	}
-	return o.UpdatedBy
+	return c.UpdatedBy
 }
 
-func (o *ConfigurationVersionVersionAudit) GetVersionedAt() *string {
-	if o == nil {
+func (c *ConfigurationVersionVersionAudit) GetVersionedAt() *string {
+	if c == nil {
 		return nil
 	}
-	return o.VersionedAt
+	return c.VersionedAt
 }
 
-func (o *ConfigurationVersionVersionAudit) GetVersionedBy() *string {
-	if o == nil {
+func (c *ConfigurationVersionVersionAudit) GetVersionedBy() *string {
+	if c == nil {
 		return nil
 	}
-	return o.VersionedBy
+	return c.VersionedBy
 }
 
 // ConfigurationVersion - Configuration data about your app which is versionable
@@ -125,99 +125,99 @@ func (c ConfigurationVersion) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ConfigurationVersion) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"app_id", "components", "owner_org_id", "version", "version_audit"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *ConfigurationVersion) GetAppID() string {
-	if o == nil {
+func (c *ConfigurationVersion) GetAppID() string {
+	if c == nil {
 		return ""
 	}
-	return o.AppID
+	return c.AppID
 }
 
-func (o *ConfigurationVersion) GetBlueprintRef() *BlueprintRef {
-	if o == nil {
+func (c *ConfigurationVersion) GetBlueprintRef() *BlueprintRef {
+	if c == nil {
 		return nil
 	}
-	return o.BlueprintRef
+	return c.BlueprintRef
 }
 
-func (o *ConfigurationVersion) GetChangelog() *string {
-	if o == nil {
+func (c *ConfigurationVersion) GetChangelog() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Changelog
+	return c.Changelog
 }
 
-func (o *ConfigurationVersion) GetComponents() []BaseComponent {
-	if o == nil {
+func (c *ConfigurationVersion) GetComponents() []BaseComponent {
+	if c == nil {
 		return []BaseComponent{}
 	}
-	return o.Components
+	return c.Components
 }
 
-func (o *ConfigurationVersion) GetDeprecatedAt() *string {
-	if o == nil {
+func (c *ConfigurationVersion) GetDeprecatedAt() *string {
+	if c == nil {
 		return nil
 	}
-	return o.DeprecatedAt
+	return c.DeprecatedAt
 }
 
-func (o *ConfigurationVersion) GetIsBeta() *bool {
-	if o == nil {
+func (c *ConfigurationVersion) GetIsBeta() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.IsBeta
+	return c.IsBeta
 }
 
-func (o *ConfigurationVersion) GetOwnerOrgID() string {
-	if o == nil {
+func (c *ConfigurationVersion) GetOwnerOrgID() string {
+	if c == nil {
 		return ""
 	}
-	return o.OwnerOrgID
+	return c.OwnerOrgID
 }
 
-func (o *ConfigurationVersion) GetPending() *bool {
-	if o == nil {
+func (c *ConfigurationVersion) GetPending() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Pending
+	return c.Pending
 }
 
-func (o *ConfigurationVersion) GetPublic() *bool {
-	if o == nil {
+func (c *ConfigurationVersion) GetPublic() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Public
+	return c.Public
 }
 
-func (o *ConfigurationVersion) GetReviewStatus() *ConfigurationVersionReviewStatus {
-	if o == nil {
+func (c *ConfigurationVersion) GetReviewStatus() *ConfigurationVersionReviewStatus {
+	if c == nil {
 		return nil
 	}
-	return o.ReviewStatus
+	return c.ReviewStatus
 }
 
-func (o *ConfigurationVersion) GetRole() *Role {
-	if o == nil {
+func (c *ConfigurationVersion) GetRole() *Role {
+	if c == nil {
 		return nil
 	}
-	return o.Role
+	return c.Role
 }
 
-func (o *ConfigurationVersion) GetVersion() string {
-	if o == nil {
+func (c *ConfigurationVersion) GetVersion() string {
+	if c == nil {
 		return ""
 	}
-	return o.Version
+	return c.Version
 }
 
-func (o *ConfigurationVersion) GetVersionAudit() ConfigurationVersionVersionAudit {
-	if o == nil {
+func (c *ConfigurationVersion) GetVersionAudit() ConfigurationVersionVersionAudit {
+	if c == nil {
 		return ConfigurationVersionVersionAudit{}
 	}
-	return o.VersionAudit
+	return c.VersionAudit
 }

@@ -9,16 +9,16 @@ type BlueprintRef struct {
 	ManifestID *string `json:"manifest_id,omitempty"`
 }
 
-func (o *BlueprintRef) GetJobID() *string {
-	if o == nil {
+func (b *BlueprintRef) GetJobID() *string {
+	if b == nil {
 		return nil
 	}
-	return o.JobID
+	return b.JobID
 }
 
-func (o *BlueprintRef) GetManifestID() *string {
-	if o == nil {
+func (b *BlueprintRef) GetManifestID() *string {
+	if b == nil {
 		return nil
 	}
-	return o.ManifestID
+	return b.ManifestID
 }

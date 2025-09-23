@@ -20,32 +20,32 @@ type ConfigurationMetadataConfigurationAudit struct {
 	UpdatedBy *string `json:"updated_by,omitempty"`
 }
 
-func (o *ConfigurationMetadataConfigurationAudit) GetCreatedAt() *string {
-	if o == nil {
+func (c *ConfigurationMetadataConfigurationAudit) GetCreatedAt() *string {
+	if c == nil {
 		return nil
 	}
-	return o.CreatedAt
+	return c.CreatedAt
 }
 
-func (o *ConfigurationMetadataConfigurationAudit) GetCreatedBy() *string {
-	if o == nil {
+func (c *ConfigurationMetadataConfigurationAudit) GetCreatedBy() *string {
+	if c == nil {
 		return nil
 	}
-	return o.CreatedBy
+	return c.CreatedBy
 }
 
-func (o *ConfigurationMetadataConfigurationAudit) GetUpdatedAt() *string {
-	if o == nil {
+func (c *ConfigurationMetadataConfigurationAudit) GetUpdatedAt() *string {
+	if c == nil {
 		return nil
 	}
-	return o.UpdatedAt
+	return c.UpdatedAt
 }
 
-func (o *ConfigurationMetadataConfigurationAudit) GetUpdatedBy() *string {
-	if o == nil {
+func (c *ConfigurationMetadataConfigurationAudit) GetUpdatedBy() *string {
+	if c == nil {
 		return nil
 	}
-	return o.UpdatedBy
+	return c.UpdatedBy
 }
 
 // ConfigurationMetadataDescription - Markdown description of the app.
@@ -56,18 +56,18 @@ type ConfigurationMetadataDescription struct {
 	En *string `json:"en,omitempty"`
 }
 
-func (o *ConfigurationMetadataDescription) GetDe() string {
-	if o == nil {
+func (c *ConfigurationMetadataDescription) GetDe() string {
+	if c == nil {
 		return ""
 	}
-	return o.De
+	return c.De
 }
 
-func (o *ConfigurationMetadataDescription) GetEn() *string {
-	if o == nil {
+func (c *ConfigurationMetadataDescription) GetEn() *string {
+	if c == nil {
 		return nil
 	}
-	return o.En
+	return c.En
 }
 
 // ConfigurationMetadataNotifications - Configuration for developer notifications
@@ -78,18 +78,18 @@ type ConfigurationMetadataNotifications struct {
 	Events []NotificationEvent `json:"events,omitempty"`
 }
 
-func (o *ConfigurationMetadataNotifications) GetEmail() *string {
-	if o == nil {
+func (c *ConfigurationMetadataNotifications) GetEmail() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Email
+	return c.Email
 }
 
-func (o *ConfigurationMetadataNotifications) GetEvents() []NotificationEvent {
-	if o == nil {
+func (c *ConfigurationMetadataNotifications) GetEvents() []NotificationEvent {
+	if c == nil {
 		return nil
 	}
-	return o.Events
+	return c.Events
 }
 
 type ConfigurationMetadataPricingType string
@@ -137,18 +137,18 @@ type ConfigurationMetadataPricing struct {
 	PricingType      *ConfigurationMetadataPricingType `json:"pricing_type,omitempty"`
 }
 
-func (o *ConfigurationMetadataPricing) GetBillingFrequency() *BillingFrequency {
-	if o == nil {
+func (c *ConfigurationMetadataPricing) GetBillingFrequency() *BillingFrequency {
+	if c == nil {
 		return nil
 	}
-	return o.BillingFrequency
+	return c.BillingFrequency
 }
 
-func (o *ConfigurationMetadataPricing) GetPricingType() *ConfigurationMetadataPricingType {
-	if o == nil {
+func (c *ConfigurationMetadataPricing) GetPricingType() *ConfigurationMetadataPricingType {
+	if c == nil {
 		return nil
 	}
-	return o.PricingType
+	return c.PricingType
 }
 
 // ConfigurationMetadata - Basic metadata about your app configuration which does not get versioned
@@ -188,127 +188,127 @@ func (c ConfigurationMetadata) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ConfigurationMetadata) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"app_id", "description", "latest_version", "name", "owner_org_id", "versions"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *ConfigurationMetadata) GetAppID() string {
-	if o == nil {
+func (c *ConfigurationMetadata) GetAppID() string {
+	if c == nil {
 		return ""
 	}
-	return o.AppID
+	return c.AppID
 }
 
-func (o *ConfigurationMetadata) GetAuthor() *Author {
-	if o == nil {
+func (c *ConfigurationMetadata) GetAuthor() *Author {
+	if c == nil {
 		return nil
 	}
-	return o.Author
+	return c.Author
 }
 
-func (o *ConfigurationMetadata) GetCategory() *string {
-	if o == nil {
+func (c *ConfigurationMetadata) GetCategory() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Category
+	return c.Category
 }
 
-func (o *ConfigurationMetadata) GetConfigurationAudit() *ConfigurationMetadataConfigurationAudit {
-	if o == nil {
+func (c *ConfigurationMetadata) GetConfigurationAudit() *ConfigurationMetadataConfigurationAudit {
+	if c == nil {
 		return nil
 	}
-	return o.ConfigurationAudit
+	return c.ConfigurationAudit
 }
 
-func (o *ConfigurationMetadata) GetDescription() ConfigurationMetadataDescription {
-	if o == nil {
+func (c *ConfigurationMetadata) GetDescription() ConfigurationMetadataDescription {
+	if c == nil {
 		return ConfigurationMetadataDescription{}
 	}
-	return o.Description
+	return c.Description
 }
 
-func (o *ConfigurationMetadata) GetDevMode() *bool {
-	if o == nil {
+func (c *ConfigurationMetadata) GetDevMode() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.DevMode
+	return c.DevMode
 }
 
-func (o *ConfigurationMetadata) GetDocumentationURL() *string {
-	if o == nil {
+func (c *ConfigurationMetadata) GetDocumentationURL() *string {
+	if c == nil {
 		return nil
 	}
-	return o.DocumentationURL
+	return c.DocumentationURL
 }
 
-func (o *ConfigurationMetadata) GetIconURL() *string {
-	if o == nil {
+func (c *ConfigurationMetadata) GetIconURL() *string {
+	if c == nil {
 		return nil
 	}
-	return o.IconURL
+	return c.IconURL
 }
 
-func (o *ConfigurationMetadata) GetInternal() *bool {
-	if o == nil {
+func (c *ConfigurationMetadata) GetInternal() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Internal
+	return c.Internal
 }
 
-func (o *ConfigurationMetadata) GetLatestVersion() string {
-	if o == nil {
+func (c *ConfigurationMetadata) GetLatestVersion() string {
+	if c == nil {
 		return ""
 	}
-	return o.LatestVersion
+	return c.LatestVersion
 }
 
-func (o *ConfigurationMetadata) GetName() string {
-	if o == nil {
+func (c *ConfigurationMetadata) GetName() string {
+	if c == nil {
 		return ""
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *ConfigurationMetadata) GetNotifications() *ConfigurationMetadataNotifications {
-	if o == nil {
+func (c *ConfigurationMetadata) GetNotifications() *ConfigurationMetadataNotifications {
+	if c == nil {
 		return nil
 	}
-	return o.Notifications
+	return c.Notifications
 }
 
-func (o *ConfigurationMetadata) GetOwnerOrgID() string {
-	if o == nil {
+func (c *ConfigurationMetadata) GetOwnerOrgID() string {
+	if c == nil {
 		return ""
 	}
-	return o.OwnerOrgID
+	return c.OwnerOrgID
 }
 
-func (o *ConfigurationMetadata) GetPricing() *ConfigurationMetadataPricing {
-	if o == nil {
+func (c *ConfigurationMetadata) GetPricing() *ConfigurationMetadataPricing {
+	if c == nil {
 		return nil
 	}
-	return o.Pricing
+	return c.Pricing
 }
 
-func (o *ConfigurationMetadata) GetPublicVersions() []string {
-	if o == nil {
+func (c *ConfigurationMetadata) GetPublicVersions() []string {
+	if c == nil {
 		return nil
 	}
-	return o.PublicVersions
+	return c.PublicVersions
 }
 
-func (o *ConfigurationMetadata) GetSupportEmail() *string {
-	if o == nil {
+func (c *ConfigurationMetadata) GetSupportEmail() *string {
+	if c == nil {
 		return nil
 	}
-	return o.SupportEmail
+	return c.SupportEmail
 }
 
-func (o *ConfigurationMetadata) GetVersions() []string {
-	if o == nil {
+func (c *ConfigurationMetadata) GetVersions() []string {
+	if c == nil {
 		return []string{}
 	}
-	return o.Versions
+	return c.Versions
 }

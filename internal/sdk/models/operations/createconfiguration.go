@@ -11,11 +11,11 @@ type CreateConfigurationResponseBody struct {
 	AppID string `json:"app_id"`
 }
 
-func (o *CreateConfigurationResponseBody) GetAppID() string {
-	if o == nil {
+func (c *CreateConfigurationResponseBody) GetAppID() string {
+	if c == nil {
 		return ""
 	}
-	return o.AppID
+	return c.AppID
 }
 
 type CreateConfigurationResponse struct {
@@ -29,30 +29,30 @@ type CreateConfigurationResponse struct {
 	Object *CreateConfigurationResponseBody
 }
 
-func (o *CreateConfigurationResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateConfigurationResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateConfigurationResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateConfigurationResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateConfigurationResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateConfigurationResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateConfigurationResponse) GetObject() *CreateConfigurationResponseBody {
-	if o == nil {
+func (c *CreateConfigurationResponse) GetObject() *CreateConfigurationResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }

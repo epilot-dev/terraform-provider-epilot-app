@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
 )
 
 type ComponentMapping string
@@ -60,46 +61,57 @@ type JourneyBlockConfig struct {
 	OverrideDevMode *OverrideDevMode `json:"override_dev_mode,omitempty"`
 }
 
-func (o *JourneyBlockConfig) GetComponentArgs() []JourneyBlockComponentArgs {
-	if o == nil {
-		return nil
-	}
-	return o.ComponentArgs
+func (j JourneyBlockConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(j, "", false)
 }
 
-func (o *JourneyBlockConfig) GetComponentMapping() map[string]ComponentMapping {
-	if o == nil {
-		return nil
+func (j *JourneyBlockConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &j, "", false, []string{"component_tag", "component_url"}); err != nil {
+		return err
 	}
-	return o.ComponentMapping
+	return nil
 }
 
-func (o *JourneyBlockConfig) GetComponentSize() *float64 {
-	if o == nil {
+func (j *JourneyBlockConfig) GetComponentArgs() []JourneyBlockComponentArgs {
+	if j == nil {
 		return nil
 	}
-	return o.ComponentSize
+	return j.ComponentArgs
 }
 
-func (o *JourneyBlockConfig) GetComponentTag() string {
-	if o == nil {
+func (j *JourneyBlockConfig) GetComponentMapping() map[string]ComponentMapping {
+	if j == nil {
+		return nil
+	}
+	return j.ComponentMapping
+}
+
+func (j *JourneyBlockConfig) GetComponentSize() *float64 {
+	if j == nil {
+		return nil
+	}
+	return j.ComponentSize
+}
+
+func (j *JourneyBlockConfig) GetComponentTag() string {
+	if j == nil {
 		return ""
 	}
-	return o.ComponentTag
+	return j.ComponentTag
 }
 
-func (o *JourneyBlockConfig) GetComponentURL() string {
-	if o == nil {
+func (j *JourneyBlockConfig) GetComponentURL() string {
+	if j == nil {
 		return ""
 	}
-	return o.ComponentURL
+	return j.ComponentURL
 }
 
-func (o *JourneyBlockConfig) GetOverrideDevMode() *OverrideDevMode {
-	if o == nil {
+func (j *JourneyBlockConfig) GetOverrideDevMode() *OverrideDevMode {
+	if j == nil {
 		return nil
 	}
-	return o.OverrideDevMode
+	return j.OverrideDevMode
 }
 
 type JourneyBlockConfigInput struct {
@@ -113,30 +125,41 @@ type JourneyBlockConfigInput struct {
 	OverrideDevMode *OverrideDevMode `json:"override_dev_mode,omitempty"`
 }
 
-func (o *JourneyBlockConfigInput) GetComponentArgs() []JourneyBlockComponentArgs {
-	if o == nil {
-		return nil
-	}
-	return o.ComponentArgs
+func (j JourneyBlockConfigInput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(j, "", false)
 }
 
-func (o *JourneyBlockConfigInput) GetComponentMapping() map[string]ComponentMapping {
-	if o == nil {
-		return nil
+func (j *JourneyBlockConfigInput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &j, "", false, []string{"component_tag"}); err != nil {
+		return err
 	}
-	return o.ComponentMapping
+	return nil
 }
 
-func (o *JourneyBlockConfigInput) GetComponentTag() string {
-	if o == nil {
+func (j *JourneyBlockConfigInput) GetComponentArgs() []JourneyBlockComponentArgs {
+	if j == nil {
+		return nil
+	}
+	return j.ComponentArgs
+}
+
+func (j *JourneyBlockConfigInput) GetComponentMapping() map[string]ComponentMapping {
+	if j == nil {
+		return nil
+	}
+	return j.ComponentMapping
+}
+
+func (j *JourneyBlockConfigInput) GetComponentTag() string {
+	if j == nil {
 		return ""
 	}
-	return o.ComponentTag
+	return j.ComponentTag
 }
 
-func (o *JourneyBlockConfigInput) GetOverrideDevMode() *OverrideDevMode {
-	if o == nil {
+func (j *JourneyBlockConfigInput) GetOverrideDevMode() *OverrideDevMode {
+	if j == nil {
 		return nil
 	}
-	return o.OverrideDevMode
+	return j.OverrideDevMode
 }

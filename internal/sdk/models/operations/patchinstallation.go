@@ -12,18 +12,18 @@ type PatchInstallationRequest struct {
 	AppID          string                 `pathParam:"style=simple,explode=false,name=appId"`
 }
 
-func (o *PatchInstallationRequest) GetInstallRequest() *shared.InstallRequest {
-	if o == nil {
+func (p *PatchInstallationRequest) GetInstallRequest() *shared.InstallRequest {
+	if p == nil {
 		return nil
 	}
-	return o.InstallRequest
+	return p.InstallRequest
 }
 
-func (o *PatchInstallationRequest) GetAppID() string {
-	if o == nil {
+func (p *PatchInstallationRequest) GetAppID() string {
+	if p == nil {
 		return ""
 	}
-	return o.AppID
+	return p.AppID
 }
 
 type PatchInstallationResponse struct {
@@ -35,23 +35,23 @@ type PatchInstallationResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *PatchInstallationResponse) GetContentType() string {
-	if o == nil {
+func (p *PatchInstallationResponse) GetContentType() string {
+	if p == nil {
 		return ""
 	}
-	return o.ContentType
+	return p.ContentType
 }
 
-func (o *PatchInstallationResponse) GetStatusCode() int {
-	if o == nil {
+func (p *PatchInstallationResponse) GetStatusCode() int {
+	if p == nil {
 		return 0
 	}
-	return o.StatusCode
+	return p.StatusCode
 }
 
-func (o *PatchInstallationResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (p *PatchInstallationResponse) GetRawResponse() *http.Response {
+	if p == nil {
 		return nil
 	}
-	return o.RawResponse
+	return p.RawResponse
 }

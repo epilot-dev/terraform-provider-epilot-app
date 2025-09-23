@@ -11,30 +11,30 @@ type CreateConfigRequest struct {
 	Name string `json:"name"`
 }
 
-func (o *CreateConfigRequest) GetCategory() *string {
-	if o == nil {
+func (c *CreateConfigRequest) GetCategory() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Category
+	return c.Category
 }
 
-func (o *CreateConfigRequest) GetDescription() TranslatedString {
-	if o == nil {
+func (c *CreateConfigRequest) GetDescription() TranslatedString {
+	if c == nil {
 		return TranslatedString{}
 	}
-	return o.Description
+	return c.Description
 }
 
-func (o *CreateConfigRequest) GetLogoURLKey() *string {
-	if o == nil {
+func (c *CreateConfigRequest) GetLogoURLKey() *string {
+	if c == nil {
 		return nil
 	}
-	return o.LogoURLKey
+	return c.LogoURLKey
 }
 
-func (o *CreateConfigRequest) GetName() string {
-	if o == nil {
+func (c *CreateConfigRequest) GetName() string {
+	if c == nil {
 		return ""
 	}
-	return o.Name
+	return c.Name
 }

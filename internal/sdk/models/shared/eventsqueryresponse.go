@@ -15,32 +15,32 @@ type EventsQueryResponsePagination struct {
 	TotalItems *int64 `json:"total_items,omitempty"`
 }
 
-func (o *EventsQueryResponsePagination) GetHasNext() *bool {
-	if o == nil {
+func (e *EventsQueryResponsePagination) GetHasNext() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.HasNext
+	return e.HasNext
 }
 
-func (o *EventsQueryResponsePagination) GetPage() *int64 {
-	if o == nil {
+func (e *EventsQueryResponsePagination) GetPage() *int64 {
+	if e == nil {
 		return nil
 	}
-	return o.Page
+	return e.Page
 }
 
-func (o *EventsQueryResponsePagination) GetPageSize() *int64 {
-	if o == nil {
+func (e *EventsQueryResponsePagination) GetPageSize() *int64 {
+	if e == nil {
 		return nil
 	}
-	return o.PageSize
+	return e.PageSize
 }
 
-func (o *EventsQueryResponsePagination) GetTotalItems() *int64 {
-	if o == nil {
+func (e *EventsQueryResponsePagination) GetTotalItems() *int64 {
+	if e == nil {
 		return nil
 	}
-	return o.TotalItems
+	return e.TotalItems
 }
 
 type ResultsType string
@@ -51,8 +51,8 @@ const (
 )
 
 type Results struct {
-	RawEvents        *RawEvents        `queryParam:"inline"`
-	AggregatedEvents *AggregatedEvents `queryParam:"inline"`
+	RawEvents        *RawEvents        `queryParam:"inline" name:"results"`
+	AggregatedEvents *AggregatedEvents `queryParam:"inline" name:"results"`
 
 	Type ResultsType
 }
@@ -78,14 +78,14 @@ func CreateResultsAggregatedEvents(aggregatedEvents AggregatedEvents) Results {
 func (u *Results) UnmarshalJSON(data []byte) error {
 
 	var rawEvents RawEvents = RawEvents{}
-	if err := utils.UnmarshalJSON(data, &rawEvents, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &rawEvents, "", true, nil); err == nil {
 		u.RawEvents = &rawEvents
 		u.Type = ResultsTypeRawEvents
 		return nil
 	}
 
 	var aggregatedEvents AggregatedEvents = AggregatedEvents{}
-	if err := utils.UnmarshalJSON(data, &aggregatedEvents, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &aggregatedEvents, "", true, nil); err == nil {
 		u.AggregatedEvents = &aggregatedEvents
 		u.Type = ResultsTypeAggregatedEvents
 		return nil
@@ -112,23 +112,23 @@ type EventsQueryResponse struct {
 	Results    *Results                       `json:"results,omitempty"`
 }
 
-func (o *EventsQueryResponse) GetPagination() *EventsQueryResponsePagination {
-	if o == nil {
+func (e *EventsQueryResponse) GetPagination() *EventsQueryResponsePagination {
+	if e == nil {
 		return nil
 	}
-	return o.Pagination
+	return e.Pagination
 }
 
-func (o *EventsQueryResponse) GetQuery() *EventsQuery {
-	if o == nil {
+func (e *EventsQueryResponse) GetQuery() *EventsQuery {
+	if e == nil {
 		return nil
 	}
-	return o.Query
+	return e.Query
 }
 
-func (o *EventsQueryResponse) GetResults() *Results {
-	if o == nil {
+func (e *EventsQueryResponse) GetResults() *Results {
+	if e == nil {
 		return nil
 	}
-	return o.Results
+	return e.Results
 }

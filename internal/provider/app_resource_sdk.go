@@ -3,24 +3,162 @@
 package provider
 
 import (
+	"context"
 	"encoding/json"
 	tfTypes "github.com/epilot-dev/terraform-provider-epilot-app/internal/provider/types"
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/models/operations"
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"math/big"
 )
 
-func (r *AppResourceModel) ToSharedInstallRequest() *shared.InstallRequest {
-	var manifest []string = []string{}
+func (r *AppResourceModel) RefreshFromSharedInstallation(ctx context.Context, resp *shared.Installation) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Manifest = make([]types.String, 0, len(resp.Manifest))
+		for _, v := range resp.Manifest {
+			r.Manifest = append(r.Manifest, types.StringValue(v))
+		}
+		r.AppID = types.StringValue(resp.AppID)
+		if resp.BlueprintRef == nil {
+			r.BlueprintRef = nil
+		} else {
+			r.BlueprintRef = &tfTypes.BlueprintRef{}
+			r.BlueprintRef.JobID = types.StringPointerValue(resp.BlueprintRef.JobID)
+			r.BlueprintRef.ManifestID = types.StringPointerValue(resp.BlueprintRef.ManifestID)
+		}
+		componentsResult, _ := json.Marshal(resp.Components)
+		r.Components = jsontypes.NewNormalizedValue(string(componentsResult))
+		r.Enabled = types.BoolPointerValue(resp.Enabled)
+		if resp.InstallationAudit == nil {
+			r.InstallationAudit = nil
+		} else {
+			r.InstallationAudit = &tfTypes.InstallationAudit{}
+			r.InstallationAudit.CreatedAt = types.StringPointerValue(resp.InstallationAudit.CreatedAt)
+			r.InstallationAudit.CreatedBy = types.StringPointerValue(resp.InstallationAudit.CreatedBy)
+			r.InstallationAudit.UpdatedAt = types.StringPointerValue(resp.InstallationAudit.UpdatedAt)
+			r.InstallationAudit.UpdatedBy = types.StringPointerValue(resp.InstallationAudit.UpdatedBy)
+		}
+		r.InstalledVersion = types.StringValue(resp.InstalledVersion)
+		r.InstallerOrgID = types.StringValue(resp.InstallerOrgID)
+		r.Name = types.StringValue(resp.Name)
+		r.OptionValues = []tfTypes.OptionsRef{}
+
+		for _, optionValuesItem := range resp.OptionValues {
+			var optionValues tfTypes.OptionsRef
+
+			optionValues.ComponentID = types.StringValue(optionValuesItem.ComponentID)
+			optionValues.Options = []tfTypes.Option{}
+
+			for _, optionsVarItem := range optionValuesItem.Options {
+				var optionsVar tfTypes.Option
+
+				optionsVar.Key = types.StringValue(optionsVarItem.Key)
+				if optionsVarItem.Value.Str != nil {
+					optionsVar.Value.Str = types.StringPointerValue(optionsVarItem.Value.Str)
+				}
+				if optionsVarItem.Value.Boolean != nil {
+					optionsVar.Value.Boolean = types.BoolPointerValue(optionsVarItem.Value.Boolean)
+				}
+				if optionsVarItem.Value.Number != nil {
+					optionsVar.Value.Number = types.Float64PointerValue(optionsVarItem.Value.Number)
+				}
+
+				optionValues.Options = append(optionValues.Options, optionsVar)
+			}
+
+			r.OptionValues = append(r.OptionValues, optionValues)
+		}
+		r.OwnerOrgID = types.StringPointerValue(resp.OwnerOrgID)
+		r.Role = types.StringPointerValue(resp.Role)
+	}
+
+	return diags
+}
+
+func (r *AppResourceModel) ToOperationsGetInstallationRequest(ctx context.Context) (*operations.GetInstallationRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var appID string
+	appID = r.AppID.ValueString()
+
+	out := operations.GetInstallationRequest{
+		AppID: appID,
+	}
+
+	return &out, diags
+}
+
+func (r *AppResourceModel) ToOperationsInstallRequest(ctx context.Context) (*operations.InstallRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	installRequest, installRequestDiags := r.ToSharedInstallRequest(ctx)
+	diags.Append(installRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	var appID string
+	appID = r.AppID.ValueString()
+
+	out := operations.InstallRequest{
+		InstallRequest: installRequest,
+		AppID:          appID,
+	}
+
+	return &out, diags
+}
+
+func (r *AppResourceModel) ToOperationsPatchInstallationRequest(ctx context.Context) (*operations.PatchInstallationRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	installRequest, installRequestDiags := r.ToSharedInstallRequest(ctx)
+	diags.Append(installRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	var appID string
+	appID = r.AppID.ValueString()
+
+	out := operations.PatchInstallationRequest{
+		InstallRequest: installRequest,
+		AppID:          appID,
+	}
+
+	return &out, diags
+}
+
+func (r *AppResourceModel) ToOperationsUninstallRequest(ctx context.Context) (*operations.UninstallRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var appID string
+	appID = r.AppID.ValueString()
+
+	out := operations.UninstallRequest{
+		AppID: appID,
+	}
+
+	return &out, diags
+}
+
+func (r *AppResourceModel) ToSharedInstallRequest(ctx context.Context) (*shared.InstallRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	manifest := make([]string, 0, len(r.Manifest))
 	for _, manifestItem := range r.Manifest {
 		manifest = append(manifest, manifestItem.ValueString())
 	}
-	var optionValues []shared.OptionsRef = []shared.OptionsRef{}
+	optionValues := make([]shared.OptionsRef, 0, len(r.OptionValues))
 	for _, optionValuesItem := range r.OptionValues {
 		var componentID string
 		componentID = optionValuesItem.ComponentID.ValueString()
 
-		var optionsVar []shared.Option = []shared.Option{}
+		optionsVar := make([]shared.Option, 0, len(optionValuesItem.Options))
 		for _, optionsItem := range optionValuesItem.Options {
 			var key string
 			key = optionsItem.Key.ValueString()
@@ -50,7 +188,7 @@ func (r *AppResourceModel) ToSharedInstallRequest() *shared.InstallRequest {
 			}
 			number := new(float64)
 			if !optionsItem.Value.Number.IsUnknown() && !optionsItem.Value.Number.IsNull() {
-				*number, _ = optionsItem.Value.Number.ValueBigFloat().Float64()
+				*number = optionsItem.Value.Number.ValueFloat64()
 			} else {
 				number = nil
 			}
@@ -80,77 +218,6 @@ func (r *AppResourceModel) ToSharedInstallRequest() *shared.InstallRequest {
 		OptionValues: optionValues,
 		Version:      version,
 	}
-	return &out
-}
 
-func (r *AppResourceModel) RefreshFromSharedInstallation(resp *shared.Installation) {
-	if resp != nil {
-		r.Manifest = []types.String{}
-		for _, v := range resp.Manifest {
-			r.Manifest = append(r.Manifest, types.StringValue(v))
-		}
-		r.AppID = types.StringValue(resp.AppID)
-		if resp.BlueprintRef == nil {
-			r.BlueprintRef = nil
-		} else {
-			r.BlueprintRef = &tfTypes.BlueprintRef{}
-			r.BlueprintRef.JobID = types.StringPointerValue(resp.BlueprintRef.JobID)
-			r.BlueprintRef.ManifestID = types.StringPointerValue(resp.BlueprintRef.ManifestID)
-		}
-		componentsResult, _ := json.Marshal(resp.Components)
-		r.Components = types.StringValue(string(componentsResult))
-		r.Enabled = types.BoolPointerValue(resp.Enabled)
-		if resp.InstallationAudit == nil {
-			r.InstallationAudit = nil
-		} else {
-			r.InstallationAudit = &tfTypes.InstallationAudit{}
-			r.InstallationAudit.CreatedAt = types.StringPointerValue(resp.InstallationAudit.CreatedAt)
-			r.InstallationAudit.CreatedBy = types.StringPointerValue(resp.InstallationAudit.CreatedBy)
-			r.InstallationAudit.UpdatedAt = types.StringPointerValue(resp.InstallationAudit.UpdatedAt)
-			r.InstallationAudit.UpdatedBy = types.StringPointerValue(resp.InstallationAudit.UpdatedBy)
-		}
-		r.InstalledVersion = types.StringValue(resp.InstalledVersion)
-		r.InstallerOrgID = types.StringValue(resp.InstallerOrgID)
-		r.Name = types.StringValue(resp.Name)
-		r.OptionValues = []tfTypes.OptionsRef{}
-		if len(r.OptionValues) > len(resp.OptionValues) {
-			r.OptionValues = r.OptionValues[:len(resp.OptionValues)]
-		}
-		for optionValuesCount, optionValuesItem := range resp.OptionValues {
-			var optionValues1 tfTypes.OptionsRef
-			optionValues1.ComponentID = types.StringValue(optionValuesItem.ComponentID)
-			optionValues1.Options = []tfTypes.Option{}
-			for optionsVarCount, optionsVarItem := range optionValuesItem.Options {
-				var optionsVar1 tfTypes.Option
-				optionsVar1.Key = types.StringValue(optionsVarItem.Key)
-				if optionsVarItem.Value.Str != nil {
-					optionsVar1.Value.Str = types.StringPointerValue(optionsVarItem.Value.Str)
-				}
-				if optionsVarItem.Value.Boolean != nil {
-					optionsVar1.Value.Boolean = types.BoolPointerValue(optionsVarItem.Value.Boolean)
-				}
-				if optionsVarItem.Value.Number != nil {
-					if optionsVarItem.Value.Number != nil {
-						optionsVar1.Value.Number = types.NumberValue(big.NewFloat(float64(*optionsVarItem.Value.Number)))
-					} else {
-						optionsVar1.Value.Number = types.NumberNull()
-					}
-				}
-				if optionsVarCount+1 > len(optionValues1.Options) {
-					optionValues1.Options = append(optionValues1.Options, optionsVar1)
-				} else {
-					optionValues1.Options[optionsVarCount].Key = optionsVar1.Key
-					optionValues1.Options[optionsVarCount].Value = optionsVar1.Value
-				}
-			}
-			if optionValuesCount+1 > len(r.OptionValues) {
-				r.OptionValues = append(r.OptionValues, optionValues1)
-			} else {
-				r.OptionValues[optionValuesCount].ComponentID = optionValues1.ComponentID
-				r.OptionValues[optionValuesCount].Options = optionValues1.Options
-			}
-		}
-		r.OwnerOrgID = types.StringPointerValue(resp.OwnerOrgID)
-		r.Role = types.StringPointerValue(resp.Role)
-	}
+	return &out, diags
 }

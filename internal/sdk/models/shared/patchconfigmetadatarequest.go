@@ -18,65 +18,65 @@ type PatchConfigMetadataRequest struct {
 	SupportEmail *string `json:"support_email,omitempty"`
 }
 
-func (o *PatchConfigMetadataRequest) GetCategory() *string {
-	if o == nil {
+func (p *PatchConfigMetadataRequest) GetCategory() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Category
+	return p.Category
 }
 
-func (o *PatchConfigMetadataRequest) GetDescription() *TranslatedString {
-	if o == nil {
+func (p *PatchConfigMetadataRequest) GetDescription() *TranslatedString {
+	if p == nil {
 		return nil
 	}
-	return o.Description
+	return p.Description
 }
 
-func (o *PatchConfigMetadataRequest) GetDevMode() *bool {
-	if o == nil {
+func (p *PatchConfigMetadataRequest) GetDevMode() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.DevMode
+	return p.DevMode
 }
 
-func (o *PatchConfigMetadataRequest) GetDocumentationURL() *string {
-	if o == nil {
+func (p *PatchConfigMetadataRequest) GetDocumentationURL() *string {
+	if p == nil {
 		return nil
 	}
-	return o.DocumentationURL
+	return p.DocumentationURL
 }
 
-func (o *PatchConfigMetadataRequest) GetLogoURLKey() *string {
-	if o == nil {
+func (p *PatchConfigMetadataRequest) GetLogoURLKey() *string {
+	if p == nil {
 		return nil
 	}
-	return o.LogoURLKey
+	return p.LogoURLKey
 }
 
-func (o *PatchConfigMetadataRequest) GetName() *string {
-	if o == nil {
+func (p *PatchConfigMetadataRequest) GetName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Name
+	return p.Name
 }
 
-func (o *PatchConfigMetadataRequest) GetNotifications() *NotificationConfig {
-	if o == nil {
+func (p *PatchConfigMetadataRequest) GetNotifications() *NotificationConfig {
+	if p == nil {
 		return nil
 	}
-	return o.Notifications
+	return p.Notifications
 }
 
-func (o *PatchConfigMetadataRequest) GetPricing() *Pricing {
-	if o == nil {
+func (p *PatchConfigMetadataRequest) GetPricing() *Pricing {
+	if p == nil {
 		return nil
 	}
-	return o.Pricing
+	return p.Pricing
 }
 
-func (o *PatchConfigMetadataRequest) GetSupportEmail() *string {
-	if o == nil {
+func (p *PatchConfigMetadataRequest) GetSupportEmail() *string {
+	if p == nil {
 		return nil
 	}
-	return o.SupportEmail
+	return p.SupportEmail
 }

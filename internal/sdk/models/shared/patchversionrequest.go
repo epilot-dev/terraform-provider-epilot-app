@@ -11,23 +11,23 @@ type PatchVersionRequest struct {
 	RoleID *string `json:"role_id,omitempty"`
 }
 
-func (o *PatchVersionRequest) GetGrants() []Grants {
-	if o == nil {
+func (p *PatchVersionRequest) GetGrants() []Grants {
+	if p == nil {
 		return nil
 	}
-	return o.Grants
+	return p.Grants
 }
 
-func (o *PatchVersionRequest) GetManifestID() *string {
-	if o == nil {
+func (p *PatchVersionRequest) GetManifestID() *string {
+	if p == nil {
 		return nil
 	}
-	return o.ManifestID
+	return p.ManifestID
 }
 
-func (o *PatchVersionRequest) GetRoleID() *string {
-	if o == nil {
+func (p *PatchVersionRequest) GetRoleID() *string {
+	if p == nil {
 		return nil
 	}
-	return o.RoleID
+	return p.RoleID
 }

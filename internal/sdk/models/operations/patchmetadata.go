@@ -13,18 +13,18 @@ type PatchMetadataRequest struct {
 	AppID string `pathParam:"style=simple,explode=false,name=appId"`
 }
 
-func (o *PatchMetadataRequest) GetPatchConfigMetadataRequest() shared.PatchConfigMetadataRequest {
-	if o == nil {
+func (p *PatchMetadataRequest) GetPatchConfigMetadataRequest() shared.PatchConfigMetadataRequest {
+	if p == nil {
 		return shared.PatchConfigMetadataRequest{}
 	}
-	return o.PatchConfigMetadataRequest
+	return p.PatchConfigMetadataRequest
 }
 
-func (o *PatchMetadataRequest) GetAppID() string {
-	if o == nil {
+func (p *PatchMetadataRequest) GetAppID() string {
+	if p == nil {
 		return ""
 	}
-	return o.AppID
+	return p.AppID
 }
 
 type PatchMetadataResponse struct {
@@ -36,23 +36,23 @@ type PatchMetadataResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *PatchMetadataResponse) GetContentType() string {
-	if o == nil {
+func (p *PatchMetadataResponse) GetContentType() string {
+	if p == nil {
 		return ""
 	}
-	return o.ContentType
+	return p.ContentType
 }
 
-func (o *PatchMetadataResponse) GetStatusCode() int {
-	if o == nil {
+func (p *PatchMetadataResponse) GetStatusCode() int {
+	if p == nil {
 		return 0
 	}
-	return o.StatusCode
+	return p.StatusCode
 }
 
-func (o *PatchMetadataResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (p *PatchMetadataResponse) GetRawResponse() *http.Response {
+	if p == nil {
 		return nil
 	}
-	return o.RawResponse
+	return p.RawResponse
 }

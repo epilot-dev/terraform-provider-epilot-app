@@ -18,32 +18,32 @@ type InstallationAudit struct {
 	UpdatedBy *string `json:"updated_by,omitempty"`
 }
 
-func (o *InstallationAudit) GetCreatedAt() *string {
-	if o == nil {
+func (i *InstallationAudit) GetCreatedAt() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CreatedAt
+	return i.CreatedAt
 }
 
-func (o *InstallationAudit) GetCreatedBy() *string {
-	if o == nil {
+func (i *InstallationAudit) GetCreatedBy() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CreatedBy
+	return i.CreatedBy
 }
 
-func (o *InstallationAudit) GetUpdatedAt() *string {
-	if o == nil {
+func (i *InstallationAudit) GetUpdatedAt() *string {
+	if i == nil {
 		return nil
 	}
-	return o.UpdatedAt
+	return i.UpdatedAt
 }
 
-func (o *InstallationAudit) GetUpdatedBy() *string {
-	if o == nil {
+func (i *InstallationAudit) GetUpdatedBy() *string {
+	if i == nil {
 		return nil
 	}
-	return o.UpdatedBy
+	return i.UpdatedBy
 }
 
 // Installation - Information about the installed app. Has configuration data of the installed version
@@ -77,92 +77,92 @@ func (i Installation) MarshalJSON() ([]byte, error) {
 }
 
 func (i *Installation) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"app_id", "components", "installed_version", "installer_org_id", "name"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *Installation) GetManifest() []string {
-	if o == nil {
+func (i *Installation) GetManifest() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Manifest
+	return i.Manifest
 }
 
-func (o *Installation) GetAppID() string {
-	if o == nil {
+func (i *Installation) GetAppID() string {
+	if i == nil {
 		return ""
 	}
-	return o.AppID
+	return i.AppID
 }
 
-func (o *Installation) GetBlueprintRef() *BlueprintRef {
-	if o == nil {
+func (i *Installation) GetBlueprintRef() *BlueprintRef {
+	if i == nil {
 		return nil
 	}
-	return o.BlueprintRef
+	return i.BlueprintRef
 }
 
-func (o *Installation) GetComponents() any {
-	if o == nil {
+func (i *Installation) GetComponents() any {
+	if i == nil {
 		return nil
 	}
-	return o.Components
+	return i.Components
 }
 
-func (o *Installation) GetEnabled() *bool {
-	if o == nil {
+func (i *Installation) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *Installation) GetInstallationAudit() *InstallationAudit {
-	if o == nil {
+func (i *Installation) GetInstallationAudit() *InstallationAudit {
+	if i == nil {
 		return nil
 	}
-	return o.InstallationAudit
+	return i.InstallationAudit
 }
 
-func (o *Installation) GetInstalledVersion() string {
-	if o == nil {
+func (i *Installation) GetInstalledVersion() string {
+	if i == nil {
 		return ""
 	}
-	return o.InstalledVersion
+	return i.InstalledVersion
 }
 
-func (o *Installation) GetInstallerOrgID() string {
-	if o == nil {
+func (i *Installation) GetInstallerOrgID() string {
+	if i == nil {
 		return ""
 	}
-	return o.InstallerOrgID
+	return i.InstallerOrgID
 }
 
-func (o *Installation) GetName() string {
-	if o == nil {
+func (i *Installation) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *Installation) GetOptionValues() []OptionsRef {
-	if o == nil {
+func (i *Installation) GetOptionValues() []OptionsRef {
+	if i == nil {
 		return nil
 	}
-	return o.OptionValues
+	return i.OptionValues
 }
 
-func (o *Installation) GetOwnerOrgID() *string {
-	if o == nil {
+func (i *Installation) GetOwnerOrgID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.OwnerOrgID
+	return i.OwnerOrgID
 }
 
-func (o *Installation) GetRole() *string {
-	if o == nil {
+func (i *Installation) GetRole() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Role
+	return i.Role
 }

@@ -17,25 +17,25 @@ type CloneVersionRequest struct {
 	TargetVersion string `pathParam:"style=simple,explode=false,name=targetVersion"`
 }
 
-func (o *CloneVersionRequest) GetAppID() string {
-	if o == nil {
+func (c *CloneVersionRequest) GetAppID() string {
+	if c == nil {
 		return ""
 	}
-	return o.AppID
+	return c.AppID
 }
 
-func (o *CloneVersionRequest) GetSourceVersion() string {
-	if o == nil {
+func (c *CloneVersionRequest) GetSourceVersion() string {
+	if c == nil {
 		return ""
 	}
-	return o.SourceVersion
+	return c.SourceVersion
 }
 
-func (o *CloneVersionRequest) GetTargetVersion() string {
-	if o == nil {
+func (c *CloneVersionRequest) GetTargetVersion() string {
+	if c == nil {
 		return ""
 	}
-	return o.TargetVersion
+	return c.TargetVersion
 }
 
 type Status string
@@ -71,25 +71,25 @@ type CloneVersionResponseBody struct {
 	Version *string `json:"version,omitempty"`
 }
 
-func (o *CloneVersionResponseBody) GetAppID() *string {
-	if o == nil {
+func (c *CloneVersionResponseBody) GetAppID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.AppID
+	return c.AppID
 }
 
-func (o *CloneVersionResponseBody) GetStatus() *Status {
-	if o == nil {
+func (c *CloneVersionResponseBody) GetStatus() *Status {
+	if c == nil {
 		return nil
 	}
-	return o.Status
+	return c.Status
 }
 
-func (o *CloneVersionResponseBody) GetVersion() *string {
-	if o == nil {
+func (c *CloneVersionResponseBody) GetVersion() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Version
+	return c.Version
 }
 
 type CloneVersionResponse struct {
@@ -103,30 +103,30 @@ type CloneVersionResponse struct {
 	Object *CloneVersionResponseBody
 }
 
-func (o *CloneVersionResponse) GetContentType() string {
-	if o == nil {
+func (c *CloneVersionResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CloneVersionResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CloneVersionResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CloneVersionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CloneVersionResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CloneVersionResponse) GetObject() *CloneVersionResponseBody {
-	if o == nil {
+func (c *CloneVersionResponse) GetObject() *CloneVersionResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }

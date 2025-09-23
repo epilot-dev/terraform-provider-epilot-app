@@ -13,18 +13,18 @@ type QueryEventsRequest struct {
 	AppID string `pathParam:"style=simple,explode=false,name=appId"`
 }
 
-func (o *QueryEventsRequest) GetEventsQuery() shared.EventsQuery {
-	if o == nil {
+func (q *QueryEventsRequest) GetEventsQuery() shared.EventsQuery {
+	if q == nil {
 		return shared.EventsQuery{}
 	}
-	return o.EventsQuery
+	return q.EventsQuery
 }
 
-func (o *QueryEventsRequest) GetAppID() string {
-	if o == nil {
+func (q *QueryEventsRequest) GetAppID() string {
+	if q == nil {
 		return ""
 	}
-	return o.AppID
+	return q.AppID
 }
 
 type QueryEventsResponse struct {
@@ -38,30 +38,30 @@ type QueryEventsResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *QueryEventsResponse) GetContentType() string {
-	if o == nil {
+func (q *QueryEventsResponse) GetContentType() string {
+	if q == nil {
 		return ""
 	}
-	return o.ContentType
+	return q.ContentType
 }
 
-func (o *QueryEventsResponse) GetEventsQueryResponse() *shared.EventsQueryResponse {
-	if o == nil {
+func (q *QueryEventsResponse) GetEventsQueryResponse() *shared.EventsQueryResponse {
+	if q == nil {
 		return nil
 	}
-	return o.EventsQueryResponse
+	return q.EventsQueryResponse
 }
 
-func (o *QueryEventsResponse) GetStatusCode() int {
-	if o == nil {
+func (q *QueryEventsResponse) GetStatusCode() int {
+	if q == nil {
 		return 0
 	}
-	return o.StatusCode
+	return q.StatusCode
 }
 
-func (o *QueryEventsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (q *QueryEventsResponse) GetRawResponse() *http.Response {
+	if q == nil {
 		return nil
 	}
-	return o.RawResponse
+	return q.RawResponse
 }

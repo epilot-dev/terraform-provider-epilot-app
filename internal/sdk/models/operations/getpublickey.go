@@ -14,25 +14,25 @@ type GetPublicKeyResponseBody struct {
 	PublicKey *string `json:"public_key,omitempty"`
 }
 
-func (o *GetPublicKeyResponseBody) GetAlgorithm() *string {
-	if o == nil {
+func (g *GetPublicKeyResponseBody) GetAlgorithm() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Algorithm
+	return g.Algorithm
 }
 
-func (o *GetPublicKeyResponseBody) GetIssuer() *string {
-	if o == nil {
+func (g *GetPublicKeyResponseBody) GetIssuer() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Issuer
+	return g.Issuer
 }
 
-func (o *GetPublicKeyResponseBody) GetPublicKey() *string {
-	if o == nil {
+func (g *GetPublicKeyResponseBody) GetPublicKey() *string {
+	if g == nil {
 		return nil
 	}
-	return o.PublicKey
+	return g.PublicKey
 }
 
 type GetPublicKeyResponse struct {
@@ -46,30 +46,30 @@ type GetPublicKeyResponse struct {
 	Object *GetPublicKeyResponseBody
 }
 
-func (o *GetPublicKeyResponse) GetContentType() string {
-	if o == nil {
+func (g *GetPublicKeyResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetPublicKeyResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetPublicKeyResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetPublicKeyResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetPublicKeyResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetPublicKeyResponse) GetObject() *GetPublicKeyResponseBody {
-	if o == nil {
+func (g *GetPublicKeyResponse) GetObject() *GetPublicKeyResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }

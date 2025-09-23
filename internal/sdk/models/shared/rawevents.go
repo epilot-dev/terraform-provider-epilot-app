@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
 )
 
 type RawEventsType string
@@ -35,16 +36,27 @@ type RawEvents struct {
 	Type   *RawEventsType `json:"type,omitempty"`
 }
 
-func (o *RawEvents) GetEvents() []AppEventData {
-	if o == nil {
-		return nil
-	}
-	return o.Events
+func (r RawEvents) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(r, "", false)
 }
 
-func (o *RawEvents) GetType() *RawEventsType {
-	if o == nil {
+func (r *RawEvents) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *RawEvents) GetEvents() []AppEventData {
+	if r == nil {
 		return nil
 	}
-	return o.Type
+	return r.Events
+}
+
+func (r *RawEvents) GetType() *RawEventsType {
+	if r == nil {
+		return nil
+	}
+	return r.Type
 }

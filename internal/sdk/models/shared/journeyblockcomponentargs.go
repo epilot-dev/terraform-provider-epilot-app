@@ -17,18 +17,29 @@ type SchemasEnumArgDescription struct {
 	En *string `json:"en,omitempty"`
 }
 
-func (o *SchemasEnumArgDescription) GetDe() string {
-	if o == nil {
-		return ""
-	}
-	return o.De
+func (s SchemasEnumArgDescription) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
 }
 
-func (o *SchemasEnumArgDescription) GetEn() *string {
-	if o == nil {
+func (s *SchemasEnumArgDescription) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SchemasEnumArgDescription) GetDe() string {
+	if s == nil {
+		return ""
+	}
+	return s.De
+}
+
+func (s *SchemasEnumArgDescription) GetEn() *string {
+	if s == nil {
 		return nil
 	}
-	return o.En
+	return s.En
 }
 
 // SchemasLabel - Human-readable label for the component arg
@@ -39,18 +50,29 @@ type SchemasLabel struct {
 	En *string `json:"en,omitempty"`
 }
 
-func (o *SchemasLabel) GetDe() string {
-	if o == nil {
-		return ""
-	}
-	return o.De
+func (s SchemasLabel) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
 }
 
-func (o *SchemasLabel) GetEn() *string {
-	if o == nil {
+func (s *SchemasLabel) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SchemasLabel) GetDe() string {
+	if s == nil {
+		return ""
+	}
+	return s.De
+}
+
+func (s *SchemasLabel) GetEn() *string {
+	if s == nil {
 		return nil
 	}
-	return o.En
+	return s.En
 }
 
 // SchemasEnumArgLabel - Display label for the option
@@ -61,18 +83,29 @@ type SchemasEnumArgLabel struct {
 	En *string `json:"en,omitempty"`
 }
 
-func (o *SchemasEnumArgLabel) GetDe() string {
-	if o == nil {
-		return ""
-	}
-	return o.De
+func (s SchemasEnumArgLabel) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
 }
 
-func (o *SchemasEnumArgLabel) GetEn() *string {
-	if o == nil {
+func (s *SchemasEnumArgLabel) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SchemasEnumArgLabel) GetDe() string {
+	if s == nil {
+		return ""
+	}
+	return s.De
+}
+
+func (s *SchemasEnumArgLabel) GetEn() *string {
+	if s == nil {
 		return nil
 	}
-	return o.En
+	return s.En
 }
 
 type SchemasOptions struct {
@@ -81,18 +114,29 @@ type SchemasOptions struct {
 	Label SchemasEnumArgLabel `json:"label"`
 }
 
-func (o *SchemasOptions) GetID() string {
-	if o == nil {
-		return ""
-	}
-	return o.ID
+func (s SchemasOptions) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
 }
 
-func (o *SchemasOptions) GetLabel() SchemasEnumArgLabel {
-	if o == nil {
+func (s *SchemasOptions) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "label"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SchemasOptions) GetID() string {
+	if s == nil {
+		return ""
+	}
+	return s.ID
+}
+
+func (s *SchemasOptions) GetLabel() SchemasEnumArgLabel {
+	if s == nil {
 		return SchemasEnumArgLabel{}
 	}
-	return o.Label
+	return s.Label
 }
 
 type SchemasType string
@@ -143,59 +187,59 @@ func (e EnumArgSchemas) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EnumArgSchemas) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"key", "label", "options", "type"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *EnumArgSchemas) GetDescription() *SchemasEnumArgDescription {
-	if o == nil {
+func (e *EnumArgSchemas) GetDescription() *SchemasEnumArgDescription {
+	if e == nil {
 		return nil
 	}
-	return o.Description
+	return e.Description
 }
 
-func (o *EnumArgSchemas) GetIsMulti() *bool {
-	if o == nil {
+func (e *EnumArgSchemas) GetIsMulti() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.IsMulti
+	return e.IsMulti
 }
 
-func (o *EnumArgSchemas) GetKey() string {
-	if o == nil {
+func (e *EnumArgSchemas) GetKey() string {
+	if e == nil {
 		return ""
 	}
-	return o.Key
+	return e.Key
 }
 
-func (o *EnumArgSchemas) GetLabel() SchemasLabel {
-	if o == nil {
+func (e *EnumArgSchemas) GetLabel() SchemasLabel {
+	if e == nil {
 		return SchemasLabel{}
 	}
-	return o.Label
+	return e.Label
 }
 
-func (o *EnumArgSchemas) GetOptions() []SchemasOptions {
-	if o == nil {
+func (e *EnumArgSchemas) GetOptions() []SchemasOptions {
+	if e == nil {
 		return []SchemasOptions{}
 	}
-	return o.Options
+	return e.Options
 }
 
-func (o *EnumArgSchemas) GetRequired() *bool {
-	if o == nil {
+func (e *EnumArgSchemas) GetRequired() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.Required
+	return e.Required
 }
 
-func (o *EnumArgSchemas) GetType() SchemasType {
-	if o == nil {
+func (e *EnumArgSchemas) GetType() SchemasType {
+	if e == nil {
 		return SchemasType("")
 	}
-	return o.Type
+	return e.Type
 }
 
 // Description of what this component arg does
@@ -206,18 +250,29 @@ type Description struct {
 	En *string `json:"en,omitempty"`
 }
 
-func (o *Description) GetDe() string {
-	if o == nil {
-		return ""
-	}
-	return o.De
+func (d Description) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
 }
 
-func (o *Description) GetEn() *string {
-	if o == nil {
+func (d *Description) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d *Description) GetDe() string {
+	if d == nil {
+		return ""
+	}
+	return d.De
+}
+
+func (d *Description) GetEn() *string {
+	if d == nil {
 		return nil
 	}
-	return o.En
+	return d.En
 }
 
 // Label - Human-readable label for the component arg
@@ -228,18 +283,29 @@ type Label struct {
 	En *string `json:"en,omitempty"`
 }
 
-func (o *Label) GetDe() string {
-	if o == nil {
-		return ""
-	}
-	return o.De
+func (l Label) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
 }
 
-func (o *Label) GetEn() *string {
-	if o == nil {
+func (l *Label) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (l *Label) GetDe() string {
+	if l == nil {
+		return ""
+	}
+	return l.De
+}
+
+func (l *Label) GetEn() *string {
+	if l == nil {
 		return nil
 	}
-	return o.En
+	return l.En
 }
 
 type Type string
@@ -286,45 +352,45 @@ func (s Schemas) MarshalJSON() ([]byte, error) {
 }
 
 func (s *Schemas) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"key", "label", "type"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *Schemas) GetDescription() *Description {
-	if o == nil {
+func (s *Schemas) GetDescription() *Description {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *Schemas) GetKey() string {
-	if o == nil {
+func (s *Schemas) GetKey() string {
+	if s == nil {
 		return ""
 	}
-	return o.Key
+	return s.Key
 }
 
-func (o *Schemas) GetLabel() Label {
-	if o == nil {
+func (s *Schemas) GetLabel() Label {
+	if s == nil {
 		return Label{}
 	}
-	return o.Label
+	return s.Label
 }
 
-func (o *Schemas) GetRequired() *bool {
-	if o == nil {
+func (s *Schemas) GetRequired() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Required
+	return s.Required
 }
 
-func (o *Schemas) GetType() Type {
-	if o == nil {
+func (s *Schemas) GetType() Type {
+	if s == nil {
 		return Type("")
 	}
-	return o.Type
+	return s.Type
 }
 
 // SchemasTextArgDescription - Description of what this component arg does
@@ -335,18 +401,29 @@ type SchemasTextArgDescription struct {
 	En *string `json:"en,omitempty"`
 }
 
-func (o *SchemasTextArgDescription) GetDe() string {
-	if o == nil {
-		return ""
-	}
-	return o.De
+func (s SchemasTextArgDescription) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
 }
 
-func (o *SchemasTextArgDescription) GetEn() *string {
-	if o == nil {
+func (s *SchemasTextArgDescription) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SchemasTextArgDescription) GetDe() string {
+	if s == nil {
+		return ""
+	}
+	return s.De
+}
+
+func (s *SchemasTextArgDescription) GetEn() *string {
+	if s == nil {
 		return nil
 	}
-	return o.En
+	return s.En
 }
 
 // SchemasTextArgLabel - Human-readable label for the component arg
@@ -357,18 +434,29 @@ type SchemasTextArgLabel struct {
 	En *string `json:"en,omitempty"`
 }
 
-func (o *SchemasTextArgLabel) GetDe() string {
-	if o == nil {
-		return ""
-	}
-	return o.De
+func (s SchemasTextArgLabel) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
 }
 
-func (o *SchemasTextArgLabel) GetEn() *string {
-	if o == nil {
+func (s *SchemasTextArgLabel) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"de"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SchemasTextArgLabel) GetDe() string {
+	if s == nil {
+		return ""
+	}
+	return s.De
+}
+
+func (s *SchemasTextArgLabel) GetEn() *string {
+	if s == nil {
 		return nil
 	}
-	return o.En
+	return s.En
 }
 
 type SchemasTextArgType string
@@ -415,45 +503,45 @@ func (t TextArgSchemas) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TextArgSchemas) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"key", "label", "type"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *TextArgSchemas) GetDescription() *SchemasTextArgDescription {
-	if o == nil {
+func (t *TextArgSchemas) GetDescription() *SchemasTextArgDescription {
+	if t == nil {
 		return nil
 	}
-	return o.Description
+	return t.Description
 }
 
-func (o *TextArgSchemas) GetKey() string {
-	if o == nil {
+func (t *TextArgSchemas) GetKey() string {
+	if t == nil {
 		return ""
 	}
-	return o.Key
+	return t.Key
 }
 
-func (o *TextArgSchemas) GetLabel() SchemasTextArgLabel {
-	if o == nil {
+func (t *TextArgSchemas) GetLabel() SchemasTextArgLabel {
+	if t == nil {
 		return SchemasTextArgLabel{}
 	}
-	return o.Label
+	return t.Label
 }
 
-func (o *TextArgSchemas) GetRequired() *bool {
-	if o == nil {
+func (t *TextArgSchemas) GetRequired() *bool {
+	if t == nil {
 		return nil
 	}
-	return o.Required
+	return t.Required
 }
 
-func (o *TextArgSchemas) GetType() SchemasTextArgType {
-	if o == nil {
+func (t *TextArgSchemas) GetType() SchemasTextArgType {
+	if t == nil {
 		return SchemasTextArgType("")
 	}
-	return o.Type
+	return t.Type
 }
 
 type JourneyBlockComponentArgsType string
@@ -465,9 +553,9 @@ const (
 )
 
 type JourneyBlockComponentArgs struct {
-	TextArgSchemas *TextArgSchemas `queryParam:"inline"`
-	Schemas        *Schemas        `queryParam:"inline"`
-	EnumArgSchemas *EnumArgSchemas `queryParam:"inline"`
+	TextArgSchemas *TextArgSchemas `queryParam:"inline" name:"JourneyBlockComponentArgs"`
+	Schemas        *Schemas        `queryParam:"inline" name:"JourneyBlockComponentArgs"`
+	EnumArgSchemas *EnumArgSchemas `queryParam:"inline" name:"JourneyBlockComponentArgs"`
 
 	Type JourneyBlockComponentArgsType
 }
@@ -522,7 +610,7 @@ func (u *JourneyBlockComponentArgs) UnmarshalJSON(data []byte) error {
 	switch dis.Type {
 	case "boolean":
 		schemas := new(Schemas)
-		if err := utils.UnmarshalJSON(data, &schemas, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &schemas, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Type == boolean) type Schemas within JourneyBlockComponentArgs: %w", string(data), err)
 		}
 
@@ -531,7 +619,7 @@ func (u *JourneyBlockComponentArgs) UnmarshalJSON(data []byte) error {
 		return nil
 	case "enum":
 		enumArgSchemas := new(EnumArgSchemas)
-		if err := utils.UnmarshalJSON(data, &enumArgSchemas, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &enumArgSchemas, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Type == enum) type EnumArgSchemas within JourneyBlockComponentArgs: %w", string(data), err)
 		}
 
@@ -540,7 +628,7 @@ func (u *JourneyBlockComponentArgs) UnmarshalJSON(data []byte) error {
 		return nil
 	case "text":
 		textArgSchemas := new(TextArgSchemas)
-		if err := utils.UnmarshalJSON(data, &textArgSchemas, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &textArgSchemas, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Type == text) type TextArgSchemas within JourneyBlockComponentArgs: %w", string(data), err)
 		}
 

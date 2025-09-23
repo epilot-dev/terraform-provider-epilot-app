@@ -11,11 +11,11 @@ type GetInstallationRequest struct {
 	AppID string `pathParam:"style=simple,explode=false,name=appId"`
 }
 
-func (o *GetInstallationRequest) GetAppID() string {
-	if o == nil {
+func (g *GetInstallationRequest) GetAppID() string {
+	if g == nil {
 		return ""
 	}
-	return o.AppID
+	return g.AppID
 }
 
 type GetInstallationResponse struct {
@@ -29,30 +29,30 @@ type GetInstallationResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *GetInstallationResponse) GetContentType() string {
-	if o == nil {
+func (g *GetInstallationResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetInstallationResponse) GetInstallation() *shared.Installation {
-	if o == nil {
+func (g *GetInstallationResponse) GetInstallation() *shared.Installation {
+	if g == nil {
 		return nil
 	}
-	return o.Installation
+	return g.Installation
 }
 
-func (o *GetInstallationResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetInstallationResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetInstallationResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetInstallationResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }

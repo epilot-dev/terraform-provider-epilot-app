@@ -13,11 +13,11 @@ type CreateZipUploadURLRequestBody struct {
 	Filename *string `json:"filename,omitempty"`
 }
 
-func (o *CreateZipUploadURLRequestBody) GetFilename() *string {
-	if o == nil {
+func (c *CreateZipUploadURLRequestBody) GetFilename() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Filename
+	return c.Filename
 }
 
 type CreateZipUploadURLRequest struct {
@@ -26,18 +26,18 @@ type CreateZipUploadURLRequest struct {
 	AppID string `pathParam:"style=simple,explode=false,name=appId"`
 }
 
-func (o *CreateZipUploadURLRequest) GetRequestBody() *CreateZipUploadURLRequestBody {
-	if o == nil {
+func (c *CreateZipUploadURLRequest) GetRequestBody() *CreateZipUploadURLRequestBody {
+	if c == nil {
 		return nil
 	}
-	return o.RequestBody
+	return c.RequestBody
 }
 
-func (o *CreateZipUploadURLRequest) GetAppID() string {
-	if o == nil {
+func (c *CreateZipUploadURLRequest) GetAppID() string {
+	if c == nil {
 		return ""
 	}
-	return o.AppID
+	return c.AppID
 }
 
 // CreateZipUploadURLResponseBody - Upload URL generated successfully
@@ -56,38 +56,38 @@ func (c CreateZipUploadURLResponseBody) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateZipUploadURLResponseBody) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"artifact_url", "upload_url"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *CreateZipUploadURLResponseBody) GetArtifactURL() string {
-	if o == nil {
+func (c *CreateZipUploadURLResponseBody) GetArtifactURL() string {
+	if c == nil {
 		return ""
 	}
-	return o.ArtifactURL
+	return c.ArtifactURL
 }
 
-func (o *CreateZipUploadURLResponseBody) GetExpiresAt() *time.Time {
-	if o == nil {
+func (c *CreateZipUploadURLResponseBody) GetExpiresAt() *time.Time {
+	if c == nil {
 		return nil
 	}
-	return o.ExpiresAt
+	return c.ExpiresAt
 }
 
-func (o *CreateZipUploadURLResponseBody) GetS3ref() *shared.S3Reference {
-	if o == nil {
+func (c *CreateZipUploadURLResponseBody) GetS3ref() *shared.S3Reference {
+	if c == nil {
 		return nil
 	}
-	return o.S3ref
+	return c.S3ref
 }
 
-func (o *CreateZipUploadURLResponseBody) GetUploadURL() string {
-	if o == nil {
+func (c *CreateZipUploadURLResponseBody) GetUploadURL() string {
+	if c == nil {
 		return ""
 	}
-	return o.UploadURL
+	return c.UploadURL
 }
 
 type CreateZipUploadURLResponse struct {
@@ -101,30 +101,30 @@ type CreateZipUploadURLResponse struct {
 	Object *CreateZipUploadURLResponseBody
 }
 
-func (o *CreateZipUploadURLResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateZipUploadURLResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateZipUploadURLResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateZipUploadURLResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateZipUploadURLResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateZipUploadURLResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateZipUploadURLResponse) GetObject() *CreateZipUploadURLResponseBody {
-	if o == nil {
+func (c *CreateZipUploadURLResponse) GetObject() *CreateZipUploadURLResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }

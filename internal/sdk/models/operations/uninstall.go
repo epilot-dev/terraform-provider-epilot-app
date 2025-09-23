@@ -10,11 +10,11 @@ type UninstallRequest struct {
 	AppID string `pathParam:"style=simple,explode=false,name=appId"`
 }
 
-func (o *UninstallRequest) GetAppID() string {
-	if o == nil {
+func (u *UninstallRequest) GetAppID() string {
+	if u == nil {
 		return ""
 	}
-	return o.AppID
+	return u.AppID
 }
 
 type UninstallResponse struct {
@@ -26,23 +26,23 @@ type UninstallResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *UninstallResponse) GetContentType() string {
-	if o == nil {
+func (u *UninstallResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UninstallResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UninstallResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UninstallResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UninstallResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }

@@ -22,31 +22,31 @@ func (l ListVersionsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListVersionsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"appId"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *ListVersionsRequest) GetAppID() string {
-	if o == nil {
+func (l *ListVersionsRequest) GetAppID() string {
+	if l == nil {
 		return ""
 	}
-	return o.AppID
+	return l.AppID
 }
 
-func (o *ListVersionsRequest) GetPage() *int64 {
-	if o == nil {
+func (l *ListVersionsRequest) GetPage() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.Page
+	return l.Page
 }
 
-func (o *ListVersionsRequest) GetPageSize() *int64 {
-	if o == nil {
+func (l *ListVersionsRequest) GetPageSize() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.PageSize
+	return l.PageSize
 }
 
 type ListVersionsPagination struct {
@@ -55,25 +55,25 @@ type ListVersionsPagination struct {
 	Total    *int64 `json:"total,omitempty"`
 }
 
-func (o *ListVersionsPagination) GetPage() *int64 {
-	if o == nil {
+func (l *ListVersionsPagination) GetPage() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.Page
+	return l.Page
 }
 
-func (o *ListVersionsPagination) GetPageSize() *int64 {
-	if o == nil {
+func (l *ListVersionsPagination) GetPageSize() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.PageSize
+	return l.PageSize
 }
 
-func (o *ListVersionsPagination) GetTotal() *int64 {
-	if o == nil {
+func (l *ListVersionsPagination) GetTotal() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.Total
+	return l.Total
 }
 
 // ListVersionsResponseBody - List of app versions
@@ -82,18 +82,18 @@ type ListVersionsResponseBody struct {
 	Versions   []shared.ConfigurationVersion `json:"versions,omitempty"`
 }
 
-func (o *ListVersionsResponseBody) GetPagination() *ListVersionsPagination {
-	if o == nil {
+func (l *ListVersionsResponseBody) GetPagination() *ListVersionsPagination {
+	if l == nil {
 		return nil
 	}
-	return o.Pagination
+	return l.Pagination
 }
 
-func (o *ListVersionsResponseBody) GetVersions() []shared.ConfigurationVersion {
-	if o == nil {
+func (l *ListVersionsResponseBody) GetVersions() []shared.ConfigurationVersion {
+	if l == nil {
 		return nil
 	}
-	return o.Versions
+	return l.Versions
 }
 
 type ListVersionsResponse struct {
@@ -107,30 +107,30 @@ type ListVersionsResponse struct {
 	Object *ListVersionsResponseBody
 }
 
-func (o *ListVersionsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListVersionsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListVersionsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListVersionsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListVersionsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListVersionsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListVersionsResponse) GetObject() *ListVersionsResponseBody {
-	if o == nil {
+func (l *ListVersionsResponse) GetObject() *ListVersionsResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }

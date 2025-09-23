@@ -15,18 +15,18 @@ type CreateBundleUploadURLRequest struct {
 	AppID string `pathParam:"style=simple,explode=false,name=appId"`
 }
 
-func (o *CreateBundleUploadURLRequest) GetCreateBundlePresignedRequest() shared.CreateBundlePresignedRequest {
-	if o == nil {
+func (c *CreateBundleUploadURLRequest) GetCreateBundlePresignedRequest() shared.CreateBundlePresignedRequest {
+	if c == nil {
 		return shared.CreateBundlePresignedRequest{}
 	}
-	return o.CreateBundlePresignedRequest
+	return c.CreateBundlePresignedRequest
 }
 
-func (o *CreateBundleUploadURLRequest) GetAppID() string {
-	if o == nil {
+func (c *CreateBundleUploadURLRequest) GetAppID() string {
+	if c == nil {
 		return ""
 	}
-	return o.AppID
+	return c.AppID
 }
 
 // CreateBundleUploadURLResponseBody - Upload URL generated successfully
@@ -47,45 +47,45 @@ func (c CreateBundleUploadURLResponseBody) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateBundleUploadURLResponseBody) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"upload_url"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *CreateBundleUploadURLResponseBody) GetComponentID() *string {
-	if o == nil {
+func (c *CreateBundleUploadURLResponseBody) GetComponentID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ComponentID
+	return c.ComponentID
 }
 
-func (o *CreateBundleUploadURLResponseBody) GetComponentURL() *string {
-	if o == nil {
+func (c *CreateBundleUploadURLResponseBody) GetComponentURL() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ComponentURL
+	return c.ComponentURL
 }
 
-func (o *CreateBundleUploadURLResponseBody) GetExpiresAt() *time.Time {
-	if o == nil {
+func (c *CreateBundleUploadURLResponseBody) GetExpiresAt() *time.Time {
+	if c == nil {
 		return nil
 	}
-	return o.ExpiresAt
+	return c.ExpiresAt
 }
 
-func (o *CreateBundleUploadURLResponseBody) GetS3ref() *shared.S3Reference {
-	if o == nil {
+func (c *CreateBundleUploadURLResponseBody) GetS3ref() *shared.S3Reference {
+	if c == nil {
 		return nil
 	}
-	return o.S3ref
+	return c.S3ref
 }
 
-func (o *CreateBundleUploadURLResponseBody) GetUploadURL() string {
-	if o == nil {
+func (c *CreateBundleUploadURLResponseBody) GetUploadURL() string {
+	if c == nil {
 		return ""
 	}
-	return o.UploadURL
+	return c.UploadURL
 }
 
 type CreateBundleUploadURLResponse struct {
@@ -99,30 +99,30 @@ type CreateBundleUploadURLResponse struct {
 	Object *CreateBundleUploadURLResponseBody
 }
 
-func (o *CreateBundleUploadURLResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateBundleUploadURLResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateBundleUploadURLResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateBundleUploadURLResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateBundleUploadURLResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateBundleUploadURLResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateBundleUploadURLResponse) GetObject() *CreateBundleUploadURLResponseBody {
-	if o == nil {
+func (c *CreateBundleUploadURLResponse) GetObject() *CreateBundleUploadURLResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }

@@ -20,32 +20,32 @@ type ConfigurationAudit struct {
 	UpdatedBy *string `json:"updated_by,omitempty"`
 }
 
-func (o *ConfigurationAudit) GetCreatedAt() *string {
-	if o == nil {
+func (c *ConfigurationAudit) GetCreatedAt() *string {
+	if c == nil {
 		return nil
 	}
-	return o.CreatedAt
+	return c.CreatedAt
 }
 
-func (o *ConfigurationAudit) GetCreatedBy() *string {
-	if o == nil {
+func (c *ConfigurationAudit) GetCreatedBy() *string {
+	if c == nil {
 		return nil
 	}
-	return o.CreatedBy
+	return c.CreatedBy
 }
 
-func (o *ConfigurationAudit) GetUpdatedAt() *string {
-	if o == nil {
+func (c *ConfigurationAudit) GetUpdatedAt() *string {
+	if c == nil {
 		return nil
 	}
-	return o.UpdatedAt
+	return c.UpdatedAt
 }
 
-func (o *ConfigurationAudit) GetUpdatedBy() *string {
-	if o == nil {
+func (c *ConfigurationAudit) GetUpdatedBy() *string {
+	if c == nil {
 		return nil
 	}
-	return o.UpdatedBy
+	return c.UpdatedBy
 }
 
 // ConfigurationDescription - Markdown description of the app.
@@ -56,18 +56,18 @@ type ConfigurationDescription struct {
 	En *string `json:"en,omitempty"`
 }
 
-func (o *ConfigurationDescription) GetDe() string {
-	if o == nil {
+func (c *ConfigurationDescription) GetDe() string {
+	if c == nil {
 		return ""
 	}
-	return o.De
+	return c.De
 }
 
-func (o *ConfigurationDescription) GetEn() *string {
-	if o == nil {
+func (c *ConfigurationDescription) GetEn() *string {
+	if c == nil {
 		return nil
 	}
-	return o.En
+	return c.En
 }
 
 // Notifications - Configuration for developer notifications
@@ -78,18 +78,18 @@ type Notifications struct {
 	Events []NotificationEvent `json:"events,omitempty"`
 }
 
-func (o *Notifications) GetEmail() *string {
-	if o == nil {
+func (n *Notifications) GetEmail() *string {
+	if n == nil {
 		return nil
 	}
-	return o.Email
+	return n.Email
 }
 
-func (o *Notifications) GetEvents() []NotificationEvent {
-	if o == nil {
+func (n *Notifications) GetEvents() []NotificationEvent {
+	if n == nil {
 		return nil
 	}
-	return o.Events
+	return n.Events
 }
 
 type ConfigurationPricingType string
@@ -137,18 +137,18 @@ type ConfigurationPricing struct {
 	PricingType      *ConfigurationPricingType `json:"pricing_type,omitempty"`
 }
 
-func (o *ConfigurationPricing) GetBillingFrequency() *BillingFrequency {
-	if o == nil {
+func (c *ConfigurationPricing) GetBillingFrequency() *BillingFrequency {
+	if c == nil {
 		return nil
 	}
-	return o.BillingFrequency
+	return c.BillingFrequency
 }
 
-func (o *ConfigurationPricing) GetPricingType() *ConfigurationPricingType {
-	if o == nil {
+func (c *ConfigurationPricing) GetPricingType() *ConfigurationPricingType {
+	if c == nil {
 		return nil
 	}
-	return o.PricingType
+	return c.PricingType
 }
 
 // ReviewStatus - Status of the review process
@@ -196,46 +196,46 @@ type VersionAudit struct {
 	VersionedBy *string `json:"versioned_by,omitempty"`
 }
 
-func (o *VersionAudit) GetCreatedAt() *string {
-	if o == nil {
+func (v *VersionAudit) GetCreatedAt() *string {
+	if v == nil {
 		return nil
 	}
-	return o.CreatedAt
+	return v.CreatedAt
 }
 
-func (o *VersionAudit) GetCreatedBy() *string {
-	if o == nil {
+func (v *VersionAudit) GetCreatedBy() *string {
+	if v == nil {
 		return nil
 	}
-	return o.CreatedBy
+	return v.CreatedBy
 }
 
-func (o *VersionAudit) GetUpdatedAt() *string {
-	if o == nil {
+func (v *VersionAudit) GetUpdatedAt() *string {
+	if v == nil {
 		return nil
 	}
-	return o.UpdatedAt
+	return v.UpdatedAt
 }
 
-func (o *VersionAudit) GetUpdatedBy() *string {
-	if o == nil {
+func (v *VersionAudit) GetUpdatedBy() *string {
+	if v == nil {
 		return nil
 	}
-	return o.UpdatedBy
+	return v.UpdatedBy
 }
 
-func (o *VersionAudit) GetVersionedAt() *string {
-	if o == nil {
+func (v *VersionAudit) GetVersionedAt() *string {
+	if v == nil {
 		return nil
 	}
-	return o.VersionedAt
+	return v.VersionedAt
 }
 
-func (o *VersionAudit) GetVersionedBy() *string {
-	if o == nil {
+func (v *VersionAudit) GetVersionedBy() *string {
+	if v == nil {
 		return nil
 	}
-	return o.VersionedBy
+	return v.VersionedBy
 }
 
 // Configuration of the published app
@@ -293,204 +293,204 @@ func (c Configuration) MarshalJSON() ([]byte, error) {
 }
 
 func (c *Configuration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"app_id", "components", "description", "latest_version", "name", "owner_org_id", "version", "version_audit", "versions"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *Configuration) GetAppID() string {
-	if o == nil {
+func (c *Configuration) GetAppID() string {
+	if c == nil {
 		return ""
 	}
-	return o.AppID
+	return c.AppID
 }
 
-func (o *Configuration) GetAuthor() *Author {
-	if o == nil {
+func (c *Configuration) GetAuthor() *Author {
+	if c == nil {
 		return nil
 	}
-	return o.Author
+	return c.Author
 }
 
-func (o *Configuration) GetBlueprintRef() *BlueprintRef {
-	if o == nil {
+func (c *Configuration) GetBlueprintRef() *BlueprintRef {
+	if c == nil {
 		return nil
 	}
-	return o.BlueprintRef
+	return c.BlueprintRef
 }
 
-func (o *Configuration) GetCategory() *string {
-	if o == nil {
+func (c *Configuration) GetCategory() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Category
+	return c.Category
 }
 
-func (o *Configuration) GetChangelog() *string {
-	if o == nil {
+func (c *Configuration) GetChangelog() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Changelog
+	return c.Changelog
 }
 
-func (o *Configuration) GetComponents() []BaseComponent {
-	if o == nil {
+func (c *Configuration) GetComponents() []BaseComponent {
+	if c == nil {
 		return []BaseComponent{}
 	}
-	return o.Components
+	return c.Components
 }
 
-func (o *Configuration) GetConfigurationAudit() *ConfigurationAudit {
-	if o == nil {
+func (c *Configuration) GetConfigurationAudit() *ConfigurationAudit {
+	if c == nil {
 		return nil
 	}
-	return o.ConfigurationAudit
+	return c.ConfigurationAudit
 }
 
-func (o *Configuration) GetDeprecatedAt() *string {
-	if o == nil {
+func (c *Configuration) GetDeprecatedAt() *string {
+	if c == nil {
 		return nil
 	}
-	return o.DeprecatedAt
+	return c.DeprecatedAt
 }
 
-func (o *Configuration) GetDescription() ConfigurationDescription {
-	if o == nil {
+func (c *Configuration) GetDescription() ConfigurationDescription {
+	if c == nil {
 		return ConfigurationDescription{}
 	}
-	return o.Description
+	return c.Description
 }
 
-func (o *Configuration) GetDevMode() *bool {
-	if o == nil {
+func (c *Configuration) GetDevMode() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.DevMode
+	return c.DevMode
 }
 
-func (o *Configuration) GetDocumentationURL() *string {
-	if o == nil {
+func (c *Configuration) GetDocumentationURL() *string {
+	if c == nil {
 		return nil
 	}
-	return o.DocumentationURL
+	return c.DocumentationURL
 }
 
-func (o *Configuration) GetIconURL() *string {
-	if o == nil {
+func (c *Configuration) GetIconURL() *string {
+	if c == nil {
 		return nil
 	}
-	return o.IconURL
+	return c.IconURL
 }
 
-func (o *Configuration) GetInternal() *bool {
-	if o == nil {
+func (c *Configuration) GetInternal() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Internal
+	return c.Internal
 }
 
-func (o *Configuration) GetIsBeta() *bool {
-	if o == nil {
+func (c *Configuration) GetIsBeta() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.IsBeta
+	return c.IsBeta
 }
 
-func (o *Configuration) GetLatestVersion() string {
-	if o == nil {
+func (c *Configuration) GetLatestVersion() string {
+	if c == nil {
 		return ""
 	}
-	return o.LatestVersion
+	return c.LatestVersion
 }
 
-func (o *Configuration) GetName() string {
-	if o == nil {
+func (c *Configuration) GetName() string {
+	if c == nil {
 		return ""
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *Configuration) GetNotifications() *Notifications {
-	if o == nil {
+func (c *Configuration) GetNotifications() *Notifications {
+	if c == nil {
 		return nil
 	}
-	return o.Notifications
+	return c.Notifications
 }
 
-func (o *Configuration) GetOwnerOrgID() string {
-	if o == nil {
+func (c *Configuration) GetOwnerOrgID() string {
+	if c == nil {
 		return ""
 	}
-	return o.OwnerOrgID
+	return c.OwnerOrgID
 }
 
-func (o *Configuration) GetPending() *bool {
-	if o == nil {
+func (c *Configuration) GetPending() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Pending
+	return c.Pending
 }
 
-func (o *Configuration) GetPricing() *ConfigurationPricing {
-	if o == nil {
+func (c *Configuration) GetPricing() *ConfigurationPricing {
+	if c == nil {
 		return nil
 	}
-	return o.Pricing
+	return c.Pricing
 }
 
-func (o *Configuration) GetPublic() *bool {
-	if o == nil {
+func (c *Configuration) GetPublic() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Public
+	return c.Public
 }
 
-func (o *Configuration) GetPublicVersions() []string {
-	if o == nil {
+func (c *Configuration) GetPublicVersions() []string {
+	if c == nil {
 		return nil
 	}
-	return o.PublicVersions
+	return c.PublicVersions
 }
 
-func (o *Configuration) GetReviewStatus() *ReviewStatus {
-	if o == nil {
+func (c *Configuration) GetReviewStatus() *ReviewStatus {
+	if c == nil {
 		return nil
 	}
-	return o.ReviewStatus
+	return c.ReviewStatus
 }
 
-func (o *Configuration) GetRole() *Role {
-	if o == nil {
+func (c *Configuration) GetRole() *Role {
+	if c == nil {
 		return nil
 	}
-	return o.Role
+	return c.Role
 }
 
-func (o *Configuration) GetSupportEmail() *string {
-	if o == nil {
+func (c *Configuration) GetSupportEmail() *string {
+	if c == nil {
 		return nil
 	}
-	return o.SupportEmail
+	return c.SupportEmail
 }
 
-func (o *Configuration) GetVersion() string {
-	if o == nil {
+func (c *Configuration) GetVersion() string {
+	if c == nil {
 		return ""
 	}
-	return o.Version
+	return c.Version
 }
 
-func (o *Configuration) GetVersionAudit() VersionAudit {
-	if o == nil {
+func (c *Configuration) GetVersionAudit() VersionAudit {
+	if c == nil {
 		return VersionAudit{}
 	}
-	return o.VersionAudit
+	return c.VersionAudit
 }
 
-func (o *Configuration) GetVersions() []string {
-	if o == nil {
+func (c *Configuration) GetVersions() []string {
+	if c == nil {
 		return []string{}
 	}
-	return o.Versions
+	return c.Versions
 }

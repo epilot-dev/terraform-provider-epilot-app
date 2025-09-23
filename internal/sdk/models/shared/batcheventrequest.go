@@ -2,13 +2,28 @@
 
 package shared
 
+import (
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
+)
+
 type BatchEventRequest struct {
 	Events []AppEventDataInput `json:"events"`
 }
 
-func (o *BatchEventRequest) GetEvents() []AppEventDataInput {
-	if o == nil {
+func (b BatchEventRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(b, "", false)
+}
+
+func (b *BatchEventRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &b, "", false, []string{"events"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (b *BatchEventRequest) GetEvents() []AppEventDataInput {
+	if b == nil {
 		return []AppEventDataInput{}
 	}
-	return o.Events
+	return b.Events
 }

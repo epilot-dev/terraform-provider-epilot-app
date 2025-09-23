@@ -11,23 +11,23 @@ type Author struct {
 	Name *string `json:"name,omitempty"`
 }
 
-func (o *Author) GetCompany() string {
-	if o == nil {
+func (a *Author) GetCompany() string {
+	if a == nil {
 		return ""
 	}
-	return o.Company
+	return a.Company
 }
 
-func (o *Author) GetEmail() *string {
-	if o == nil {
+func (a *Author) GetEmail() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Email
+	return a.Email
 }
 
-func (o *Author) GetName() *string {
-	if o == nil {
+func (a *Author) GetName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Name
+	return a.Name
 }

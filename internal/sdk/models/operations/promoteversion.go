@@ -12,18 +12,18 @@ type PromoteVersionRequest struct {
 	Version string `pathParam:"style=simple,explode=false,name=version"`
 }
 
-func (o *PromoteVersionRequest) GetAppID() string {
-	if o == nil {
+func (p *PromoteVersionRequest) GetAppID() string {
+	if p == nil {
 		return ""
 	}
-	return o.AppID
+	return p.AppID
 }
 
-func (o *PromoteVersionRequest) GetVersion() string {
-	if o == nil {
+func (p *PromoteVersionRequest) GetVersion() string {
+	if p == nil {
 		return ""
 	}
-	return o.Version
+	return p.Version
 }
 
 type PromoteVersionResponse struct {
@@ -37,30 +37,30 @@ type PromoteVersionResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *PromoteVersionResponse) GetContentType() string {
-	if o == nil {
+func (p *PromoteVersionResponse) GetContentType() string {
+	if p == nil {
 		return ""
 	}
-	return o.ContentType
+	return p.ContentType
 }
 
-func (o *PromoteVersionResponse) GetInstallation() *shared.Installation {
-	if o == nil {
+func (p *PromoteVersionResponse) GetInstallation() *shared.Installation {
+	if p == nil {
 		return nil
 	}
-	return o.Installation
+	return p.Installation
 }
 
-func (o *PromoteVersionResponse) GetStatusCode() int {
-	if o == nil {
+func (p *PromoteVersionResponse) GetStatusCode() int {
+	if p == nil {
 		return 0
 	}
-	return o.StatusCode
+	return p.StatusCode
 }
 
-func (o *PromoteVersionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (p *PromoteVersionResponse) GetRawResponse() *http.Response {
+	if p == nil {
 		return nil
 	}
-	return o.RawResponse
+	return p.RawResponse
 }

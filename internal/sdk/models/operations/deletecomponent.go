@@ -15,25 +15,25 @@ type DeleteComponentRequest struct {
 	Version string `pathParam:"style=simple,explode=false,name=version"`
 }
 
-func (o *DeleteComponentRequest) GetAppID() string {
-	if o == nil {
+func (d *DeleteComponentRequest) GetAppID() string {
+	if d == nil {
 		return ""
 	}
-	return o.AppID
+	return d.AppID
 }
 
-func (o *DeleteComponentRequest) GetComponentID() string {
-	if o == nil {
+func (d *DeleteComponentRequest) GetComponentID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ComponentID
+	return d.ComponentID
 }
 
-func (o *DeleteComponentRequest) GetVersion() string {
-	if o == nil {
+func (d *DeleteComponentRequest) GetVersion() string {
+	if d == nil {
 		return ""
 	}
-	return o.Version
+	return d.Version
 }
 
 type DeleteComponentResponse struct {
@@ -45,23 +45,23 @@ type DeleteComponentResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *DeleteComponentResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteComponentResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteComponentResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteComponentResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteComponentResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteComponentResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }

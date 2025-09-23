@@ -9,16 +9,16 @@ type Role struct {
 	ID *string `json:"id,omitempty"`
 }
 
-func (o *Role) GetGrants() []Grants {
-	if o == nil {
+func (r *Role) GetGrants() []Grants {
+	if r == nil {
 		return nil
 	}
-	return o.Grants
+	return r.Grants
 }
 
-func (o *Role) GetID() *string {
-	if o == nil {
+func (r *Role) GetID() *string {
+	if r == nil {
 		return nil
 	}
-	return o.ID
+	return r.ID
 }

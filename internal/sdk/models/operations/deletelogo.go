@@ -11,11 +11,11 @@ type DeleteLogoRequest struct {
 	AppID string `pathParam:"style=simple,explode=false,name=appId"`
 }
 
-func (o *DeleteLogoRequest) GetAppID() string {
-	if o == nil {
+func (d *DeleteLogoRequest) GetAppID() string {
+	if d == nil {
 		return ""
 	}
-	return o.AppID
+	return d.AppID
 }
 
 type DeleteLogoResponse struct {
@@ -27,23 +27,23 @@ type DeleteLogoResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *DeleteLogoResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteLogoResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteLogoResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteLogoResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteLogoResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteLogoResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }

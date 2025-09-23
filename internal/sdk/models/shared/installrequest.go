@@ -11,23 +11,23 @@ type InstallRequest struct {
 	Version *string `json:"version,omitempty"`
 }
 
-func (o *InstallRequest) GetManifest() []string {
-	if o == nil {
+func (i *InstallRequest) GetManifest() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Manifest
+	return i.Manifest
 }
 
-func (o *InstallRequest) GetOptionValues() []OptionsRef {
-	if o == nil {
+func (i *InstallRequest) GetOptionValues() []OptionsRef {
+	if i == nil {
 		return nil
 	}
-	return o.OptionValues
+	return i.OptionValues
 }
 
-func (o *InstallRequest) GetVersion() *string {
-	if o == nil {
+func (i *InstallRequest) GetVersion() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Version
+	return i.Version
 }

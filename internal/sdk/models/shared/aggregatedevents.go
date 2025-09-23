@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
 )
 
 type Metrics struct {
@@ -12,18 +13,29 @@ type Metrics struct {
 	ErrorRate *float64 `json:"error_rate,omitempty"`
 }
 
-func (o *Metrics) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
+func (m Metrics) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(m, "", false)
 }
 
-func (o *Metrics) GetErrorRate() *float64 {
-	if o == nil {
+func (m *Metrics) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &m, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *Metrics) GetCount() *int64 {
+	if m == nil {
 		return nil
 	}
-	return o.ErrorRate
+	return m.Count
+}
+
+func (m *Metrics) GetErrorRate() *float64 {
+	if m == nil {
+		return nil
+	}
+	return m.ErrorRate
 }
 
 type Groups struct {
@@ -32,18 +44,29 @@ type Groups struct {
 	Metrics    *Metrics       `json:"metrics,omitempty"`
 }
 
-func (o *Groups) GetDimensions() map[string]any {
-	if o == nil {
-		return nil
-	}
-	return o.Dimensions
+func (g Groups) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
 }
 
-func (o *Groups) GetMetrics() *Metrics {
-	if o == nil {
+func (g *Groups) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (g *Groups) GetDimensions() map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Metrics
+	return g.Dimensions
+}
+
+func (g *Groups) GetMetrics() *Metrics {
+	if g == nil {
+		return nil
+	}
+	return g.Metrics
 }
 
 type AggregatedEventsType string
@@ -74,16 +97,27 @@ type AggregatedEvents struct {
 	Type   *AggregatedEventsType `json:"type,omitempty"`
 }
 
-func (o *AggregatedEvents) GetGroups() []Groups {
-	if o == nil {
-		return nil
-	}
-	return o.Groups
+func (a AggregatedEvents) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
 }
 
-func (o *AggregatedEvents) GetType() *AggregatedEventsType {
-	if o == nil {
+func (a *AggregatedEvents) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *AggregatedEvents) GetGroups() []Groups {
+	if a == nil {
 		return nil
 	}
-	return o.Type
+	return a.Groups
+}
+
+func (a *AggregatedEvents) GetType() *AggregatedEventsType {
+	if a == nil {
+		return nil
+	}
+	return a.Type
 }

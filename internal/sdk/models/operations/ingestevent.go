@@ -18,8 +18,8 @@ const (
 )
 
 type IngestEventRequestBody struct {
-	AppEventDataInput *shared.AppEventDataInput `queryParam:"inline"`
-	BatchEventRequest *shared.BatchEventRequest `queryParam:"inline"`
+	AppEventDataInput *shared.AppEventDataInput `queryParam:"inline" name:"requestBody"`
+	BatchEventRequest *shared.BatchEventRequest `queryParam:"inline" name:"requestBody"`
 
 	Type IngestEventRequestBodyType
 }
@@ -44,17 +44,17 @@ func CreateIngestEventRequestBodyBatchEventRequest(batchEventRequest shared.Batc
 
 func (u *IngestEventRequestBody) UnmarshalJSON(data []byte) error {
 
-	var batchEventRequest shared.BatchEventRequest = shared.BatchEventRequest{}
-	if err := utils.UnmarshalJSON(data, &batchEventRequest, "", true, true); err == nil {
-		u.BatchEventRequest = &batchEventRequest
-		u.Type = IngestEventRequestBodyTypeBatchEventRequest
+	var appEventDataInput shared.AppEventDataInput = shared.AppEventDataInput{}
+	if err := utils.UnmarshalJSON(data, &appEventDataInput, "", true, nil); err == nil {
+		u.AppEventDataInput = &appEventDataInput
+		u.Type = IngestEventRequestBodyTypeAppEventDataInput
 		return nil
 	}
 
-	var appEventDataInput shared.AppEventDataInput = shared.AppEventDataInput{}
-	if err := utils.UnmarshalJSON(data, &appEventDataInput, "", true, true); err == nil {
-		u.AppEventDataInput = &appEventDataInput
-		u.Type = IngestEventRequestBodyTypeAppEventDataInput
+	var batchEventRequest shared.BatchEventRequest = shared.BatchEventRequest{}
+	if err := utils.UnmarshalJSON(data, &batchEventRequest, "", true, nil); err == nil {
+		u.BatchEventRequest = &batchEventRequest
+		u.Type = IngestEventRequestBodyTypeBatchEventRequest
 		return nil
 	}
 
@@ -82,23 +82,23 @@ type IngestEventResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *IngestEventResponse) GetContentType() string {
-	if o == nil {
+func (i *IngestEventResponse) GetContentType() string {
+	if i == nil {
 		return ""
 	}
-	return o.ContentType
+	return i.ContentType
 }
 
-func (o *IngestEventResponse) GetStatusCode() int {
-	if o == nil {
+func (i *IngestEventResponse) GetStatusCode() int {
+	if i == nil {
 		return 0
 	}
-	return o.StatusCode
+	return i.StatusCode
 }
 
-func (o *IngestEventResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (i *IngestEventResponse) GetRawResponse() *http.Response {
+	if i == nil {
 		return nil
 	}
-	return o.RawResponse
+	return i.RawResponse
 }

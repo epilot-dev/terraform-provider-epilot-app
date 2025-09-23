@@ -9,16 +9,16 @@ type NotificationConfig struct {
 	Events []NotificationEvent `json:"events,omitempty"`
 }
 
-func (o *NotificationConfig) GetEmail() *string {
-	if o == nil {
+func (n *NotificationConfig) GetEmail() *string {
+	if n == nil {
 		return nil
 	}
-	return o.Email
+	return n.Email
 }
 
-func (o *NotificationConfig) GetEvents() []NotificationEvent {
-	if o == nil {
+func (n *NotificationConfig) GetEvents() []NotificationEvent {
+	if n == nil {
 		return nil
 	}
-	return o.Events
+	return n.Events
 }

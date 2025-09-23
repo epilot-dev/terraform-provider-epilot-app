@@ -14,18 +14,18 @@ type GetPublicConfigurationRequest struct {
 	Version *string `queryParam:"style=form,explode=true,name=version"`
 }
 
-func (o *GetPublicConfigurationRequest) GetAppID() string {
-	if o == nil {
+func (g *GetPublicConfigurationRequest) GetAppID() string {
+	if g == nil {
 		return ""
 	}
-	return o.AppID
+	return g.AppID
 }
 
-func (o *GetPublicConfigurationRequest) GetVersion() *string {
-	if o == nil {
+func (g *GetPublicConfigurationRequest) GetVersion() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Version
+	return g.Version
 }
 
 type GetPublicConfigurationResponse struct {
@@ -39,30 +39,30 @@ type GetPublicConfigurationResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *GetPublicConfigurationResponse) GetContentType() string {
-	if o == nil {
+func (g *GetPublicConfigurationResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetPublicConfigurationResponse) GetPublicConfiguration() *shared.PublicConfiguration {
-	if o == nil {
+func (g *GetPublicConfigurationResponse) GetPublicConfiguration() *shared.PublicConfiguration {
+	if g == nil {
 		return nil
 	}
-	return o.PublicConfiguration
+	return g.PublicConfiguration
 }
 
-func (o *GetPublicConfigurationResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetPublicConfigurationResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetPublicConfigurationResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetPublicConfigurationResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }

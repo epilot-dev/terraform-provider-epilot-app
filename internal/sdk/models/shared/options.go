@@ -50,9 +50,9 @@ const (
 )
 
 type OptionsValue struct {
-	Str     *string  `queryParam:"inline"`
-	Boolean *bool    `queryParam:"inline"`
-	Number  *float64 `queryParam:"inline"`
+	Str     *string  `queryParam:"inline" name:"value"`
+	Boolean *bool    `queryParam:"inline" name:"value"`
+	Number  *float64 `queryParam:"inline" name:"value"`
 
 	Type OptionsValueType
 }
@@ -87,21 +87,21 @@ func CreateOptionsValueNumber(number float64) OptionsValue {
 func (u *OptionsValue) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = OptionsValueTypeStr
 		return nil
 	}
 
 	var boolean bool = false
-	if err := utils.UnmarshalJSON(data, &boolean, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &boolean, "", true, nil); err == nil {
 		u.Boolean = &boolean
 		u.Type = OptionsValueTypeBoolean
 		return nil
 	}
 
 	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		u.Number = &number
 		u.Type = OptionsValueTypeNumber
 		return nil
@@ -139,6 +139,17 @@ type Options struct {
 	Type     OptionsType `json:"type"`
 	// The configured value for this option. Is only present when the component is installed.
 	Value *OptionsValue `json:"value,omitempty"`
+}
+
+func (o Options) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *Options) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"key", "type"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *Options) GetDescription() *string {

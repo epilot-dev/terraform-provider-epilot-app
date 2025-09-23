@@ -51,16 +51,16 @@ type Pricing struct {
 	PricingType      *PricingType      `json:"pricing_type,omitempty"`
 }
 
-func (o *Pricing) GetBillingFrequency() *BillingFrequency {
-	if o == nil {
+func (p *Pricing) GetBillingFrequency() *BillingFrequency {
+	if p == nil {
 		return nil
 	}
-	return o.BillingFrequency
+	return p.BillingFrequency
 }
 
-func (o *Pricing) GetPricingType() *PricingType {
-	if o == nil {
+func (p *Pricing) GetPricingType() *PricingType {
+	if p == nil {
 		return nil
 	}
-	return o.PricingType
+	return p.PricingType
 }

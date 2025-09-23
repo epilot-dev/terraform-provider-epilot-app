@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
 )
 
 type EventType string
@@ -50,53 +51,64 @@ type AppEventDataInput struct {
 	Version string `json:"version"`
 }
 
-func (o *AppEventDataInput) GetAppID() string {
-	if o == nil {
+func (a AppEventDataInput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AppEventDataInput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"app_id", "component_id", "event_type", "source", "version"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *AppEventDataInput) GetAppID() string {
+	if a == nil {
 		return ""
 	}
-	return o.AppID
+	return a.AppID
 }
 
-func (o *AppEventDataInput) GetComponentID() string {
-	if o == nil {
+func (a *AppEventDataInput) GetComponentID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ComponentID
+	return a.ComponentID
 }
 
-func (o *AppEventDataInput) GetCorrelationID() *string {
-	if o == nil {
+func (a *AppEventDataInput) GetCorrelationID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.CorrelationID
+	return a.CorrelationID
 }
 
-func (o *AppEventDataInput) GetDetails() map[string]any {
-	if o == nil {
+func (a *AppEventDataInput) GetDetails() map[string]any {
+	if a == nil {
 		return nil
 	}
-	return o.Details
+	return a.Details
 }
 
-func (o *AppEventDataInput) GetEventType() EventType {
-	if o == nil {
+func (a *AppEventDataInput) GetEventType() EventType {
+	if a == nil {
 		return EventType("")
 	}
-	return o.EventType
+	return a.EventType
 }
 
-func (o *AppEventDataInput) GetSource() ComponentType {
-	if o == nil {
+func (a *AppEventDataInput) GetSource() ComponentType {
+	if a == nil {
 		return ComponentType("")
 	}
-	return o.Source
+	return a.Source
 }
 
-func (o *AppEventDataInput) GetVersion() string {
-	if o == nil {
+func (a *AppEventDataInput) GetVersion() string {
+	if a == nil {
 		return ""
 	}
-	return o.Version
+	return a.Version
 }
 
 type AppEventData struct {
@@ -116,72 +128,83 @@ type AppEventData struct {
 	Version string `json:"version"`
 }
 
-func (o *AppEventData) GetActor() Actor {
-	if o == nil {
+func (a AppEventData) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AppEventData) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"actor", "app_id", "component_id", "event_type", "source", "version"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *AppEventData) GetActor() Actor {
+	if a == nil {
 		return Actor{}
 	}
-	return o.Actor
+	return a.Actor
 }
 
-func (o *AppEventData) GetAppID() string {
-	if o == nil {
+func (a *AppEventData) GetAppID() string {
+	if a == nil {
 		return ""
 	}
-	return o.AppID
+	return a.AppID
 }
 
-func (o *AppEventData) GetComponentID() string {
-	if o == nil {
+func (a *AppEventData) GetComponentID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ComponentID
+	return a.ComponentID
 }
 
-func (o *AppEventData) GetCorrelationID() *string {
-	if o == nil {
+func (a *AppEventData) GetCorrelationID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.CorrelationID
+	return a.CorrelationID
 }
 
-func (o *AppEventData) GetDetails() map[string]any {
-	if o == nil {
+func (a *AppEventData) GetDetails() map[string]any {
+	if a == nil {
 		return nil
 	}
-	return o.Details
+	return a.Details
 }
 
-func (o *AppEventData) GetEventID() *string {
-	if o == nil {
+func (a *AppEventData) GetEventID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.EventID
+	return a.EventID
 }
 
-func (o *AppEventData) GetEventType() EventType {
-	if o == nil {
+func (a *AppEventData) GetEventType() EventType {
+	if a == nil {
 		return EventType("")
 	}
-	return o.EventType
+	return a.EventType
 }
 
-func (o *AppEventData) GetSource() ComponentType {
-	if o == nil {
+func (a *AppEventData) GetSource() ComponentType {
+	if a == nil {
 		return ComponentType("")
 	}
-	return o.Source
+	return a.Source
 }
 
-func (o *AppEventData) GetTimestamp() *string {
-	if o == nil {
+func (a *AppEventData) GetTimestamp() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Timestamp
+	return a.Timestamp
 }
 
-func (o *AppEventData) GetVersion() string {
-	if o == nil {
+func (a *AppEventData) GetVersion() string {
+	if a == nil {
 		return ""
 	}
-	return o.Version
+	return a.Version
 }

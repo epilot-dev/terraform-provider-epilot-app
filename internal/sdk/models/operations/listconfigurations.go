@@ -20,24 +20,24 @@ func (l ListConfigurationsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListConfigurationsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *ListConfigurationsRequest) GetPage() *int64 {
-	if o == nil {
+func (l *ListConfigurationsRequest) GetPage() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.Page
+	return l.Page
 }
 
-func (o *ListConfigurationsRequest) GetPageSize() *int64 {
-	if o == nil {
+func (l *ListConfigurationsRequest) GetPageSize() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.PageSize
+	return l.PageSize
 }
 
 type Pagination struct {
@@ -46,25 +46,25 @@ type Pagination struct {
 	Total    *int64 `json:"total,omitempty"`
 }
 
-func (o *Pagination) GetPage() *int64 {
-	if o == nil {
+func (p *Pagination) GetPage() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.Page
+	return p.Page
 }
 
-func (o *Pagination) GetPageSize() *int64 {
-	if o == nil {
+func (p *Pagination) GetPageSize() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.PageSize
+	return p.PageSize
 }
 
-func (o *Pagination) GetTotal() *int64 {
-	if o == nil {
+func (p *Pagination) GetTotal() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.Total
+	return p.Total
 }
 
 // ListConfigurationsResponseBody - List of app configurations
@@ -73,18 +73,18 @@ type ListConfigurationsResponseBody struct {
 	Pagination     *Pagination                    `json:"pagination,omitempty"`
 }
 
-func (o *ListConfigurationsResponseBody) GetConfigurations() []shared.ConfigurationMetadata {
-	if o == nil {
+func (l *ListConfigurationsResponseBody) GetConfigurations() []shared.ConfigurationMetadata {
+	if l == nil {
 		return nil
 	}
-	return o.Configurations
+	return l.Configurations
 }
 
-func (o *ListConfigurationsResponseBody) GetPagination() *Pagination {
-	if o == nil {
+func (l *ListConfigurationsResponseBody) GetPagination() *Pagination {
+	if l == nil {
 		return nil
 	}
-	return o.Pagination
+	return l.Pagination
 }
 
 type ListConfigurationsResponse struct {
@@ -98,30 +98,30 @@ type ListConfigurationsResponse struct {
 	Object *ListConfigurationsResponseBody
 }
 
-func (o *ListConfigurationsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListConfigurationsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListConfigurationsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListConfigurationsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListConfigurationsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListConfigurationsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListConfigurationsResponse) GetObject() *ListConfigurationsResponseBody {
-	if o == nil {
+func (l *ListConfigurationsResponse) GetObject() *ListConfigurationsResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }

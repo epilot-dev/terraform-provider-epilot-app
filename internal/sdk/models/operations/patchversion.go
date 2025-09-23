@@ -15,25 +15,25 @@ type PatchVersionRequest struct {
 	Version string `pathParam:"style=simple,explode=false,name=version"`
 }
 
-func (o *PatchVersionRequest) GetPatchVersionRequest() shared.PatchVersionRequest {
-	if o == nil {
+func (p *PatchVersionRequest) GetPatchVersionRequest() shared.PatchVersionRequest {
+	if p == nil {
 		return shared.PatchVersionRequest{}
 	}
-	return o.PatchVersionRequest
+	return p.PatchVersionRequest
 }
 
-func (o *PatchVersionRequest) GetAppID() string {
-	if o == nil {
+func (p *PatchVersionRequest) GetAppID() string {
+	if p == nil {
 		return ""
 	}
-	return o.AppID
+	return p.AppID
 }
 
-func (o *PatchVersionRequest) GetVersion() string {
-	if o == nil {
+func (p *PatchVersionRequest) GetVersion() string {
+	if p == nil {
 		return ""
 	}
-	return o.Version
+	return p.Version
 }
 
 type PatchVersionResponse struct {
@@ -45,23 +45,23 @@ type PatchVersionResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *PatchVersionResponse) GetContentType() string {
-	if o == nil {
+func (p *PatchVersionResponse) GetContentType() string {
+	if p == nil {
 		return ""
 	}
-	return o.ContentType
+	return p.ContentType
 }
 
-func (o *PatchVersionResponse) GetStatusCode() int {
-	if o == nil {
+func (p *PatchVersionResponse) GetStatusCode() int {
+	if p == nil {
 		return 0
 	}
-	return o.StatusCode
+	return p.StatusCode
 }
 
-func (o *PatchVersionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (p *PatchVersionResponse) GetRawResponse() *http.Response {
+	if p == nil {
 		return nil
 	}
-	return o.RawResponse
+	return p.RawResponse
 }

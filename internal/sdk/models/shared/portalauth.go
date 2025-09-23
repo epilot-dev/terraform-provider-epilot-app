@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
+)
+
 type PortalAuth struct {
 	Headers map[string]string `json:"headers,omitempty"`
 	Method  *string           `json:"method,omitempty"`
@@ -9,30 +13,41 @@ type PortalAuth struct {
 	URL     *string           `json:"url,omitempty"`
 }
 
-func (o *PortalAuth) GetHeaders() map[string]string {
-	if o == nil {
-		return nil
-	}
-	return o.Headers
+func (p PortalAuth) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
 }
 
-func (o *PortalAuth) GetMethod() *string {
-	if o == nil {
-		return nil
+func (p *PortalAuth) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
 	}
-	return o.Method
+	return nil
 }
 
-func (o *PortalAuth) GetType() *string {
-	if o == nil {
+func (p *PortalAuth) GetHeaders() map[string]string {
+	if p == nil {
 		return nil
 	}
-	return o.Type
+	return p.Headers
 }
 
-func (o *PortalAuth) GetURL() *string {
-	if o == nil {
+func (p *PortalAuth) GetMethod() *string {
+	if p == nil {
 		return nil
 	}
-	return o.URL
+	return p.Method
+}
+
+func (p *PortalAuth) GetType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Type
+}
+
+func (p *PortalAuth) GetURL() *string {
+	if p == nil {
+		return nil
+	}
+	return p.URL
 }

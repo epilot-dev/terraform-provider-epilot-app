@@ -7,13 +7,12 @@ import (
 	"fmt"
 	tfTypes "github.com/epilot-dev/terraform-provider-epilot-app/internal/provider/types"
 	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk"
-	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/models/operations"
-	"github.com/epilot-dev/terraform-provider-epilot-app/internal/validators"
 	speakeasy_listvalidators "github.com/epilot-dev/terraform-provider-epilot-app/internal/validators/listvalidators"
 	speakeasy_objectvalidators "github.com/epilot-dev/terraform-provider-epilot-app/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/epilot-dev/terraform-provider-epilot-app/internal/validators/stringvalidators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/boolvalidator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/numbervalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -34,6 +33,7 @@ func NewAppResource() resource.Resource {
 
 // AppResource defines the resource implementation.
 type AppResource struct {
+	// Provider configured SDK client.
 	client *sdk.SDK
 }
 
@@ -41,7 +41,7 @@ type AppResource struct {
 type AppResourceModel struct {
 	AppID             types.String               `tfsdk:"app_id"`
 	BlueprintRef      *tfTypes.BlueprintRef      `tfsdk:"blueprint_ref"`
-	Components        types.String               `tfsdk:"components"`
+	Components        jsontypes.Normalized       `tfsdk:"components"`
 	Enabled           types.Bool                 `tfsdk:"enabled"`
 	InstallationAudit *tfTypes.InstallationAudit `tfsdk:"installation_audit"`
 	InstalledVersion  types.String               `tfsdk:"installed_version"`
@@ -79,11 +79,9 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				},
 			},
 			"components": schema.StringAttribute{
+				CustomType:  jsontypes.NormalizedType{},
 				Computed:    true,
 				Description: `List of component configurations for the installed version. Parsed as JSON.`,
-				Validators: []validator.String{
-					validators.IsValidJSON(),
-				},
 			},
 			"enabled": schema.BoolAttribute{
 				Computed:    true,
@@ -176,11 +174,11 @@ func (r *AppResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 													}...),
 												},
 											},
-											"number": schema.NumberAttribute{
+											"number": schema.Float64Attribute{
 												Computed: true,
 												Optional: true,
-												Validators: []validator.Number{
-													numbervalidator.ConflictsWith(path.Expressions{
+												Validators: []validator.Float64{
+													float64validator.ConflictsWith(path.Expressions{
 														path.MatchRelative().AtParent().AtName("str"),
 														path.MatchRelative().AtParent().AtName("boolean"),
 													}...),
@@ -267,15 +265,13 @@ func (r *AppResource) Create(ctx context.Context, req resource.CreateRequest, re
 		return
 	}
 
-	installRequest := data.ToSharedInstallRequest()
-	var appID string
-	appID = data.AppID.ValueString()
+	request, requestDiags := data.ToOperationsInstallRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
 
-	request := operations.InstallRequest{
-		InstallRequest: installRequest,
-		AppID:          appID,
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	res, err := r.client.AppInstallation.Install(ctx, request)
+	res, err := r.client.AppInstallation.Install(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -295,15 +291,24 @@ func (r *AppResource) Create(ctx context.Context, req resource.CreateRequest, re
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSharedInstallation(res.Installation)
-	refreshPlan(ctx, plan, &data, resp.Diagnostics)
-	var appId1 string
-	appId1 = data.AppID.ValueString()
+	resp.Diagnostics.Append(data.RefreshFromSharedInstallation(ctx, res.Installation)...)
 
-	request1 := operations.GetInstallationRequest{
-		AppID: appId1,
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	res1, err := r.client.AppInstallation.GetInstallation(ctx, request1)
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetInstallationRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.AppInstallation.GetInstallation(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -323,8 +328,17 @@ func (r *AppResource) Create(ctx context.Context, req resource.CreateRequest, re
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	data.RefreshFromSharedInstallation(res1.Installation)
-	refreshPlan(ctx, plan, &data, resp.Diagnostics)
+	resp.Diagnostics.Append(data.RefreshFromSharedInstallation(ctx, res1.Installation)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -348,13 +362,13 @@ func (r *AppResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 		return
 	}
 
-	var appID string
-	appID = data.AppID.ValueString()
+	request, requestDiags := data.ToOperationsGetInstallationRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
 
-	request := operations.GetInstallationRequest{
-		AppID: appID,
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	res, err := r.client.AppInstallation.GetInstallation(ctx, request)
+	res, err := r.client.AppInstallation.GetInstallation(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -378,7 +392,11 @@ func (r *AppResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSharedInstallation(res.Installation)
+	resp.Diagnostics.Append(data.RefreshFromSharedInstallation(ctx, res.Installation)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -398,15 +416,13 @@ func (r *AppResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		return
 	}
 
-	installRequest := data.ToSharedInstallRequest()
-	var appID string
-	appID = data.AppID.ValueString()
+	request, requestDiags := data.ToOperationsPatchInstallationRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
 
-	request := operations.PatchInstallationRequest{
-		InstallRequest: installRequest,
-		AppID:          appID,
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	res, err := r.client.AppInstallation.PatchInstallation(ctx, request)
+	res, err := r.client.AppInstallation.PatchInstallation(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -422,14 +438,19 @@ func (r *AppResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	refreshPlan(ctx, plan, &data, resp.Diagnostics)
-	var appId1 string
-	appId1 = data.AppID.ValueString()
 
-	request1 := operations.GetInstallationRequest{
-		AppID: appId1,
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	res1, err := r.client.AppInstallation.GetInstallation(ctx, request1)
+	request1, request1Diags := data.ToOperationsGetInstallationRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.AppInstallation.GetInstallation(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -449,8 +470,17 @@ func (r *AppResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	data.RefreshFromSharedInstallation(res1.Installation)
-	refreshPlan(ctx, plan, &data, resp.Diagnostics)
+	resp.Diagnostics.Append(data.RefreshFromSharedInstallation(ctx, res1.Installation)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -474,13 +504,13 @@ func (r *AppResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 		return
 	}
 
-	var appID string
-	appID = data.AppID.ValueString()
+	request, requestDiags := data.ToOperationsUninstallRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
 
-	request := operations.UninstallRequest{
-		AppID: appID,
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	res, err := r.client.AppInstallation.Uninstall(ctx, request)
+	res, err := r.client.AppInstallation.Uninstall(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

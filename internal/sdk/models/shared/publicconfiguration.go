@@ -16,18 +16,18 @@ type PublicConfigurationDescription struct {
 	En *string `json:"en,omitempty"`
 }
 
-func (o *PublicConfigurationDescription) GetDe() string {
-	if o == nil {
+func (p *PublicConfigurationDescription) GetDe() string {
+	if p == nil {
 		return ""
 	}
-	return o.De
+	return p.De
 }
 
-func (o *PublicConfigurationDescription) GetEn() *string {
-	if o == nil {
+func (p *PublicConfigurationDescription) GetEn() *string {
+	if p == nil {
 		return nil
 	}
-	return o.En
+	return p.En
 }
 
 type PublicConfigurationPricingType string
@@ -75,18 +75,18 @@ type PublicConfigurationPricing struct {
 	PricingType      *PublicConfigurationPricingType `json:"pricing_type,omitempty"`
 }
 
-func (o *PublicConfigurationPricing) GetBillingFrequency() *BillingFrequency {
-	if o == nil {
+func (p *PublicConfigurationPricing) GetBillingFrequency() *BillingFrequency {
+	if p == nil {
 		return nil
 	}
-	return o.BillingFrequency
+	return p.BillingFrequency
 }
 
-func (o *PublicConfigurationPricing) GetPricingType() *PublicConfigurationPricingType {
-	if o == nil {
+func (p *PublicConfigurationPricing) GetPricingType() *PublicConfigurationPricingType {
+	if p == nil {
 		return nil
 	}
-	return o.PricingType
+	return p.PricingType
 }
 
 // PublicConfiguration - Public configuration of the published app
@@ -132,148 +132,148 @@ func (p PublicConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PublicConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"app_id", "components", "name", "owner_org_id", "version"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *PublicConfiguration) GetAppID() string {
-	if o == nil {
+func (p *PublicConfiguration) GetAppID() string {
+	if p == nil {
 		return ""
 	}
-	return o.AppID
+	return p.AppID
 }
 
-func (o *PublicConfiguration) GetAuthor() *Author {
-	if o == nil {
+func (p *PublicConfiguration) GetAuthor() *Author {
+	if p == nil {
 		return nil
 	}
-	return o.Author
+	return p.Author
 }
 
-func (o *PublicConfiguration) GetBlueprintRef() *BlueprintRef {
-	if o == nil {
+func (p *PublicConfiguration) GetBlueprintRef() *BlueprintRef {
+	if p == nil {
 		return nil
 	}
-	return o.BlueprintRef
+	return p.BlueprintRef
 }
 
-func (o *PublicConfiguration) GetCategory() *string {
-	if o == nil {
+func (p *PublicConfiguration) GetCategory() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Category
+	return p.Category
 }
 
-func (o *PublicConfiguration) GetComponents() []BaseComponent {
-	if o == nil {
+func (p *PublicConfiguration) GetComponents() []BaseComponent {
+	if p == nil {
 		return []BaseComponent{}
 	}
-	return o.Components
+	return p.Components
 }
 
-func (o *PublicConfiguration) GetDeprecatedAt() *string {
-	if o == nil {
+func (p *PublicConfiguration) GetDeprecatedAt() *string {
+	if p == nil {
 		return nil
 	}
-	return o.DeprecatedAt
+	return p.DeprecatedAt
 }
 
-func (o *PublicConfiguration) GetDescription() *PublicConfigurationDescription {
-	if o == nil {
+func (p *PublicConfiguration) GetDescription() *PublicConfigurationDescription {
+	if p == nil {
 		return nil
 	}
-	return o.Description
+	return p.Description
 }
 
-func (o *PublicConfiguration) GetDevMode() *bool {
-	if o == nil {
+func (p *PublicConfiguration) GetDevMode() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.DevMode
+	return p.DevMode
 }
 
-func (o *PublicConfiguration) GetDocumentationURL() *string {
-	if o == nil {
+func (p *PublicConfiguration) GetDocumentationURL() *string {
+	if p == nil {
 		return nil
 	}
-	return o.DocumentationURL
+	return p.DocumentationURL
 }
 
-func (o *PublicConfiguration) GetIconURL() *string {
-	if o == nil {
+func (p *PublicConfiguration) GetIconURL() *string {
+	if p == nil {
 		return nil
 	}
-	return o.IconURL
+	return p.IconURL
 }
 
-func (o *PublicConfiguration) GetIsBeta() *bool {
-	if o == nil {
+func (p *PublicConfiguration) GetIsBeta() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.IsBeta
+	return p.IsBeta
 }
 
-func (o *PublicConfiguration) GetLatestVersion() *string {
-	if o == nil {
+func (p *PublicConfiguration) GetLatestVersion() *string {
+	if p == nil {
 		return nil
 	}
-	return o.LatestVersion
+	return p.LatestVersion
 }
 
-func (o *PublicConfiguration) GetName() string {
-	if o == nil {
+func (p *PublicConfiguration) GetName() string {
+	if p == nil {
 		return ""
 	}
-	return o.Name
+	return p.Name
 }
 
-func (o *PublicConfiguration) GetOwnerOrgID() string {
-	if o == nil {
+func (p *PublicConfiguration) GetOwnerOrgID() string {
+	if p == nil {
 		return ""
 	}
-	return o.OwnerOrgID
+	return p.OwnerOrgID
 }
 
-func (o *PublicConfiguration) GetPricing() *PublicConfigurationPricing {
-	if o == nil {
+func (p *PublicConfiguration) GetPricing() *PublicConfigurationPricing {
+	if p == nil {
 		return nil
 	}
-	return o.Pricing
+	return p.Pricing
 }
 
-func (o *PublicConfiguration) GetPublic() *bool {
-	if o == nil {
+func (p *PublicConfiguration) GetPublic() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Public
+	return p.Public
 }
 
-func (o *PublicConfiguration) GetRole() *Role {
-	if o == nil {
+func (p *PublicConfiguration) GetRole() *Role {
+	if p == nil {
 		return nil
 	}
-	return o.Role
+	return p.Role
 }
 
-func (o *PublicConfiguration) GetSupportEmail() *string {
-	if o == nil {
+func (p *PublicConfiguration) GetSupportEmail() *string {
+	if p == nil {
 		return nil
 	}
-	return o.SupportEmail
+	return p.SupportEmail
 }
 
-func (o *PublicConfiguration) GetVersion() string {
-	if o == nil {
+func (p *PublicConfiguration) GetVersion() string {
+	if p == nil {
 		return ""
 	}
-	return o.Version
+	return p.Version
 }
 
-func (o *PublicConfiguration) GetVersions() []ConfigurationVersion {
-	if o == nil {
+func (p *PublicConfiguration) GetVersions() []ConfigurationVersion {
+	if p == nil {
 		return nil
 	}
-	return o.Versions
+	return p.Versions
 }

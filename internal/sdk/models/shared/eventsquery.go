@@ -80,18 +80,18 @@ type Aggregation struct {
 	Metrics []EventsQueryMetrics `json:"metrics,omitempty"`
 }
 
-func (o *Aggregation) GetGroupBy() []GroupBy {
-	if o == nil {
+func (a *Aggregation) GetGroupBy() []GroupBy {
+	if a == nil {
 		return nil
 	}
-	return o.GroupBy
+	return a.GroupBy
 }
 
-func (o *Aggregation) GetMetrics() []EventsQueryMetrics {
-	if o == nil {
+func (a *Aggregation) GetMetrics() []EventsQueryMetrics {
+	if a == nil {
 		return nil
 	}
-	return o.Metrics
+	return a.Metrics
 }
 
 type EventsQueryEventType string
@@ -134,32 +134,32 @@ type Filters struct {
 	Source []ComponentType `json:"source,omitempty"`
 }
 
-func (o *Filters) GetComponentID() []string {
-	if o == nil {
+func (f *Filters) GetComponentID() []string {
+	if f == nil {
 		return nil
 	}
-	return o.ComponentID
+	return f.ComponentID
 }
 
-func (o *Filters) GetCorrelationID() *string {
-	if o == nil {
+func (f *Filters) GetCorrelationID() *string {
+	if f == nil {
 		return nil
 	}
-	return o.CorrelationID
+	return f.CorrelationID
 }
 
-func (o *Filters) GetEventType() []EventsQueryEventType {
-	if o == nil {
+func (f *Filters) GetEventType() []EventsQueryEventType {
+	if f == nil {
 		return nil
 	}
-	return o.EventType
+	return f.EventType
 }
 
-func (o *Filters) GetSource() []ComponentType {
-	if o == nil {
+func (f *Filters) GetSource() []ComponentType {
+	if f == nil {
 		return nil
 	}
-	return o.Source
+	return f.Source
 }
 
 type Pagination struct {
@@ -172,24 +172,24 @@ func (p Pagination) MarshalJSON() ([]byte, error) {
 }
 
 func (p *Pagination) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *Pagination) GetPage() *int64 {
-	if o == nil {
+func (p *Pagination) GetPage() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.Page
+	return p.Page
 }
 
-func (o *Pagination) GetPageSize() *int64 {
-	if o == nil {
+func (p *Pagination) GetPageSize() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.PageSize
+	return p.PageSize
 }
 
 type Field string
@@ -257,24 +257,24 @@ func (s Sort) MarshalJSON() ([]byte, error) {
 }
 
 func (s *Sort) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *Sort) GetField() *Field {
-	if o == nil {
+func (s *Sort) GetField() *Field {
+	if s == nil {
 		return nil
 	}
-	return o.Field
+	return s.Field
 }
 
-func (o *Sort) GetOrder() *Order {
-	if o == nil {
+func (s *Sort) GetOrder() *Order {
+	if s == nil {
 		return nil
 	}
-	return o.Order
+	return s.Order
 }
 
 // Preset - Predefined time range (alternative to start/end)
@@ -328,31 +328,31 @@ func (t TimeRange) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TimeRange) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *TimeRange) GetEnd() *time.Time {
-	if o == nil {
+func (t *TimeRange) GetEnd() *time.Time {
+	if t == nil {
 		return nil
 	}
-	return o.End
+	return t.End
 }
 
-func (o *TimeRange) GetPreset() *Preset {
-	if o == nil {
+func (t *TimeRange) GetPreset() *Preset {
+	if t == nil {
 		return nil
 	}
-	return o.Preset
+	return t.Preset
 }
 
-func (o *TimeRange) GetStart() *time.Time {
-	if o == nil {
+func (t *TimeRange) GetStart() *time.Time {
+	if t == nil {
 		return nil
 	}
-	return o.Start
+	return t.Start
 }
 
 type EventsQuery struct {
@@ -364,37 +364,37 @@ type EventsQuery struct {
 	TimeRange *TimeRange `json:"time_range,omitempty"`
 }
 
-func (o *EventsQuery) GetAggregation() *Aggregation {
-	if o == nil {
+func (e *EventsQuery) GetAggregation() *Aggregation {
+	if e == nil {
 		return nil
 	}
-	return o.Aggregation
+	return e.Aggregation
 }
 
-func (o *EventsQuery) GetFilters() *Filters {
-	if o == nil {
+func (e *EventsQuery) GetFilters() *Filters {
+	if e == nil {
 		return nil
 	}
-	return o.Filters
+	return e.Filters
 }
 
-func (o *EventsQuery) GetPagination() *Pagination {
-	if o == nil {
+func (e *EventsQuery) GetPagination() *Pagination {
+	if e == nil {
 		return nil
 	}
-	return o.Pagination
+	return e.Pagination
 }
 
-func (o *EventsQuery) GetSort() *Sort {
-	if o == nil {
+func (e *EventsQuery) GetSort() *Sort {
+	if e == nil {
 		return nil
 	}
-	return o.Sort
+	return e.Sort
 }
 
-func (o *EventsQuery) GetTimeRange() *TimeRange {
-	if o == nil {
+func (e *EventsQuery) GetTimeRange() *TimeRange {
+	if e == nil {
 		return nil
 	}
-	return o.TimeRange
+	return e.TimeRange
 }

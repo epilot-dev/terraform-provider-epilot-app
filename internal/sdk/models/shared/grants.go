@@ -9,16 +9,16 @@ type Grants struct {
 	Resource *string `json:"resource,omitempty"`
 }
 
-func (o *Grants) GetAction() string {
-	if o == nil {
+func (g *Grants) GetAction() string {
+	if g == nil {
 		return ""
 	}
-	return o.Action
+	return g.Action
 }
 
-func (o *Grants) GetResource() *string {
-	if o == nil {
+func (g *Grants) GetResource() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Resource
+	return g.Resource
 }

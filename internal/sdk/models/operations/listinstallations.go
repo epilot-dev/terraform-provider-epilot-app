@@ -24,38 +24,38 @@ func (l ListInstallationsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListInstallationsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *ListInstallationsRequest) GetComponentType() *shared.ComponentType {
-	if o == nil {
+func (l *ListInstallationsRequest) GetComponentType() *shared.ComponentType {
+	if l == nil {
 		return nil
 	}
-	return o.ComponentType
+	return l.ComponentType
 }
 
-func (o *ListInstallationsRequest) GetEnabled() *bool {
-	if o == nil {
+func (l *ListInstallationsRequest) GetEnabled() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Enabled
+	return l.Enabled
 }
 
-func (o *ListInstallationsRequest) GetPage() *int64 {
-	if o == nil {
+func (l *ListInstallationsRequest) GetPage() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.Page
+	return l.Page
 }
 
-func (o *ListInstallationsRequest) GetPageSize() *int64 {
-	if o == nil {
+func (l *ListInstallationsRequest) GetPageSize() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.PageSize
+	return l.PageSize
 }
 
 type ListInstallationsPagination struct {
@@ -64,25 +64,25 @@ type ListInstallationsPagination struct {
 	Total    *int64 `json:"total,omitempty"`
 }
 
-func (o *ListInstallationsPagination) GetPage() *int64 {
-	if o == nil {
+func (l *ListInstallationsPagination) GetPage() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.Page
+	return l.Page
 }
 
-func (o *ListInstallationsPagination) GetPageSize() *int64 {
-	if o == nil {
+func (l *ListInstallationsPagination) GetPageSize() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.PageSize
+	return l.PageSize
 }
 
-func (o *ListInstallationsPagination) GetTotal() *int64 {
-	if o == nil {
+func (l *ListInstallationsPagination) GetTotal() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.Total
+	return l.Total
 }
 
 // ListInstallationsResponseBody - Successful response
@@ -91,18 +91,18 @@ type ListInstallationsResponseBody struct {
 	Pagination *ListInstallationsPagination `json:"pagination,omitempty"`
 }
 
-func (o *ListInstallationsResponseBody) GetApps() []shared.Installation {
-	if o == nil {
+func (l *ListInstallationsResponseBody) GetApps() []shared.Installation {
+	if l == nil {
 		return nil
 	}
-	return o.Apps
+	return l.Apps
 }
 
-func (o *ListInstallationsResponseBody) GetPagination() *ListInstallationsPagination {
-	if o == nil {
+func (l *ListInstallationsResponseBody) GetPagination() *ListInstallationsPagination {
+	if l == nil {
 		return nil
 	}
-	return o.Pagination
+	return l.Pagination
 }
 
 type ListInstallationsResponse struct {
@@ -116,30 +116,30 @@ type ListInstallationsResponse struct {
 	Object *ListInstallationsResponseBody
 }
 
-func (o *ListInstallationsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListInstallationsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListInstallationsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListInstallationsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListInstallationsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListInstallationsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListInstallationsResponse) GetObject() *ListInstallationsResponseBody {
-	if o == nil {
+func (l *ListInstallationsResponse) GetObject() *ListInstallationsResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }

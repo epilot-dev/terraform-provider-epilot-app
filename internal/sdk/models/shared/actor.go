@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
 )
 
 // ActorType - Type of the actor (e.g., user, system)
@@ -43,23 +44,34 @@ type Actor struct {
 	UserID *string `json:"user_id,omitempty"`
 }
 
-func (o *Actor) GetOrgID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.OrgID
+func (a Actor) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
 }
 
-func (o *Actor) GetType() ActorType {
-	if o == nil {
+func (a *Actor) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"type"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *Actor) GetOrgID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.OrgID
+}
+
+func (a *Actor) GetType() ActorType {
+	if a == nil {
 		return ActorType("")
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *Actor) GetUserID() *string {
-	if o == nil {
+func (a *Actor) GetUserID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.UserID
+	return a.UserID
 }

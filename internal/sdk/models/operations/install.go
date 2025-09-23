@@ -12,18 +12,18 @@ type InstallRequest struct {
 	AppID          string                 `pathParam:"style=simple,explode=false,name=appId"`
 }
 
-func (o *InstallRequest) GetInstallRequest() *shared.InstallRequest {
-	if o == nil {
+func (i *InstallRequest) GetInstallRequest() *shared.InstallRequest {
+	if i == nil {
 		return nil
 	}
-	return o.InstallRequest
+	return i.InstallRequest
 }
 
-func (o *InstallRequest) GetAppID() string {
-	if o == nil {
+func (i *InstallRequest) GetAppID() string {
+	if i == nil {
 		return ""
 	}
-	return o.AppID
+	return i.AppID
 }
 
 type InstallResponse struct {
@@ -37,30 +37,30 @@ type InstallResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *InstallResponse) GetContentType() string {
-	if o == nil {
+func (i *InstallResponse) GetContentType() string {
+	if i == nil {
 		return ""
 	}
-	return o.ContentType
+	return i.ContentType
 }
 
-func (o *InstallResponse) GetInstallation() *shared.Installation {
-	if o == nil {
+func (i *InstallResponse) GetInstallation() *shared.Installation {
+	if i == nil {
 		return nil
 	}
-	return o.Installation
+	return i.Installation
 }
 
-func (o *InstallResponse) GetStatusCode() int {
-	if o == nil {
+func (i *InstallResponse) GetStatusCode() int {
+	if i == nil {
 		return 0
 	}
-	return o.StatusCode
+	return i.StatusCode
 }
 
-func (o *InstallResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (i *InstallResponse) GetRawResponse() *http.Response {
+	if i == nil {
 		return nil
 	}
-	return o.RawResponse
+	return i.RawResponse
 }

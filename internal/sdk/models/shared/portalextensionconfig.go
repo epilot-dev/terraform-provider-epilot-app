@@ -2,31 +2,46 @@
 
 package shared
 
+import (
+	"github.com/epilot-dev/terraform-provider-epilot-app/internal/sdk/internal/utils"
+)
+
 type Call struct {
 	Headers map[string]string `json:"headers,omitempty"`
 	Params  map[string]string `json:"params,omitempty"`
 	URL     *string           `json:"url,omitempty"`
 }
 
-func (o *Call) GetHeaders() map[string]string {
-	if o == nil {
-		return nil
-	}
-	return o.Headers
+func (c Call) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
 }
 
-func (o *Call) GetParams() map[string]string {
-	if o == nil {
-		return nil
+func (c *Call) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
 	}
-	return o.Params
+	return nil
 }
 
-func (o *Call) GetURL() *string {
-	if o == nil {
+func (c *Call) GetHeaders() map[string]string {
+	if c == nil {
 		return nil
 	}
-	return o.URL
+	return c.Headers
+}
+
+func (c *Call) GetParams() map[string]string {
+	if c == nil {
+		return nil
+	}
+	return c.Params
+}
+
+func (c *Call) GetURL() *string {
+	if c == nil {
+		return nil
+	}
+	return c.URL
 }
 
 type Hooks struct {
@@ -38,46 +53,57 @@ type Hooks struct {
 	Type     *string           `json:"type,omitempty"`
 }
 
-func (o *Hooks) GetAuth() *PortalAuth {
-	if o == nil {
-		return nil
-	}
-	return o.Auth
+func (h Hooks) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(h, "", false)
 }
 
-func (o *Hooks) GetCall() *Call {
-	if o == nil {
-		return nil
+func (h *Hooks) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &h, "", false, nil); err != nil {
+		return err
 	}
-	return o.Call
+	return nil
 }
 
-func (o *Hooks) GetID() *string {
-	if o == nil {
+func (h *Hooks) GetAuth() *PortalAuth {
+	if h == nil {
 		return nil
 	}
-	return o.ID
+	return h.Auth
 }
 
-func (o *Hooks) GetInterval() []string {
-	if o == nil {
+func (h *Hooks) GetCall() *Call {
+	if h == nil {
 		return nil
 	}
-	return o.Interval
+	return h.Call
 }
 
-func (o *Hooks) GetName() *TranslatedString {
-	if o == nil {
+func (h *Hooks) GetID() *string {
+	if h == nil {
 		return nil
 	}
-	return o.Name
+	return h.ID
 }
 
-func (o *Hooks) GetType() *string {
-	if o == nil {
+func (h *Hooks) GetInterval() []string {
+	if h == nil {
 		return nil
 	}
-	return o.Type
+	return h.Interval
+}
+
+func (h *Hooks) GetName() *TranslatedString {
+	if h == nil {
+		return nil
+	}
+	return h.Name
+}
+
+func (h *Hooks) GetType() *string {
+	if h == nil {
+		return nil
+	}
+	return h.Type
 }
 
 type Redirect struct {
@@ -85,18 +111,29 @@ type Redirect struct {
 	URL    *string           `json:"url,omitempty"`
 }
 
-func (o *Redirect) GetParams() map[string]string {
-	if o == nil {
-		return nil
-	}
-	return o.Params
+func (r Redirect) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(r, "", false)
 }
 
-func (o *Redirect) GetURL() *string {
-	if o == nil {
+func (r *Redirect) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *Redirect) GetParams() map[string]string {
+	if r == nil {
 		return nil
 	}
-	return o.URL
+	return r.Params
+}
+
+func (r *Redirect) GetURL() *string {
+	if r == nil {
+		return nil
+	}
+	return r.URL
 }
 
 type Links struct {
@@ -109,53 +146,64 @@ type Links struct {
 	Type        *string           `json:"type,omitempty"`
 }
 
-func (o *Links) GetAuth() *PortalAuth {
-	if o == nil {
-		return nil
-	}
-	return o.Auth
+func (l Links) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
 }
 
-func (o *Links) GetCondition() *string {
-	if o == nil {
-		return nil
+func (l *Links) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
+		return err
 	}
-	return o.Condition
+	return nil
 }
 
-func (o *Links) GetDescription() *TranslatedString {
-	if o == nil {
+func (l *Links) GetAuth() *PortalAuth {
+	if l == nil {
 		return nil
 	}
-	return o.Description
+	return l.Auth
 }
 
-func (o *Links) GetID() *string {
-	if o == nil {
+func (l *Links) GetCondition() *string {
+	if l == nil {
 		return nil
 	}
-	return o.ID
+	return l.Condition
 }
 
-func (o *Links) GetName() *TranslatedString {
-	if o == nil {
+func (l *Links) GetDescription() *TranslatedString {
+	if l == nil {
 		return nil
 	}
-	return o.Name
+	return l.Description
 }
 
-func (o *Links) GetRedirect() *Redirect {
-	if o == nil {
+func (l *Links) GetID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Redirect
+	return l.ID
 }
 
-func (o *Links) GetType() *string {
-	if o == nil {
+func (l *Links) GetName() *TranslatedString {
+	if l == nil {
 		return nil
 	}
-	return o.Type
+	return l.Name
+}
+
+func (l *Links) GetRedirect() *Redirect {
+	if l == nil {
+		return nil
+	}
+	return l.Redirect
+}
+
+func (l *Links) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
 }
 
 type PortalExtensionConfig struct {
@@ -164,23 +212,34 @@ type PortalExtensionConfig struct {
 	Links []Links `json:"links,omitempty"`
 }
 
-func (o *PortalExtensionConfig) GetHooks() []Hooks {
-	if o == nil {
-		return nil
-	}
-	return o.Hooks
+func (p PortalExtensionConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
 }
 
-func (o *PortalExtensionConfig) GetID() *string {
-	if o == nil {
-		return nil
+func (p *PortalExtensionConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
 	}
-	return o.ID
+	return nil
 }
 
-func (o *PortalExtensionConfig) GetLinks() []Links {
-	if o == nil {
+func (p *PortalExtensionConfig) GetHooks() []Hooks {
+	if p == nil {
 		return nil
 	}
-	return o.Links
+	return p.Hooks
+}
+
+func (p *PortalExtensionConfig) GetID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ID
+}
+
+func (p *PortalExtensionConfig) GetLinks() []Links {
+	if p == nil {
+		return nil
+	}
+	return p.Links
 }

@@ -15,41 +15,41 @@ type CreateComponentRequest struct {
 	Version string `pathParam:"style=simple,explode=false,name=version"`
 }
 
-func (o *CreateComponentRequest) GetBaseComponent() shared.BaseComponentInput {
-	if o == nil {
+func (c *CreateComponentRequest) GetBaseComponent() shared.BaseComponentInput {
+	if c == nil {
 		return shared.BaseComponentInput{}
 	}
-	return o.BaseComponent
+	return c.BaseComponent
 }
 
-func (o *CreateComponentRequest) GetBaseComponentCustomFlowAction() *shared.CustomFlowActionComponentSchemas {
-	return o.GetBaseComponent().CustomFlowActionComponentSchemas
+func (c *CreateComponentRequest) GetBaseComponentCustomFlowAction() *shared.CustomFlowActionComponentSchemas {
+	return c.GetBaseComponent().CustomFlowActionComponentSchemas
 }
 
-func (o *CreateComponentRequest) GetBaseComponentCustomJourneyBlock() *shared.SchemasInput {
-	return o.GetBaseComponent().SchemasInput
+func (c *CreateComponentRequest) GetBaseComponentCustomJourneyBlock() *shared.SchemasInput {
+	return c.GetBaseComponent().SchemasInput
 }
 
-func (o *CreateComponentRequest) GetBaseComponentErpInformToolkit() *shared.ErpInformToolkitComponentSchemas {
-	return o.GetBaseComponent().ErpInformToolkitComponentSchemas
+func (c *CreateComponentRequest) GetBaseComponentErpInformToolkit() *shared.ErpInformToolkitComponentSchemas {
+	return c.GetBaseComponent().ErpInformToolkitComponentSchemas
 }
 
-func (o *CreateComponentRequest) GetBaseComponentPortalExtension() *shared.PortalExtensionComponentSchemas {
-	return o.GetBaseComponent().PortalExtensionComponentSchemas
+func (c *CreateComponentRequest) GetBaseComponentPortalExtension() *shared.PortalExtensionComponentSchemas {
+	return c.GetBaseComponent().PortalExtensionComponentSchemas
 }
 
-func (o *CreateComponentRequest) GetAppID() string {
-	if o == nil {
+func (c *CreateComponentRequest) GetAppID() string {
+	if c == nil {
 		return ""
 	}
-	return o.AppID
+	return c.AppID
 }
 
-func (o *CreateComponentRequest) GetVersion() string {
-	if o == nil {
+func (c *CreateComponentRequest) GetVersion() string {
+	if c == nil {
 		return ""
 	}
-	return o.Version
+	return c.Version
 }
 
 // CreateComponentResponseBody - Component created successfully
@@ -57,36 +57,36 @@ type CreateComponentResponseBody struct {
 	Component *shared.BaseComponent `json:"component,omitempty"`
 }
 
-func (o *CreateComponentResponseBody) GetComponent() *shared.BaseComponent {
-	if o == nil {
+func (c *CreateComponentResponseBody) GetComponent() *shared.BaseComponent {
+	if c == nil {
 		return nil
 	}
-	return o.Component
+	return c.Component
 }
 
-func (o *CreateComponentResponseBody) GetComponentCustomFlowAction() *shared.CustomFlowActionComponentSchemas {
-	if v := o.GetComponent(); v != nil {
+func (c *CreateComponentResponseBody) GetComponentCustomFlowAction() *shared.CustomFlowActionComponentSchemas {
+	if v := c.GetComponent(); v != nil {
 		return v.CustomFlowActionComponentSchemas
 	}
 	return nil
 }
 
-func (o *CreateComponentResponseBody) GetComponentCustomJourneyBlock() *shared.JourneyBlockComponentSchemas {
-	if v := o.GetComponent(); v != nil {
+func (c *CreateComponentResponseBody) GetComponentCustomJourneyBlock() *shared.JourneyBlockComponentSchemas {
+	if v := c.GetComponent(); v != nil {
 		return v.JourneyBlockComponentSchemas
 	}
 	return nil
 }
 
-func (o *CreateComponentResponseBody) GetComponentErpInformToolkit() *shared.ErpInformToolkitComponentSchemas {
-	if v := o.GetComponent(); v != nil {
+func (c *CreateComponentResponseBody) GetComponentErpInformToolkit() *shared.ErpInformToolkitComponentSchemas {
+	if v := c.GetComponent(); v != nil {
 		return v.ErpInformToolkitComponentSchemas
 	}
 	return nil
 }
 
-func (o *CreateComponentResponseBody) GetComponentPortalExtension() *shared.PortalExtensionComponentSchemas {
-	if v := o.GetComponent(); v != nil {
+func (c *CreateComponentResponseBody) GetComponentPortalExtension() *shared.PortalExtensionComponentSchemas {
+	if v := c.GetComponent(); v != nil {
 		return v.PortalExtensionComponentSchemas
 	}
 	return nil
@@ -103,30 +103,30 @@ type CreateComponentResponse struct {
 	Object *CreateComponentResponseBody
 }
 
-func (o *CreateComponentResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateComponentResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateComponentResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateComponentResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateComponentResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateComponentResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateComponentResponse) GetObject() *CreateComponentResponseBody {
-	if o == nil {
+func (c *CreateComponentResponse) GetObject() *CreateComponentResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }

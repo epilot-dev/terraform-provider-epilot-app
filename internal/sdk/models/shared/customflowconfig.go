@@ -15,18 +15,29 @@ type ExternalIntegrationSettings struct {
 	URL *string `json:"url,omitempty"`
 }
 
-func (o *ExternalIntegrationSettings) GetHeaders() map[string]any {
-	if o == nil {
-		return nil
-	}
-	return o.Headers
+func (e ExternalIntegrationSettings) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(e, "", false)
 }
 
-func (o *ExternalIntegrationSettings) GetURL() *string {
-	if o == nil {
+func (e *ExternalIntegrationSettings) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &e, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (e *ExternalIntegrationSettings) GetHeaders() map[string]any {
+	if e == nil {
 		return nil
 	}
-	return o.URL
+	return e.Headers
+}
+
+func (e *ExternalIntegrationSettings) GetURL() *string {
+	if e == nil {
+		return nil
+	}
+	return e.URL
 }
 
 type SchemasExternalIntegrationCustomActionConfigType string
@@ -61,32 +72,43 @@ type ExternalIntegrationCustomActionConfigSchemas struct {
 	Type SchemasExternalIntegrationCustomActionConfigType `json:"type"`
 }
 
-func (o *ExternalIntegrationCustomActionConfigSchemas) GetDescription() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Description
+func (e ExternalIntegrationCustomActionConfigSchemas) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(e, "", false)
 }
 
-func (o *ExternalIntegrationCustomActionConfigSchemas) GetExternalIntegrationSettings() *ExternalIntegrationSettings {
-	if o == nil {
-		return nil
+func (e *ExternalIntegrationCustomActionConfigSchemas) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"type"}); err != nil {
+		return err
 	}
-	return o.ExternalIntegrationSettings
+	return nil
 }
 
-func (o *ExternalIntegrationCustomActionConfigSchemas) GetName() *string {
-	if o == nil {
+func (e *ExternalIntegrationCustomActionConfigSchemas) GetDescription() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Name
+	return e.Description
 }
 
-func (o *ExternalIntegrationCustomActionConfigSchemas) GetType() SchemasExternalIntegrationCustomActionConfigType {
-	if o == nil {
+func (e *ExternalIntegrationCustomActionConfigSchemas) GetExternalIntegrationSettings() *ExternalIntegrationSettings {
+	if e == nil {
+		return nil
+	}
+	return e.ExternalIntegrationSettings
+}
+
+func (e *ExternalIntegrationCustomActionConfigSchemas) GetName() *string {
+	if e == nil {
+		return nil
+	}
+	return e.Name
+}
+
+func (e *ExternalIntegrationCustomActionConfigSchemas) GetType() SchemasExternalIntegrationCustomActionConfigType {
+	if e == nil {
 		return SchemasExternalIntegrationCustomActionConfigType("")
 	}
-	return o.Type
+	return e.Type
 }
 
 type CustomFlowConfigType string
@@ -96,7 +118,7 @@ const (
 )
 
 type CustomFlowConfig struct {
-	ExternalIntegrationCustomActionConfigSchemas *ExternalIntegrationCustomActionConfigSchemas `queryParam:"inline"`
+	ExternalIntegrationCustomActionConfigSchemas *ExternalIntegrationCustomActionConfigSchemas `queryParam:"inline" name:"CustomFlowConfig"`
 
 	Type CustomFlowConfigType
 }
@@ -127,7 +149,7 @@ func (u *CustomFlowConfig) UnmarshalJSON(data []byte) error {
 	switch dis.Type {
 	case "external_integration":
 		externalIntegrationCustomActionConfigSchemas := new(ExternalIntegrationCustomActionConfigSchemas)
-		if err := utils.UnmarshalJSON(data, &externalIntegrationCustomActionConfigSchemas, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &externalIntegrationCustomActionConfigSchemas, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Type == external_integration) type ExternalIntegrationCustomActionConfigSchemas within CustomFlowConfig: %w", string(data), err)
 		}
 

@@ -9,16 +9,16 @@ type CreateBundlePresignedRequest struct {
 	Version string `json:"version"`
 }
 
-func (o *CreateBundlePresignedRequest) GetComponentID() *string {
-	if o == nil {
+func (c *CreateBundlePresignedRequest) GetComponentID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ComponentID
+	return c.ComponentID
 }
 
-func (o *CreateBundlePresignedRequest) GetVersion() string {
-	if o == nil {
+func (c *CreateBundlePresignedRequest) GetVersion() string {
+	if c == nil {
 		return ""
 	}
-	return o.Version
+	return c.Version
 }

@@ -44,16 +44,16 @@ type CreateLogoPresignedRequest struct {
 	MimeType MimeType `json:"mime_type"`
 }
 
-func (o *CreateLogoPresignedRequest) GetFilename() string {
-	if o == nil {
+func (c *CreateLogoPresignedRequest) GetFilename() string {
+	if c == nil {
 		return ""
 	}
-	return o.Filename
+	return c.Filename
 }
 
-func (o *CreateLogoPresignedRequest) GetMimeType() MimeType {
-	if o == nil {
+func (c *CreateLogoPresignedRequest) GetMimeType() MimeType {
+	if c == nil {
 		return MimeType("")
 	}
-	return o.MimeType
+	return c.MimeType
 }

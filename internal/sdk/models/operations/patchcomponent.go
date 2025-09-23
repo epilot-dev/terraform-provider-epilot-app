@@ -17,48 +17,48 @@ type PatchComponentRequest struct {
 	Version string `pathParam:"style=simple,explode=false,name=version"`
 }
 
-func (o *PatchComponentRequest) GetBaseComponent() shared.BaseComponentInput {
-	if o == nil {
+func (p *PatchComponentRequest) GetBaseComponent() shared.BaseComponentInput {
+	if p == nil {
 		return shared.BaseComponentInput{}
 	}
-	return o.BaseComponent
+	return p.BaseComponent
 }
 
-func (o *PatchComponentRequest) GetBaseComponentCustomFlowAction() *shared.CustomFlowActionComponentSchemas {
-	return o.GetBaseComponent().CustomFlowActionComponentSchemas
+func (p *PatchComponentRequest) GetBaseComponentCustomFlowAction() *shared.CustomFlowActionComponentSchemas {
+	return p.GetBaseComponent().CustomFlowActionComponentSchemas
 }
 
-func (o *PatchComponentRequest) GetBaseComponentCustomJourneyBlock() *shared.SchemasInput {
-	return o.GetBaseComponent().SchemasInput
+func (p *PatchComponentRequest) GetBaseComponentCustomJourneyBlock() *shared.SchemasInput {
+	return p.GetBaseComponent().SchemasInput
 }
 
-func (o *PatchComponentRequest) GetBaseComponentErpInformToolkit() *shared.ErpInformToolkitComponentSchemas {
-	return o.GetBaseComponent().ErpInformToolkitComponentSchemas
+func (p *PatchComponentRequest) GetBaseComponentErpInformToolkit() *shared.ErpInformToolkitComponentSchemas {
+	return p.GetBaseComponent().ErpInformToolkitComponentSchemas
 }
 
-func (o *PatchComponentRequest) GetBaseComponentPortalExtension() *shared.PortalExtensionComponentSchemas {
-	return o.GetBaseComponent().PortalExtensionComponentSchemas
+func (p *PatchComponentRequest) GetBaseComponentPortalExtension() *shared.PortalExtensionComponentSchemas {
+	return p.GetBaseComponent().PortalExtensionComponentSchemas
 }
 
-func (o *PatchComponentRequest) GetAppID() string {
-	if o == nil {
+func (p *PatchComponentRequest) GetAppID() string {
+	if p == nil {
 		return ""
 	}
-	return o.AppID
+	return p.AppID
 }
 
-func (o *PatchComponentRequest) GetComponentID() string {
-	if o == nil {
+func (p *PatchComponentRequest) GetComponentID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ComponentID
+	return p.ComponentID
 }
 
-func (o *PatchComponentRequest) GetVersion() string {
-	if o == nil {
+func (p *PatchComponentRequest) GetVersion() string {
+	if p == nil {
 		return ""
 	}
-	return o.Version
+	return p.Version
 }
 
 type PatchComponentResponse struct {
@@ -70,23 +70,23 @@ type PatchComponentResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *PatchComponentResponse) GetContentType() string {
-	if o == nil {
+func (p *PatchComponentResponse) GetContentType() string {
+	if p == nil {
 		return ""
 	}
-	return o.ContentType
+	return p.ContentType
 }
 
-func (o *PatchComponentResponse) GetStatusCode() int {
-	if o == nil {
+func (p *PatchComponentResponse) GetStatusCode() int {
+	if p == nil {
 		return 0
 	}
-	return o.StatusCode
+	return p.StatusCode
 }
 
-func (o *PatchComponentResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (p *PatchComponentResponse) GetRawResponse() *http.Response {
+	if p == nil {
 		return nil
 	}
-	return o.RawResponse
+	return p.RawResponse
 }
